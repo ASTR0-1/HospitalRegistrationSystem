@@ -8,7 +8,7 @@ namespace HospitalRegistrationSystem.Application.Interfaces.Data
     {
         Task<IEnumerable<Doctor>> GetDoctorsAsync(bool trackChanges);
         Task<Doctor> GetDoctorAsync(int id, bool trackChanges);
-        void CreateDoctor(Doctor Doctor);
-        void DeleteDoctor(Doctor Doctor);
+        void CreateDoctor(Doctor doctor);
+        void DeleteDoctor(Doctor doctor);
     }
 }
