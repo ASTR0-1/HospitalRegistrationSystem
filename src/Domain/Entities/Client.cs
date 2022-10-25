@@ -14,6 +14,5 @@ namespace HospitalRegistrationSystem.Domain.Entities
         public string Gender { get; set; }
 
         public ICollection<Appointment> Appointments { get; set; } = new Collection<Appointment>();
-
     }
 }
