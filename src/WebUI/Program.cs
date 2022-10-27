@@ -46,9 +46,10 @@ namespace HospitalRegistrationSystem.WebUI
 
             if (app.Environment.IsDevelopment())
             {
+                app.UseDeveloperExceptionPage();
+
                 app.UseSwagger();
                 app.UseSwaggerUI();
-                app.UseDeveloperExceptionPage();
             }
             else
             {
