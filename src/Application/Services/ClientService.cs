@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using HospitalRegistrationSystem.Application.Interfaces.Data;
-using HospitalRegistrationSystem.Application.Interfaces.DTO;
+using HospitalRegistrationSystem.Application.Interfaces.DTOs;
 using HospitalRegistrationSystem.Application.Interfaces.Services;
 using HospitalRegistrationSystem.Domain.Entities;
 
@@ -12,16 +12,19 @@ namespace HospitalRegistrationSystem.Application.Services
     public class ClientService : IClientService
     {
         private readonly IRepositoryManager _repository;
-        private readonly Mapper _mapper;
+        private readonly IMapper _mapper;
 
-        public ClientService(IRepositoryManager repository, Mapper mapper)
+        public ClientService(IRepositoryManager repository, IMapper mapper)
         {
             _repository = repository;
             _mapper = mapper;
         }
 
-        public void AddNew(Client client) =>
+        public async Task AddNewAsync(Client client)
+        {
             _repository.Client.CreateClient(client);
+            await _repository.SaveAsync();
+        }
 
         public async Task<IEnumerable<ClientCardDTO>> FindAsync(string searchString)
         {

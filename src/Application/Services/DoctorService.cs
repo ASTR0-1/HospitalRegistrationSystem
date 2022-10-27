@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using HospitalRegistrationSystem.Application.Interfaces.Data;
-using HospitalRegistrationSystem.Application.Interfaces.DTO;
+using HospitalRegistrationSystem.Application.Interfaces.DTOs;
 using HospitalRegistrationSystem.Application.Interfaces.Services;
 using HospitalRegistrationSystem.Domain.Entities;
 
@@ -12,16 +12,19 @@ namespace HospitalRegistrationSystem.Application.Services
     public class DoctorService : IDoctorService
     {
         private readonly IRepositoryManager _repository;
-        private readonly Mapper _mapper;
+        private readonly IMapper _mapper;
 
-        public DoctorService(IRepositoryManager repository, Mapper mapper)
+        public DoctorService(IRepositoryManager repository, IMapper mapper)
         {
             _repository = repository;
             _mapper = mapper;
         }
 
-        public void AddNew(Doctor doctor) =>
+        public async Task AddNewAsync(Doctor doctor)
+        {
             _repository.Doctor.CreateDoctor(doctor);
+            await _repository.SaveAsync();
+        }
 
         public async Task<IEnumerable<DoctorCardDTO>> FindAsync(string searchString)
         {

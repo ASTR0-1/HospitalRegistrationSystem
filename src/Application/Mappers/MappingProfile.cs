@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using HospitalRegistrationSystem.Application.Interfaces.DTO;
+using HospitalRegistrationSystem.Application.Interfaces.DTOs;
 using HospitalRegistrationSystem.Domain.Entities;
 
 namespace HospitalRegistrationSystem.Application.Mappers
@@ -48,9 +48,11 @@ namespace HospitalRegistrationSystem.Application.Mappers
                     .ForPath(da => da.ClientGender,
                         opt => opt.MapFrom(a => a.Client.Gender));
 
-            CreateMap<Client, ClientCardDTO>();
+            CreateMap<Client, ClientCardDTO>()
+                .ReverseMap();
 
-            CreateMap<Doctor, DoctorCardDTO>();
+            CreateMap<Doctor, DoctorCardDTO>()
+                .ReverseMap();
         }
     }
 }

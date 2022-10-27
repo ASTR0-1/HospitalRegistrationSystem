@@ -1,4 +1,4 @@
-﻿namespace HospitalRegistrationSystem.Application.Interfaces.DTO
+﻿namespace HospitalRegistrationSystem.Application.Interfaces.DTOs
 {
     public class ClientCardDTO
     {
