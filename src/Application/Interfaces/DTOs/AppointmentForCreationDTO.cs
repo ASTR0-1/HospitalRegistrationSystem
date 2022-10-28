@@ -3,7 +3,7 @@ using System;
 
 namespace HospitalRegistrationSystem.Application.Interfaces.DTOs
 {
-    public class AppointmentDTO
+    public class AppointmentForCreationDTO
     {
         public DateTime VisitTime { get; set; }
 

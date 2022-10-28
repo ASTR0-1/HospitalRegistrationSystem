@@ -53,6 +53,9 @@ namespace HospitalRegistrationSystem.Application.Mappers
 
             CreateMap<Doctor, DoctorCardDTO>()
                 .ReverseMap();
+
+            CreateMap<Client, ClientForCreationDTO>()
+                .ReverseMap();
         }
     }
 }
