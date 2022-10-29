@@ -37,8 +37,7 @@ namespace HospitalRegistrationSystem.WebUI
             {
                 config.RespectBrowserAcceptHeader = true;
                 config.ReturnHttpNotAcceptable = true;
-            }).AddNewtonsoftJson()
-            .AddXmlDataContractSerializerFormatters();
+            }).AddNewtonsoftJson();
 
             services.AddFluentValidation();
 
