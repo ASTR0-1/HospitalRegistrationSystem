@@ -21,10 +21,14 @@ namespace HospitalRegistrationSystem.Infrastructure.Persistence.Repositories
 
         public async Task<Doctor> GetDoctorAsync(int id, bool trackChanges) =>
             await FindByCondition(d => d.Id == id, trackChanges)
+                .Include(d => d.Appointments)
+                    .ThenInclude(a => a.Client)
                 .SingleOrDefaultAsync();
 
         public async Task<IEnumerable<Doctor>> GetDoctorsAsync(bool trackChanges) =>
             await FindAll(trackChanges)
+                .Include(d => d.Appointments)
+                    .ThenInclude(a => a.Client)
                 .OrderBy(d => d.Id)
                 .ToListAsync();
     }
