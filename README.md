@@ -25,8 +25,9 @@ To log exceptional situations we use NLog to log info/warnings/errors/debug into
 
 <h2>Swagger screenshots :</h2>
 <b>Controllers :</b><br>
-![image](https://user-images.githubusercontent.com/71894616/198849327-daba7050-2b94-407c-b415-0d39dc0e4d46.png)
 
-<b>Used DTO's :</b><br>
+![image](https://user-images.githubusercontent.com/71894616/198849408-c5b400cf-968d-466f-b15b-60362765f768.png)
+
+<br><b>Used DTO's :</b><br>
 ![image](https://user-images.githubusercontent.com/71894616/198849303-d4df1c8b-6666-496b-9ce1-9580b1c599e9.png)
 
