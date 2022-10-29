@@ -33,7 +33,7 @@ namespace HospitalRegistrationSystem.WebUI.Controllers
         [HttpGet(Name = "Doctors")]
         public async Task<IActionResult> GetDoctors([FromQuery] string searchString)
         {
-            if (string.IsNullOrWhiteSpace(searchString))
+            if (string.IsNullOrEmpty(searchString))
             {
                 IEnumerable<DoctorCardDTO> allDoctorsDtos = await _doctorService.GetAllAsync();
 

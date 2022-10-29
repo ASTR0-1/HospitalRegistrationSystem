@@ -26,6 +26,15 @@ namespace HospitalRegistrationSystem.Application.Services
             await _repository.SaveAsync();
         }
 
+        public async Task<IEnumerable<ClientAppointmentDTO>> GetAllAsync()
+        {
+            IEnumerable<Appointment> appointments = await _repository.Appointment.GetAppointmentsAsync(trackChanges: false);
+
+            var appointmentsDto = _mapper.Map<IEnumerable<ClientAppointmentDTO>>(appointments);
+
+            return appointmentsDto;
+        }
+
         public async Task<IEnumerable<ClientAppointmentDTO>> GetByClientIdAsync(int clientId)
         {
             IEnumerable<Appointment> appointments = await _repository.Appointment.GetAppointmentsAsync(trackChanges: false);

@@ -9,8 +9,6 @@ namespace HospitalRegistrationSystem.Application.Validation
         {
             RuleFor(e => e.VisitTime)
                 .NotEmpty();
-            RuleFor(e => e.Diagnosis)
-                .NotEmpty();
             RuleFor(e => e.DoctorId)
                 .NotEmpty();
             RuleFor(e => e.ClientId)

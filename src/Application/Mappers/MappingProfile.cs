@@ -48,6 +48,9 @@ namespace HospitalRegistrationSystem.Application.Mappers
                     .ForPath(da => da.ClientGender,
                         opt => opt.MapFrom(a => a.Client.Gender));
 
+            CreateMap<Appointment, AppointmentForCreationDTO>()
+                .ReverseMap();
+
             CreateMap<Client, ClientCardDTO>()
                 .ReverseMap();
 
