@@ -24,11 +24,11 @@ namespace HospitalRegistrationSystem.WebUI
             IConfiguration configuration = builder.Configuration;
 
             services.ConfigureCors();
+
             services.ConfigureLoggerService();
 
             services.ConfigureSqlContext(configuration);
             services.ConfigureRepositoryManager();
-
             services.ConfigureEntityServices();
 
             services.AddAutoMapper(typeof(MappingProfile));
@@ -39,6 +39,8 @@ namespace HospitalRegistrationSystem.WebUI
                 config.ReturnHttpNotAcceptable = true;
             }).AddNewtonsoftJson()
             .AddXmlDataContractSerializerFormatters();
+
+            services.AddFluentValidation();
 
             services.AddSwaggerGen();
 
