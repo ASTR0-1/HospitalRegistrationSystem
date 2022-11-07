@@ -5,31 +5,30 @@ using HospitalRegistrationSystem.Application.Interfaces.Data;
 using HospitalRegistrationSystem.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace HospitalRegistrationSystem.Infrastructure.Persistence.Repositories
+namespace HospitalRegistrationSystem.Infrastructure.Persistence.Repositories;
+
+public class DoctorRepository : RepositoryBase<Doctor>, IDoctorRepository
 {
-    public class DoctorRepository : RepositoryBase<Doctor>, IDoctorRepository
-    {
-        public DoctorRepository(RepositoryContext repositoryContext)
-            : base(repositoryContext)
-        { }
+    public DoctorRepository(RepositoryContext repositoryContext)
+        : base(repositoryContext)
+    { }
 
-        public void CreateDoctor(Doctor doctor) =>
-            Create(doctor);
+    public void CreateDoctor(Doctor doctor) =>
+        Create(doctor);
 
-        public void DeleteDoctor(Doctor doctor) =>
-            Delete(doctor);
+    public void DeleteDoctor(Doctor doctor) =>
+        Delete(doctor);
 
-        public async Task<Doctor> GetDoctorAsync(int id, bool trackChanges) =>
-            await FindByCondition(d => d.Id == id, trackChanges)
-                .Include(d => d.Appointments)
-                    .ThenInclude(a => a.Client)
-                .SingleOrDefaultAsync();
+    public async Task<Doctor> GetDoctorAsync(int id, bool trackChanges) =>
+        await FindByCondition(d => d.Id == id, trackChanges)
+            .Include(d => d.Appointments)
+                .ThenInclude(a => a.Client)
+            .SingleOrDefaultAsync();
 
-        public async Task<IEnumerable<Doctor>> GetDoctorsAsync(bool trackChanges) =>
-            await FindAll(trackChanges)
-                .Include(d => d.Appointments)
-                    .ThenInclude(a => a.Client)
-                .OrderBy(d => d.Id)
-                .ToListAsync();
-    }
+    public async Task<IEnumerable<Doctor>> GetDoctorsAsync(bool trackChanges) =>
+        await FindAll(trackChanges)
+            .Include(d => d.Appointments)
+                .ThenInclude(a => a.Client)
+            .OrderBy(d => d.Id)
+            .ToListAsync();
 }

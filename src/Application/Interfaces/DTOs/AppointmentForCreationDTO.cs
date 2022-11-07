@@ -1,14 +1,12 @@
-﻿using HospitalRegistrationSystem.Domain.Entities;
-using System;
+﻿using System;
 
-namespace HospitalRegistrationSystem.Application.Interfaces.DTOs
+namespace HospitalRegistrationSystem.Application.Interfaces.DTOs;
+
+public class AppointmentForCreationDTO
 {
-    public class AppointmentForCreationDTO
-    {
-        public DateTime VisitTime { get; set; }
+    public DateTime VisitTime { get; set; }
 
-        public int DoctorId { get; set; }
+    public int DoctorId { get; set; }
 
-        public int ClientId { get; set; }
-    }
+    public int ClientId { get; set; }
 }

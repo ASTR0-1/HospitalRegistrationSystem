@@ -9,72 +9,71 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NLog;
 
-namespace HospitalRegistrationSystem.WebUI
+namespace HospitalRegistrationSystem.WebUI;
+
+public class Program
 {
-    public class Program
+    public static void Main(string[] args)
     {
-        public static void Main(string[] args)
+        var builder = WebApplication.CreateBuilder(args);
+
+        LogManager.LoadConfiguration(string.Concat(Directory.GetCurrentDirectory(),
+            "/nlog.config"));
+
+        IServiceCollection services = builder.Services;
+        IConfiguration configuration = builder.Configuration;
+
+        services.ConfigureCors();
+
+        services.ConfigureLoggerService();
+
+        services.ConfigureSqlContext(configuration);
+        services.ConfigureRepositoryManager();
+        services.ConfigureEntityServices();
+
+        services.AddAutoMapper(typeof(MappingProfile));
+
+        services.AddControllers(config =>
         {
-            var builder = WebApplication.CreateBuilder(args);
+            config.RespectBrowserAcceptHeader = true;
+            config.ReturnHttpNotAcceptable = true;
+        }).AddNewtonsoftJson();
 
-            LogManager.LoadConfiguration(string.Concat(Directory.GetCurrentDirectory(),
-                "/nlog.config"));
+        services.AddFluentValidation();
 
-            IServiceCollection services = builder.Services;
-            IConfiguration configuration = builder.Configuration;
+        services.AddSwaggerGen();
 
-            services.ConfigureCors();
+        var app = builder.Build();
 
-            services.ConfigureLoggerService();
+        if (app.Environment.IsDevelopment())
+        {
+            app.UseDeveloperExceptionPage();
 
-            services.ConfigureSqlContext(configuration);
-            services.ConfigureRepositoryManager();
-            services.ConfigureEntityServices();
-
-            services.AddAutoMapper(typeof(MappingProfile));
-
-            services.AddControllers(config =>
-            {
-                config.RespectBrowserAcceptHeader = true;
-                config.ReturnHttpNotAcceptable = true;
-            }).AddNewtonsoftJson();
-
-            services.AddFluentValidation();
-
-            services.AddSwaggerGen();
-
-            var app = builder.Build();
-
-            if (app.Environment.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            }
-            else
-            {
-                app.UseHsts();
-            }
-
-            var logger = app.Services.GetRequiredService<ILoggerManager>();
-            app.ConfigureExceptionHandler(logger);
-            app.UseHttpsRedirection();
-
-            app.UseCors("CorsPolicy");
-
-            app.UseForwardedHeaders(new ForwardedHeadersOptions
-            {
-                ForwardedHeaders = ForwardedHeaders.All
-            });
-
-            app.UseRouting();
-
-            app.UseAuthorization();
-
-            app.MapControllers();
-
-            app.Run();
+            app.UseSwagger();
+            app.UseSwaggerUI();
         }
+        else
+        {
+            app.UseHsts();
+        }
+
+        var logger = app.Services.GetRequiredService<ILoggerManager>();
+        app.ConfigureExceptionHandler(logger);
+        app.UseHttpsRedirection();
+
+        app.UseCors("CorsPolicy");
+
+        app.UseForwardedHeaders(new ForwardedHeadersOptions
+        {
+            ForwardedHeaders = ForwardedHeaders.All
+        });
+
+        app.UseRouting();
+
+        app.UseAuthorization();
+
+        app.MapControllers();
+
+        app.Run();
     }
 }

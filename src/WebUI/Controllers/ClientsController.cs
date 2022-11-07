@@ -10,73 +10,72 @@ using HospitalRegistrationSystem.Application.Interfaces.Services;
 using HospitalRegistrationSystem.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 
-namespace HospitalRegistrationSystem.WebUI.Controllers
+namespace HospitalRegistrationSystem.WebUI.Controllers;
+
+[Route("api/clients")]
+[ApiController]
+public class ClientsController : ControllerBase
 {
-    [Route("api/clients")]
-    [ApiController]
-    public class ClientsController : ControllerBase
+    private readonly IClientService _clientService;
+    private readonly ILoggerManager _logger;
+    private readonly IMapper _mapper;
+    private readonly IValidator<ClientForCreationDTO> _validator;
+
+    public ClientsController(IClientService clientService, ILoggerManager logger,
+        IMapper mapper, IValidator<ClientForCreationDTO> validator)
     {
-        private readonly IClientService _clientService;
-        private readonly ILoggerManager _logger;
-        private readonly IMapper _mapper;
-        private readonly IValidator<ClientForCreationDTO> _validator;
+        _clientService = clientService;
+        _logger = logger;
+        _mapper = mapper;
+        _validator = validator;
+    }
 
-        public ClientsController(IClientService clientService, ILoggerManager logger,
-            IMapper mapper, IValidator<ClientForCreationDTO> validator)
+    [HttpGet(Name = "Clients")]
+    public async Task<IActionResult> GetClients([FromQuery] string searchString)
+    {
+        if (string.IsNullOrEmpty(searchString))
         {
-            _clientService = clientService;
-            _logger = logger;
-            _mapper = mapper;
-            _validator = validator;
+            IEnumerable<ClientCardDTO> allClientsDtos = await _clientService.GetAllAsync();
+
+            return Ok(allClientsDtos);
         }
 
-        [HttpGet(Name = "Clients")]
-        public async Task<IActionResult> GetClients([FromQuery] string searchString)
+        IEnumerable<ClientCardDTO> clientsDtos = await _clientService.FindAsync(searchString);
+
+        if (!clientsDtos.Any())
         {
-            if (string.IsNullOrEmpty(searchString))
-            {
-                IEnumerable<ClientCardDTO> allClientsDtos = await _clientService.GetAllAsync();
+            _logger.LogInformation($"Clients with given searchString: '{searchString}' doesn't exist in the database.");
 
-                return Ok(allClientsDtos);
-            }
-
-            IEnumerable<ClientCardDTO> clientsDtos = await _clientService.FindAsync(searchString);
-
-            if (!clientsDtos.Any())
-            {
-                _logger.LogInformation($"Clients with given searchString: '{searchString}' doesn't exist in the database.");
-
-                return NotFound();
-            }
-
-            return Ok(clientsDtos);
+            return NotFound();
         }
 
-        [HttpPost]
-        public async Task<IActionResult> PostClient([FromBody] ClientForCreationDTO clientDto)
+        return Ok(clientsDtos);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> PostClient([FromBody] ClientForCreationDTO clientDto)
+    {
+        if (clientDto == null)
         {
-            if (clientDto == null)
-            {
-                _logger.LogError("ClientCardDTO object sent from a client is null");
+            _logger.LogError("ClientCardDTO object sent from a client is null");
 
-                return BadRequest("ClientCardDTO object is null");
-            }
-
-            ValidationResult result = await _validator.ValidateAsync(clientDto);
-
-            if (!result.IsValid)
-            {
-                _logger.LogError("Invalid model state for the ClientCardDTO object");
-
-                return UnprocessableEntity(result.Errors);
-            }
-
-            var clientEntity = _mapper.Map<Client>(clientDto);
-
-            await _clientService.AddNewAsync(clientEntity);
-
-            return CreatedAtRoute("Clients", new { searchString = clientDto.FirstName },
-                clientDto);
+            return BadRequest("ClientCardDTO object is null");
         }
+
+        ValidationResult result = await _validator.ValidateAsync(clientDto);
+
+        if (!result.IsValid)
+        {
+            _logger.LogError("Invalid model state for the ClientCardDTO object");
+
+            return UnprocessableEntity(result.Errors);
+        }
+
+        var clientEntity = _mapper.Map<Client>(clientDto);
+
+        await _clientService.AddNewAsync(clientEntity);
+
+        return CreatedAtRoute("Clients", new { searchString = clientDto.FirstName },
+            clientDto);
     }
 }

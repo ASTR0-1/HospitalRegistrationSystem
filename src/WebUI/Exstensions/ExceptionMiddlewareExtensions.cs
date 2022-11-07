@@ -5,33 +5,32 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 
-namespace HospitalRegistrationSystem.WebUI.Exstensions
+namespace HospitalRegistrationSystem.WebUI.Exstensions;
+
+public static class ExceptionMiddlewareExtensions
 {
-    public static class ExceptionMiddlewareExtensions
+    public static void ConfigureExceptionHandler(this IApplicationBuilder app,
+        ILoggerManager logger)
     {
-        public static void ConfigureExceptionHandler(this IApplicationBuilder app,
-            ILoggerManager logger)
+        app.UseExceptionHandler(appError =>
         {
-            app.UseExceptionHandler(appError =>
+            appError.Run(async context =>
             {
-                appError.Run(async context =>
+                context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                context.Response.ContentType = "application/json";
+
+                var contextFeature = context.Features.Get<IExceptionHandlerFeature>();
+                if (contextFeature != null)
                 {
-                    context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                    context.Response.ContentType = "application/json";
+                    logger.LogError($"Something went wrong: {contextFeature.Error}");
 
-                    var contextFeature = context.Features.Get<IExceptionHandlerFeature>();
-                    if (contextFeature != null)
+                    await context.Response.WriteAsync(new ErrorDetails()
                     {
-                        logger.LogError($"Something went wrong: {contextFeature.Error}");
-
-                        await context.Response.WriteAsync(new ErrorDetails()
-                        {
-                            StatusCode = context.Response.StatusCode,
-                            Message = "Internal Server Error."
-                        }.ToString());
-                    }
-                });
+                        StatusCode = context.Response.StatusCode,
+                        Message = "Internal Server Error."
+                    }.ToString());
+                }
             });
-        }
+        });
     }
 }

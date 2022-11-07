@@ -1,21 +1,20 @@
 ﻿using FluentValidation;
 using HospitalRegistrationSystem.Application.Interfaces.DTOs;
 
-namespace HospitalRegistrationSystem.Application.Validation
+namespace HospitalRegistrationSystem.Application.Validation;
+
+public class ClientForCreationDTOValidator : AbstractValidator<ClientForCreationDTO>
 {
-    public class ClientForCreationDTOValidator : AbstractValidator<ClientForCreationDTO>
+    public ClientForCreationDTOValidator()
     {
-        public ClientForCreationDTOValidator()
-        {
-            RuleFor(e => e.FirstName)
-                .NotEmpty();
-            RuleFor(e => e.MiddleName)
-                .NotEmpty();
-            RuleFor(e => e.LastName)
-                .NotEmpty();
-            RuleFor(e => e.Gender)
-                .MaximumLength(10)
-                .NotEmpty();
-        }
+        RuleFor(e => e.FirstName)
+            .NotEmpty();
+        RuleFor(e => e.MiddleName)
+            .NotEmpty();
+        RuleFor(e => e.LastName)
+            .NotEmpty();
+        RuleFor(e => e.Gender)
+            .MaximumLength(10)
+            .NotEmpty();
     }
 }

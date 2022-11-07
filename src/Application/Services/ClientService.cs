@@ -7,45 +7,44 @@ using HospitalRegistrationSystem.Application.Interfaces.DTOs;
 using HospitalRegistrationSystem.Application.Interfaces.Services;
 using HospitalRegistrationSystem.Domain.Entities;
 
-namespace HospitalRegistrationSystem.Application.Services
+namespace HospitalRegistrationSystem.Application.Services;
+
+public class ClientService : IClientService
 {
-    public class ClientService : IClientService
+    private readonly IRepositoryManager _repository;
+    private readonly IMapper _mapper;
+
+    public ClientService(IRepositoryManager repository, IMapper mapper)
     {
-        private readonly IRepositoryManager _repository;
-        private readonly IMapper _mapper;
+        _repository = repository;
+        _mapper = mapper;
+    }
 
-        public ClientService(IRepositoryManager repository, IMapper mapper)
-        {
-            _repository = repository;
-            _mapper = mapper;
-        }
+    public async Task AddNewAsync(Client client)
+    {
+        _repository.Client.CreateClient(client);
+        await _repository.SaveAsync();
+    }
 
-        public async Task AddNewAsync(Client client)
-        {
-            _repository.Client.CreateClient(client);
-            await _repository.SaveAsync();
-        }
+    public async Task<IEnumerable<ClientCardDTO>> FindAsync(string searchString)
+    {
+        IEnumerable<Client> clients = await _repository.Client.GetClientsAsync(trackChanges: false);
 
-        public async Task<IEnumerable<ClientCardDTO>> FindAsync(string searchString)
-        {
-            IEnumerable<Client> clients = await _repository.Client.GetClientsAsync(trackChanges: false);
+        IEnumerable<Client> filteredClients = clients
+            .Where(c => string.Join(" ", c.FirstName, c.MiddleName, c.LastName)
+            .Contains(searchString, System.StringComparison.InvariantCultureIgnoreCase));
 
-            IEnumerable<Client> filteredClients = clients
-                .Where(c => string.Join(" ", c.FirstName, c.MiddleName, c.LastName)
-                .Contains(searchString, System.StringComparison.InvariantCultureIgnoreCase));
+        var clientsDto = _mapper.Map<IEnumerable<ClientCardDTO>>(filteredClients);
 
-            var clientsDto = _mapper.Map<IEnumerable<ClientCardDTO>>(filteredClients);
+        return clientsDto;
+    }
 
-            return clientsDto;
-        }
+    public async Task<IEnumerable<ClientCardDTO>> GetAllAsync()
+    {
+        IEnumerable<Client> clients = await _repository.Client.GetClientsAsync(trackChanges: false);
 
-        public async Task<IEnumerable<ClientCardDTO>> GetAllAsync()
-        {
-            IEnumerable<Client> clients = await _repository.Client.GetClientsAsync(trackChanges: false);
+        var clientsDto = _mapper.Map<IEnumerable<ClientCardDTO>>(clients);
 
-            var clientsDto = _mapper.Map<IEnumerable<ClientCardDTO>>(clients);
-
-            return clientsDto;
-        }
+        return clientsDto;
     }
 }

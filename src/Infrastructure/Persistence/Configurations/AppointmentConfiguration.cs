@@ -2,16 +2,15 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace HospitalRegistrationSystem.Infrastructure.Persistence.Configurations
-{
-    public class AppointmentConfiguration : IEntityTypeConfiguration<Appointment>
-    {
-        public void Configure(EntityTypeBuilder<Appointment> builder)
-        {
-            builder.HasKey(a => a.Id);
+namespace HospitalRegistrationSystem.Infrastructure.Persistence.Configurations;
 
-            builder.Property(a => a.VisitTime)
-                .IsRequired();
-        }
+public class AppointmentConfiguration : IEntityTypeConfiguration<Appointment>
+{
+    public void Configure(EntityTypeBuilder<Appointment> builder)
+    {
+        builder.HasKey(a => a.Id);
+
+        builder.Property(a => a.VisitTime)
+            .IsRequired();
     }
 }
