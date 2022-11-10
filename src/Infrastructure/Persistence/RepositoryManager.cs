@@ -12,6 +12,8 @@ public class RepositoryManager : IRepositoryManager
     private IDoctorRepository _doctorRepository;
     private IAppointmentRepository _appointmentRepository;
 
+    private static readonly object _lock = new object();
+
     public RepositoryManager(RepositoryContext context)
     {
         _context = context;
@@ -21,9 +23,12 @@ public class RepositoryManager : IRepositoryManager
     {
         get
         {
-            _appointmentRepository ??= new AppointmentRepository(_context);
+            lock (_lock)
+            {
+                _appointmentRepository ??= new AppointmentRepository(_context);
 
-            return _appointmentRepository;
+                return _appointmentRepository;
+            }
         }
     }
 
@@ -31,9 +36,12 @@ public class RepositoryManager : IRepositoryManager
     {
         get
         {
-            _clientRepository ??= new ClientRepository(_context);
+            lock (_lock)
+            {
+                _clientRepository ??= new ClientRepository(_context);
 
-            return _clientRepository;
+                return _clientRepository;
+            }
         }
     }
 
@@ -41,9 +49,12 @@ public class RepositoryManager : IRepositoryManager
     {
         get
         {
-            _doctorRepository ??= new DoctorRepository(_context);
+            lock (_lock)
+            {
+                _doctorRepository ??= new DoctorRepository(_context);
 
-            return _doctorRepository;
+                return _doctorRepository; 
+            }
         }
     }
 
