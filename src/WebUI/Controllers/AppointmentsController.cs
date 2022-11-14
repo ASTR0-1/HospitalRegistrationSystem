@@ -7,8 +7,10 @@ using FluentValidation.Results;
 using HospitalRegistrationSystem.Application.Interfaces;
 using HospitalRegistrationSystem.Application.Interfaces.DTOs;
 using HospitalRegistrationSystem.Application.Interfaces.Services;
+using HospitalRegistrationSystem.Application.Utility;
 using HospitalRegistrationSystem.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace HospitalRegistrationSystem.WebUI.Controllers;
 
@@ -35,7 +37,7 @@ public class AppointmentsController : ControllerBase
     }
 
     [HttpGet("client/{clientId}", Name = "ClientAppointments")]
-    public async Task<IActionResult> GetClientAppointments(int clientId)
+    public async Task<IActionResult> GetClientAppointments(int clientId, [FromQuery] PagingParameters pagingParameters)
     {
         ClientCardDTO client = (await _clientService.GetAllAsync())
             .Where(e => e.Id == clientId)
@@ -57,11 +59,16 @@ public class AppointmentsController : ControllerBase
             return NotFound();
         }
 
-        return Ok(clientAppointments);
+        var pagedClientAppointments = PagedList<ClientAppointmentDTO>
+            .ToPagedList(clientAppointments, pagingParameters.PageNumber, pagingParameters.PageSize);
+        Response.Headers.Add("X-Pagination",
+            JsonConvert.SerializeObject(pagedClientAppointments.MetaData));
+
+        return Ok(pagedClientAppointments);
     }
 
     [HttpGet("doctor/{doctorId}", Name = "DoctorAppointments")]
-    public async Task<IActionResult> GetDoctorAppointments(int doctorId)
+    public async Task<IActionResult> GetDoctorAppointments(int doctorId, [FromQuery] PagingParameters pagingParameters)
     {
         DoctorCardDTO doctor = (await _doctorService.GetAllAsync())
             .Where(e => e.Id == doctorId)
@@ -83,7 +90,13 @@ public class AppointmentsController : ControllerBase
             return NotFound();
         }
 
-        return Ok(doctorAppointments);
+        var pagedDoctorAppointments = PagedList<DoctorAppointmentDTO>
+            .ToPagedList(doctorAppointments, pagingParameters.PageNumber, pagingParameters.PageSize);
+
+        Response.Headers.Add("X-Pagination",
+            JsonConvert.SerializeObject(pagedDoctorAppointments.MetaData));
+
+        return Ok(pagedDoctorAppointments);
     }
 
     [HttpPost]

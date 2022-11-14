@@ -7,8 +7,10 @@ using FluentValidation.Results;
 using HospitalRegistrationSystem.Application.Interfaces;
 using HospitalRegistrationSystem.Application.Interfaces.DTOs;
 using HospitalRegistrationSystem.Application.Interfaces.Services;
+using HospitalRegistrationSystem.Application.Utility;
 using HospitalRegistrationSystem.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace HospitalRegistrationSystem.WebUI.Controllers;
 
@@ -31,25 +33,36 @@ public class ClientsController : ControllerBase
     }
 
     [HttpGet(Name = "Clients")]
-    public async Task<IActionResult> GetClients([FromQuery] string searchString)
+    public async Task<IActionResult> GetClients([FromQuery] string SearchString, 
+        [FromQuery] PagingParameters pagingParameters)
     {
-        if (string.IsNullOrEmpty(searchString))
+        if (string.IsNullOrEmpty(SearchString))
         {
-            IEnumerable<ClientCardDTO> allClientsDtos = await _clientService.GetAllAsync();
+            IEnumerable<ClientCardDTO> clientsDtos = await _clientService.GetAllAsync();
+            var pagedClients = PagedList<ClientCardDTO>
+                .ToPagedList(clientsDtos, pagingParameters.PageNumber, pagingParameters.PageSize);
+            
+            Response.Headers.Add("X-Pagination",
+                JsonConvert.SerializeObject(pagedClients.MetaData));
 
-            return Ok(allClientsDtos);
+            return Ok(pagedClients);
         }
 
-        IEnumerable<ClientCardDTO> clientsDtos = await _clientService.FindAsync(searchString);
+        IEnumerable<ClientCardDTO> searchedClientsDtos = await _clientService.FindAsync(SearchString);
 
-        if (!clientsDtos.Any())
+        if (!searchedClientsDtos.Any())
         {
-            _logger.LogInformation($"Clients with given searchString: '{searchString}' doesn't exist in the database.");
+            _logger.LogInformation($"Clients with given searchString: '{SearchString}' doesn't exist in the database.");
 
             return NotFound();
         }
 
-        return Ok(clientsDtos);
+        var pagedClientsSearched = PagedList<ClientCardDTO>
+            .ToPagedList(searchedClientsDtos, pagingParameters.PageNumber, pagingParameters.PageSize);
+        Response.Headers.Add("X-Pagination",
+            JsonConvert.SerializeObject(pagedClientsSearched.MetaData));
+
+        return Ok(pagedClientsSearched);
     }
 
     [HttpPost]

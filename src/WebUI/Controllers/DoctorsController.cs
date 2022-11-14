@@ -7,8 +7,10 @@ using FluentValidation.Results;
 using HospitalRegistrationSystem.Application.Interfaces;
 using HospitalRegistrationSystem.Application.Interfaces.DTOs;
 using HospitalRegistrationSystem.Application.Interfaces.Services;
+using HospitalRegistrationSystem.Application.Utility;
 using HospitalRegistrationSystem.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace HospitalRegistrationSystem.WebUI.Controllers;
 
@@ -31,25 +33,36 @@ public class DoctorsController : ControllerBase
     }
 
     [HttpGet(Name = "Doctors")]
-    public async Task<IActionResult> GetDoctors([FromQuery] string searchString)
+    public async Task<IActionResult> GetDoctors([FromQuery] string SearchString,
+        [FromQuery] PagingParameters pagingParameters)
     {
-        if (string.IsNullOrEmpty(searchString))
+        if (string.IsNullOrEmpty(SearchString))
         {
-            IEnumerable<DoctorCardDTO> allDoctorsDtos = await _doctorService.GetAllAsync();
+            IEnumerable<DoctorCardDTO> doctorsDtos = await _doctorService.GetAllAsync();
+            var pagedDoctors = PagedList<DoctorCardDTO>
+                .ToPagedList(doctorsDtos, pagingParameters.PageNumber, pagingParameters.PageSize);
 
-            return Ok(allDoctorsDtos);
+            Response.Headers.Add("X-Pagination",
+               JsonConvert.SerializeObject(pagedDoctors.MetaData));
+
+            return Ok(pagedDoctors);
         }
 
-        IEnumerable<DoctorCardDTO> doctorsDtos = await _doctorService.FindAsync(searchString);
+        IEnumerable<DoctorCardDTO> searchedDoctorsDtos = await _doctorService.FindAsync(SearchString);
 
-        if (!doctorsDtos.Any())
+        if (!searchedDoctorsDtos.Any())
         {
-            _logger.LogInformation($"Doctors with given searchString: '{searchString}' doesn't exist in the database.");
+            _logger.LogInformation($"Doctors with given searchString: '{SearchString}' doesn't exist in the database.");
 
             return NotFound();
         }
 
-        return Ok(doctorsDtos);
+        var pagedDoctorsSearched = PagedList<DoctorCardDTO>
+                .ToPagedList(searchedDoctorsDtos, pagingParameters.PageNumber, pagingParameters.PageSize);
+        Response.Headers.Add("X-Pagination",
+               JsonConvert.SerializeObject(pagedDoctorsSearched.MetaData));
+
+        return Ok(pagedDoctorsSearched);
     }
 
     [HttpPost]
