@@ -54,7 +54,7 @@ public class ClientsController : ControllerBase
         {
             _logger.LogInformation($"Clients with given searchString: '{SearchString}' doesn't exist in the database.");
 
-            return NotFound();
+            return NotFound($"Clients with given searchString: '{SearchString}' doesn't exist");
         }
 
         var pagedClientsSearched = PagedList<ClientCardDTO>

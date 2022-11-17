@@ -37,27 +37,19 @@ public class AppointmentsController : ControllerBase
     }
 
     [HttpGet("client/{clientId}", Name = "ClientAppointments")]
-    public async Task<IActionResult> GetClientAppointments(int clientId, [FromQuery] PagingParameters pagingParameters)
+    public async Task<IActionResult> GetClientAppointments(int clientId,
+        [FromQuery] PagingParameters pagingParameters)
     {
-        ClientCardDTO client = (await _clientService.GetAllAsync())
-            .Where(e => e.Id == clientId)
-            .FirstOrDefault();
+        ClientCardDTO client = await _clientService.GetAsync(clientId);
 
         if (client == null)
         {
             _logger.LogInformation($"Client with id: {clientId} doesn't exist in the database.");
 
-            return NotFound();
+            return NotFound($"Client with id: {clientId} doesn't exist");
         }
 
         IEnumerable<ClientAppointmentDTO> clientAppointments = await _appointmentsService.GetByClientIdAsync(clientId);
-
-        if (!clientAppointments.Any())
-        {
-            _logger.LogInformation($"Appointments with given clientId: '{clientId}' doesn't exist in the database.");
-
-            return NotFound();
-        }
 
         var pagedClientAppointments = PagedList<ClientAppointmentDTO>
             .ToPagedList(clientAppointments, pagingParameters.PageNumber, pagingParameters.PageSize);
@@ -67,28 +59,43 @@ public class AppointmentsController : ControllerBase
         return Ok(pagedClientAppointments);
     }
 
-    [HttpGet("doctor/{doctorId}", Name = "DoctorAppointments")]
-    public async Task<IActionResult> GetDoctorAppointments(int doctorId, [FromQuery] PagingParameters pagingParameters)
+    [HttpGet("client/{clientId}/visited")]
+    public async Task<IActionResult> GetVisitedClientAppointments(int clientId,
+        [FromQuery] PagingParameters pagingParameters)
     {
-        DoctorCardDTO doctor = (await _doctorService.GetAllAsync())
-            .Where(e => e.Id == doctorId)
-            .FirstOrDefault();
+        ClientCardDTO client = await _clientService.GetAsync(clientId);
+
+        if (client == null)
+        {
+            _logger.LogInformation($"Client with id: {clientId} doesn't exist in the database.");
+
+            return NotFound($"Client with id: {clientId} doesn't exist");
+        }
+
+        IEnumerable<ClientAppointmentCardDTO> clientAppointmentCards = await _appointmentsService.GetVisitedByClientIdAsync(clientId);
+
+        var pagedClientAppointments = PagedList<ClientAppointmentCardDTO>
+            .ToPagedList(clientAppointmentCards, pagingParameters.PageNumber, pagingParameters.PageSize);
+        Response.Headers.Add("X-Pagination",
+            JsonConvert.SerializeObject(pagedClientAppointments.MetaData));
+
+        return Ok(pagedClientAppointments);
+    }
+
+    [HttpGet("doctor/{doctorId}", Name = "DoctorAppointments")]
+    public async Task<IActionResult> GetDoctorAppointments(int doctorId,
+        [FromQuery] PagingParameters pagingParameters)
+    {
+        DoctorCardDTO doctor = await _doctorService.GetAsync(doctorId);
 
         if (doctor == null)
         {
             _logger.LogInformation($"Doctor with id: {doctorId} doesn't exist in the database.");
 
-            return NotFound();
+            return NotFound($"Doctor with id: {doctorId} doesn't exist");
         }
 
         IEnumerable<DoctorAppointmentDTO> doctorAppointments = await _appointmentsService.GetByDoctorIdAsync(doctorId);
-
-        if (!doctorAppointments.Any())
-        {
-            _logger.LogInformation($"Appointments with given clientId: '{doctorId}' doesn't exist in the database.");
-
-            return NotFound();
-        }
 
         var pagedDoctorAppointments = PagedList<DoctorAppointmentDTO>
             .ToPagedList(doctorAppointments, pagingParameters.PageNumber, pagingParameters.PageSize);
@@ -104,16 +111,26 @@ public class AppointmentsController : ControllerBase
     {
         if (appointmentDto == null)
         {
-            _logger.LogError("AppointmentForCreationDTO object sent from a client is null");
+            _logger.LogError("AppointmentForCreationDTO object sent from a client is null.");
 
             return BadRequest("AppointmentForCreationDTO object is null");
+        }
+
+        var client = await _clientService.GetAsync(appointmentDto.ClientId);
+        var doctor = await _doctorService.GetAsync(appointmentDto.DoctorId);
+
+        if (client == null || doctor == null)
+        {
+            _logger.LogError("Doctor or Client with given id doesn't exist in the database.");
+
+            return BadRequest("Doctor or Client with given id doesn't exist");
         }
 
         ValidationResult result = await _validator.ValidateAsync(appointmentDto);
 
         if (!result.IsValid)
         {
-            _logger.LogError("Invalid model state for the AppointmentForCreationDTO object");
+            _logger.LogError("Invalid model state for the AppointmentForCreationDTO object.");
 
             return UnprocessableEntity(result.Errors);
         }
@@ -129,15 +146,13 @@ public class AppointmentsController : ControllerBase
     [HttpPut("{appointmentId}/markAsVisited")]
     public async Task<IActionResult> PutVisitedAppointment(int appointmentId, [FromQuery] string diagnosis)
     {
-        ClientAppointmentDTO appointment = (await _appointmentsService.GetAllAsync())
-            .Where(e => e.Id == appointmentId)
-            .FirstOrDefault();
+        ClientAppointmentDTO appointment = await _appointmentsService.GetAsync(appointmentId);
 
         if (appointment == null)
         {
             _logger.LogInformation($"Appointment with id: {appointmentId} doesn't exist in the database.");
 
-            return NotFound();
+            return NotFound($"Appointment with id: {appointmentId} doesn't exist");
         }
 
         ClientAppointmentDTO appointmnetDto = await _appointmentsService.MarkAsVisitedAsync(appointmentId, diagnosis);

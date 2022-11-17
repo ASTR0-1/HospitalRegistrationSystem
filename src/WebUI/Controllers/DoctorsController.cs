@@ -54,7 +54,7 @@ public class DoctorsController : ControllerBase
         {
             _logger.LogInformation($"Doctors with given searchString: '{SearchString}' doesn't exist in the database.");
 
-            return NotFound();
+            return NotFound($"Doctors with given searchString: '{SearchString}' doesn't exist");
         }
 
         var pagedDoctorsSearched = PagedList<DoctorCardDTO>
