@@ -47,4 +47,13 @@ public class ClientService : IClientService
 
         return clientsDto;
     }
+
+    public async Task<ClientCardDTO> GetAsync(int clientId)
+    {
+        Client client = await _repository.Client.GetClientAsync(clientId, trackChanges: false);
+
+        var clientDto = _mapper.Map<ClientCardDTO>(client);
+
+        return clientDto;
+    }
 }

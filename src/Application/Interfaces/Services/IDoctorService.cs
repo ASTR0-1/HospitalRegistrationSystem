@@ -10,4 +10,5 @@ public interface IDoctorService
     Task AddNewAsync(Doctor doctor);
     Task<IEnumerable<DoctorCardDTO>> FindAsync(string searchString);
     Task<IEnumerable<DoctorCardDTO>> GetAllAsync();
+    Task<DoctorCardDTO> GetAsync(int doctorId);
 }

@@ -10,6 +10,7 @@ public interface IAppointmentService
     Task AddNewAsync(Appointment appointment);
     Task<ClientAppointmentDTO> MarkAsVisitedAsync(int appointmentId, string diagnosis);
     Task<IEnumerable<ClientAppointmentDTO>> GetAllAsync();
+    Task<ClientAppointmentDTO> GetAsync(int appointmentId);
     Task<IEnumerable<ClientAppointmentDTO>> GetByClientIdAsync(int clientId);
     Task<IEnumerable<ClientAppointmentCardDTO>> GetVisitedByClientIdAsync(int clientId);
     Task<IEnumerable<DoctorAppointmentDTO>> GetByDoctorIdAsync(int doctorId);

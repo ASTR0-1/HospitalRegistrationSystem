@@ -10,4 +10,5 @@ public interface IClientService
     Task AddNewAsync(Client client);
     Task<IEnumerable<ClientCardDTO>> FindAsync(string searchString);
     Task<IEnumerable<ClientCardDTO>> GetAllAsync();
+    Task<ClientCardDTO> GetAsync(int clientId);
 }

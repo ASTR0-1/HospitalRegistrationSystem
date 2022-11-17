@@ -47,4 +47,13 @@ public class DoctorService : IDoctorService
 
         return doctorsDto;
     }
+
+    public async Task<DoctorCardDTO> GetAsync(int doctorId)
+    {
+        Doctor doctor = await _repository.Doctor.GetDoctorAsync(doctorId, trackChanges: false);
+
+        var doctorDto = _mapper.Map<DoctorCardDTO>(doctor);
+
+        return doctorDto;
+    }
 }

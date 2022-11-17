@@ -35,12 +35,21 @@ public class AppointmentService : IAppointmentService
         return appointmentsDto;
     }
 
+    public async Task<ClientAppointmentDTO> GetAsync(int appointmentId)
+    {
+        Appointment appointment = await _repository.Appointment.GetAppointmentAsync(appointmentId, trackChanges: false);
+
+        var appointmentDto = _mapper.Map<ClientAppointmentDTO>(appointment);
+
+        return appointmentDto;
+    }
+
     public async Task<IEnumerable<ClientAppointmentDTO>> GetByClientIdAsync(int clientId)
     {
         IEnumerable<Appointment> appointments = await _repository.Appointment.GetAppointmentsAsync(trackChanges: false);
 
         IEnumerable<Appointment> clientAppointments = appointments
-            .Where(a => a.ClientId == clientId);
+            .Where(a => a.ClientId == clientId && a.IsVisited == false);
 
         var appointmentsDto = _mapper.Map<IEnumerable<ClientAppointmentDTO>>(clientAppointments);
 
@@ -52,7 +61,7 @@ public class AppointmentService : IAppointmentService
         IEnumerable<Appointment> appointments = await _repository.Appointment.GetAppointmentsAsync(trackChanges: false);
 
         IEnumerable<Appointment> doctorAppointments = appointments
-            .Where(a => a.DoctorId == doctorId);
+            .Where(a => a.DoctorId == doctorId && a.IsVisited == false);
 
         var appointmentsDto = _mapper.Map<IEnumerable<DoctorAppointmentDTO>>(doctorAppointments);
 
