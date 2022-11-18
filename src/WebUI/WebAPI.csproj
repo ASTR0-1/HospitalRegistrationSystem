@@ -2,8 +2,8 @@
 
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
-		<RootNamespace>HospitalRegistrationSystem.WebUI</RootNamespace>
-		<AssemblyName>HospitalRegistrationSystem.WebUI</AssemblyName>
+		<RootNamespace>HospitalRegistrationSystem.WebAPI</RootNamespace>
+		<AssemblyName>HospitalRegistrationSystem.WebAPI</AssemblyName>
 	</PropertyGroup>
 
   <ItemGroup>

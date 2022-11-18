@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 
-namespace HospitalRegistrationSystem.WebUI.ErrorModel;
+namespace HospitalRegistrationSystem.WebAPI.ErrorModel;
 
 public class ErrorDetails
 {

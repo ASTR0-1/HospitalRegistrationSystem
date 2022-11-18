@@ -12,7 +12,7 @@ using HospitalRegistrationSystem.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
-namespace HospitalRegistrationSystem.WebUI.Controllers;
+namespace HospitalRegistrationSystem.WebAPI.Controllers;
 
 [Route("api/clients")]
 [ApiController]
@@ -33,7 +33,7 @@ public class ClientsController : ControllerBase
     }
 
     [HttpGet(Name = "Clients")]
-    public async Task<IActionResult> GetClients([FromQuery] string SearchString, 
+    public async Task<IActionResult> GetClients([FromQuery] string SearchString,
         [FromQuery] PagingParameters pagingParameters)
     {
         if (string.IsNullOrEmpty(SearchString))
@@ -41,7 +41,7 @@ public class ClientsController : ControllerBase
             IEnumerable<ClientCardDTO> clientsDtos = await _clientService.GetAllAsync();
             var pagedClients = PagedList<ClientCardDTO>
                 .ToPagedList(clientsDtos, pagingParameters.PageNumber, pagingParameters.PageSize);
-            
+
             Response.Headers.Add("X-Pagination",
                 JsonConvert.SerializeObject(pagedClients.MetaData));
 

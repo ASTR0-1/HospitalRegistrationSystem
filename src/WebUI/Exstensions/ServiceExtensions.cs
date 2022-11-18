@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace HospitalRegistrationSystem.WebUI.Exstensions;
+namespace HospitalRegistrationSystem.WebAPI.Exstensions;
 
 public static class ServiceExtensions
 {

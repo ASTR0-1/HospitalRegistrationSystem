@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 
-namespace HospitalRegistrationSystem.WebUI.Exstensions;
+namespace HospitalRegistrationSystem.WebAPI.Exstensions;
 
 public static class ExceptionMiddlewareExtensions
 {

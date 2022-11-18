@@ -12,7 +12,7 @@ using HospitalRegistrationSystem.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
-namespace HospitalRegistrationSystem.WebUI.Controllers;
+namespace HospitalRegistrationSystem.WebAPI.Controllers;
 
 [Route("api/doctors")]
 [ApiController]

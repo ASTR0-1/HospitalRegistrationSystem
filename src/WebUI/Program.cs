@@ -1,7 +1,7 @@
 using System.IO;
 using HospitalRegistrationSystem.Application.Interfaces;
 using HospitalRegistrationSystem.Application.Mappers;
-using HospitalRegistrationSystem.WebUI.Exstensions;
+using HospitalRegistrationSystem.WebAPI.Exstensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Configuration;
@@ -9,7 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NLog;
 
-namespace HospitalRegistrationSystem.WebUI;
+namespace HospitalRegistrationSystem.WebAPI;
 
 public class Program
 {
