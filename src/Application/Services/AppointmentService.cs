@@ -2,8 +2,8 @@
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using HospitalRegistrationSystem.Application.DTOs;
 using HospitalRegistrationSystem.Application.Interfaces.Data;
-using HospitalRegistrationSystem.Application.Interfaces.DTOs;
 using HospitalRegistrationSystem.Application.Interfaces.Services;
 using HospitalRegistrationSystem.Domain.Entities;
 

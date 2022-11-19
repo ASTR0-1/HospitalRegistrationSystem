@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using HospitalRegistrationSystem.Application.Interfaces.DTOs;
+using HospitalRegistrationSystem.Application.DTOs;
 using HospitalRegistrationSystem.Domain.Entities;
 
 namespace HospitalRegistrationSystem.Application.Mappers;

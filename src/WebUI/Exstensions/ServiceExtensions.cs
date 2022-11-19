@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
+using HospitalRegistrationSystem.Application.DTOs;
 using HospitalRegistrationSystem.Application.Interfaces;
 using HospitalRegistrationSystem.Application.Interfaces.Data;
-using HospitalRegistrationSystem.Application.Interfaces.DTOs;
 using HospitalRegistrationSystem.Application.Interfaces.Services;
 using HospitalRegistrationSystem.Application.Services;
 using HospitalRegistrationSystem.Application.Validation;

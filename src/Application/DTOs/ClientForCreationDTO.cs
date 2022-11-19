@@ -1,6 +1,6 @@
-﻿namespace HospitalRegistrationSystem.Application.Interfaces.DTOs;
+﻿namespace HospitalRegistrationSystem.Application.DTOs;
 
-public class DoctorForCreationDTO
+public class ClientForCreationDTO
 {
     public string FirstName { get; set; }
 
@@ -9,6 +9,4 @@ public class DoctorForCreationDTO
     public string LastName { get; set; }
 
     public string Gender { get; set; }
-
-    public string Specialty { get; set; }
 }

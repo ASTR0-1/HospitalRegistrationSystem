@@ -1,6 +1,6 @@
 ﻿using System.Net;
 using HospitalRegistrationSystem.Application.Interfaces;
-using HospitalRegistrationSystem.WebUI.ErrorModel;
+using HospitalRegistrationSystem.WebAPI.ErrorModel;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;

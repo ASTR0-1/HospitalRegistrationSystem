@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using HospitalRegistrationSystem.Application.Interfaces.DTOs;
+using HospitalRegistrationSystem.Application.DTOs;
 
 namespace HospitalRegistrationSystem.Application.Validation;
 

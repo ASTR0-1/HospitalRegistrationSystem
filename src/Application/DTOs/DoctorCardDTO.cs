@@ -1,6 +1,6 @@
-﻿namespace HospitalRegistrationSystem.Application.Interfaces.DTOs;
+﻿namespace HospitalRegistrationSystem.Application.DTOs;
 
-public class ClientCardDTO
+public class DoctorCardDTO
 {
     public int Id { get; set; }
 
@@ -11,4 +11,6 @@ public class ClientCardDTO
     public string LastName { get; set; }
 
     public string Gender { get; set; }
+
+    public string Specialty { get; set; }
 }

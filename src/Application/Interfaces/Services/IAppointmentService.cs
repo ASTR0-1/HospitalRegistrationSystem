@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using HospitalRegistrationSystem.Application.Interfaces.DTOs;
+using HospitalRegistrationSystem.Application.DTOs;
 using HospitalRegistrationSystem.Domain.Entities;
 
 namespace HospitalRegistrationSystem.Application.Interfaces.Services;
