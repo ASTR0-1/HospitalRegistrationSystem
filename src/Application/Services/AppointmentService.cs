@@ -80,7 +80,7 @@ public class AppointmentService : IAppointmentService
         return appointmentsDto;
     }
 
-    public async Task<ClientAppointmentDTO> MarkAsVisitedAsync(int appointmentId, string diagnosis)
+    public async Task<ClientAppointmentCardDTO> MarkAsVisitedAsync(int appointmentId, string diagnosis)
     {
         Appointment appointment = await _repository.Appointment.GetAppointmentAsync(appointmentId, trackChanges: true);
         if (appointment == null)

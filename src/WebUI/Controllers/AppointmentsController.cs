@@ -155,7 +155,7 @@ public class AppointmentsController : ControllerBase
             return NotFound($"Appointment with id: {appointmentId} doesn't exist");
         }
 
-        ClientAppointmentDTO appointmnetDto = await _appointmentsService.MarkAsVisitedAsync(appointmentId, diagnosis);
+        ClientAppointmentCardDTO appointmnetDto = await _appointmentsService.MarkAsVisitedAsync(appointmentId, diagnosis);
 
         return Ok(appointmnetDto);
     }
