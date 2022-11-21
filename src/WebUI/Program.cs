@@ -68,8 +68,6 @@ public class Program
             ForwardedHeaders = ForwardedHeaders.All
         });
 
-        app.UseRouting();
-
         app.UseAuthorization();
 
         app.MapControllers();
