@@ -33,10 +33,11 @@ public class DoctorsController : ControllerBase
     }
 
     [HttpGet(Name = "Doctors")]
-    public async Task<IActionResult> GetDoctors([FromQuery] string SearchString,
-        [FromQuery] PagingParameters pagingParameters)
+    public async Task<IActionResult> GetDoctors([FromQuery] EntityParameters pagingParameters)
     {
-        if (string.IsNullOrEmpty(SearchString))
+        string searchString = pagingParameters.SearchString;
+
+        if (string.IsNullOrEmpty(searchString))
         {
             IEnumerable<DoctorCardDTO> doctorsDtos = await _doctorService.GetAllAsync();
             var pagedDoctors = PagedList<DoctorCardDTO>
@@ -48,13 +49,13 @@ public class DoctorsController : ControllerBase
             return Ok(pagedDoctors);
         }
 
-        IEnumerable<DoctorCardDTO> searchedDoctorsDtos = await _doctorService.FindAsync(SearchString);
+        IEnumerable<DoctorCardDTO> searchedDoctorsDtos = await _doctorService.FindAsync(searchString);
 
         if (!searchedDoctorsDtos.Any())
         {
-            _logger.LogInformation($"Doctors with given searchString: '{SearchString}' doesn't exist in the database.");
+            _logger.LogInformation($"Doctors with given searchString: '{searchString}' doesn't exist in the database.");
 
-            return NotFound($"Doctors with given searchString: '{SearchString}' doesn't exist");
+            return NotFound($"Doctors with given searchString: '{searchString}' doesn't exist");
         }
 
         var pagedDoctorsSearched = PagedList<DoctorCardDTO>

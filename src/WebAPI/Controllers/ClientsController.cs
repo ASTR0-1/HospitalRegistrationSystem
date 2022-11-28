@@ -33,10 +33,11 @@ public class ClientsController : ControllerBase
     }
 
     [HttpGet(Name = "Clients")]
-    public async Task<IActionResult> GetClients([FromQuery] string SearchString,
-        [FromQuery] PagingParameters pagingParameters)
+    public async Task<IActionResult> GetClients([FromQuery] EntityParameters pagingParameters)
     {
-        if (string.IsNullOrEmpty(SearchString))
+        string searchString = pagingParameters.SearchString;
+
+        if (string.IsNullOrEmpty(searchString))
         {
             IEnumerable<ClientCardDTO> clientsDtos = await _clientService.GetAllAsync();
             var pagedClients = PagedList<ClientCardDTO>
@@ -48,13 +49,13 @@ public class ClientsController : ControllerBase
             return Ok(pagedClients);
         }
 
-        IEnumerable<ClientCardDTO> searchedClientsDtos = await _clientService.FindAsync(SearchString);
+        IEnumerable<ClientCardDTO> searchedClientsDtos = await _clientService.FindAsync(searchString);
 
         if (!searchedClientsDtos.Any())
         {
-            _logger.LogInformation($"Clients with given searchString: '{SearchString}' doesn't exist in the database.");
+            _logger.LogInformation($"Clients with given searchString: '{searchString}' doesn't exist in the database.");
 
-            return NotFound($"Clients with given searchString: '{SearchString}' doesn't exist");
+            return NotFound($"Clients with given searchString: '{searchString}' doesn't exist");
         }
 
         var pagedClientsSearched = PagedList<ClientCardDTO>
