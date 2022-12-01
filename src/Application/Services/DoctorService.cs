@@ -31,7 +31,7 @@ public class DoctorService : IDoctorService
         IEnumerable<Doctor> doctors = await _repository.Doctor.GetDoctorsAsync(trackChanges: false);
 
         IEnumerable<Doctor> filteredDoctors = doctors
-            .Where(c => string.Join(" ", c.FirstName, c.MiddleName, c.LastName)
+            .Where(c => string.Join(" ", c.FirstName, c.MiddleName, c.LastName, c.Specialty)
             .Contains(searchString, System.StringComparison.InvariantCultureIgnoreCase));
 
         var doctorsDto = _mapper.Map<IEnumerable<DoctorCardDTO>>(filteredDoctors);

@@ -19,9 +19,10 @@ public static class ServiceExtensions
         services.AddCors(opts =>
         {
             opts.AddPolicy("CorsPolicy", builder =>
-                builder.AllowAnyOrigin()
+                builder.AllowAnyHeader()
                 .AllowAnyMethod()
-                .AllowAnyHeader());
+                .AllowAnyOrigin()
+                .WithExposedHeaders("X-Pagination"));
         });
 
     public static void ConfigureLoggerService(this IServiceCollection services) =>
