@@ -1,0 +1,45 @@
+<div class="d-flex position-fixed-top align-items-center flex-column gap-2">
+    <div class="d-flex flex-row justify-content-center align-items-center unselectable">
+        <p class="view-emoji-header">🧑‍⚕️👩‍⚕️</p>
+        <p class="view-text-header">Add new doctor</p>
+    </div>
+    <div class="d-flex form flex-column justify-content-center align-items-center unselectable gap-4">
+        <div class="form-group">
+            <label class="form-text">First name: </label>
+            <input class="form-control form-text" autocomplete="off" name="firstName"
+                [(ngModel)]="doctorToAdd.firstName" #firstName="ngModel" required />
+            <div [hidden]="firstName.valid || firstName.untouched" class="validation-text">Please, enter first name!
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-text">Middle name: </label>
+            <input class="form-control form-text" autocomplete="off" name="middleName"
+                [(ngModel)]="doctorToAdd.middleName" #middleName="ngModel" required />
+            <div [hidden]="middleName.valid || middleName.untouched" class="validation-text">Please, enter middle name!
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-text">Last name: </label>
+            <input class="form-control form-text" autocomplete="off" name="lastName" [(ngModel)]="doctorToAdd.lastName"
+                #lastName="ngModel" required />
+            <div [hidden]="lastName.valid || lastName.untouched" class="validation-text">Please, enter last name!</div>
+        </div>
+        <div class="form-group">
+            <label class="form-text">Gender: </label>
+            <input class="form-control form-text" autocomplete="off" name="gender" [(ngModel)]="doctorToAdd.gender"
+                #gender="ngModel" required pattern="[A-Z].*" />
+            <div [hidden]="gender.valid || gender.untouched" class="validation-text">Please, enter gender starting with
+                capital!</div>
+        </div>
+        <div class="form-group">
+            <label class="form-text">Specialty: </label>
+            <input class="form-control form-text" autocomplete="off" name="specialty"
+                [(ngModel)]="doctorToAdd.specialty" #specialty="ngModel" required />
+            <div [hidden]="specialty.valid || specialty.untouched" class="validation-text">Please, enter specialty!
+            </div>
+        </div>
+        <button
+            [disabled]="firstName.invalid || lastName.invalid || middleName.invalid || gender.invalid || specialty.invalid"
+            class="btn" (click)="addDoctor()">Submit</button>
+    </div>
+</div>

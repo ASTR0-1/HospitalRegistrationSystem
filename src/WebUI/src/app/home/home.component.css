@@ -1,0 +1,29 @@
+.home-container {
+    height: 65vh;
+}
+
+.row-text {
+    font-weight: 400;
+    font-size: 30px;
+}
+
+.emoji-gender{
+    font-size: 55px;
+}
+
+.btn {
+    border-radius: 10px;
+    font-size: 20px;
+    background-color: #92a9bd;
+    color: #fff;
+}
+
+.form-control {
+    font-size: 20px;
+}
+
+.input-group-text {
+    background-color: #92a9bd;
+    border-color: #92a9bd;
+    color: #fff;
+}

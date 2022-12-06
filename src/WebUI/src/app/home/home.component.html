@@ -1,0 +1,28 @@
+<div class="col w-100 home-container">
+    <div class="row-6 d-flex h-50 justify-content-center align-items-center">
+        <span class="emoji-gender">🧑‍⚕️👩‍⚕️</span>
+        <span class="row-text"> Check out all of the</span>
+        <button class="btn m-2" routerLink="doctors">Doctors</button>
+        <span class="row-text"> or</span>
+        <div class="input-group w-25 m-3 rounded">
+            <input type="search" class="form-control rounded" placeholder="Search doctors" 
+                aria-label="Search" aria-describedby="search-addon" #doctorsData (keyup.enter)="searchDoctors(doctorsData.value)" />
+            <span class="input-group-text border-0" id="search-doctors">
+              <i class="fas fa-search"></i>
+            </span>
+        </div>
+    </div>
+    <div class="row-6 d-flex h-50 justify-content-center align-items-center">
+        <span class="emoji-gender">👨👩</span>
+        <span class="row-text"> Check out all of the</span>
+        <button class="btn m-2" routerLink="clients">Clients</button>
+        <span class="row-text"> or</span>
+        <div class="input-group w-25 m-3 rounded">
+            <input type="search" class="form-control rounded" placeholder="Search clients" 
+                aria-label="Search" aria-describedby="search-addon" #clientsData (keyup.enter)="searchClients(clientsData.value)" />
+            <span class="input-group-text border-0" id="search-clients">
+              <i class="fas fa-search"></i>
+            </span>
+        </div>
+    </div>
+</div>

@@ -32,7 +32,7 @@ public class DoctorService : IDoctorService
 
         IEnumerable<Doctor> filteredDoctors = doctors
             .Where(c => string.Join(" ", c.FirstName, c.MiddleName, c.LastName, c.Specialty)
-            .Contains(searchString, System.StringComparison.InvariantCultureIgnoreCase));
+            .Contains(searchString, System.StringComparison.OrdinalIgnoreCase));
 
         var doctorsDto = _mapper.Map<IEnumerable<DoctorCardDTO>>(filteredDoctors);
 

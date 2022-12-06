@@ -1,0 +1,39 @@
+<div class="d-flex position-fixed-top align-items-center flex-column gap-2">
+    <div class="d-flex flex-row justify-content-center align-items-center unselectable">
+        <p class="view-emoji-header">🧑‍⚕️👩‍⚕️</p>
+        <p class="view-text-header">Doctors</p>
+    </div>
+    <div class="d-flex flex-row justify-content-center align-items-center gap-2">
+        <button [disabled]="!hasPrevious" class="btn btn-arrow" (click)="prevPage()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor"
+                class="bi bi-caret-left-fill" viewBox="0 0 16 16">
+                <path
+                    d="m3.86 8.753 5.482 4.796c.646.566 1.658.106 1.658-.753V3.204a1 1 0 0 0-1.659-.753l-5.48 4.796a1 1 0 0 0 0 1.506z" />
+            </svg>
+        </button>
+        <button class="btn btn-add btn-header w-25 mb-2" routerLink="new">Add new doctor</button>
+        <button [disabled]="!hasNext" class="btn btn-arrow" (click)="nextPage()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor"
+                class="bi bi-caret-right-fill" viewBox="0 0 16 16">
+                <path
+                    d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z" />
+            </svg>
+        </button>
+    </div>
+    <div class="d-flex flex-row card-container gap-5">
+        <div class="d-flex flex-column justify-content-center align-items-center gap-2 view-card"
+            *ngFor="let doctor of doctors">
+            <p class="view-card-emoji unselectable">{{getEmojiGender(doctor)}}</p>
+            <p class="view-card-text">
+                {{doctor.firstName}}<br />
+                {{doctor.middleName}}<br />
+                {{doctor.lastName}}<br />
+            </p>
+            <p class="view-card-text view-card-specialty">
+                {{doctor.specialty}}
+            </p>
+            <button class="btn" routerLink="{{doctor.id}}/appointments"
+                [queryParams]="{doctorFullName: getDoctorFullName(doctor)}">Schedule</button>
+        </div>
+    </div>
+</div>
