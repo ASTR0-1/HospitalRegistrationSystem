@@ -6,7 +6,7 @@ Main idea of this application is to control Hospital appointments
 
 <h4>Using these techonlogies :</h4>
 ➡️ <i>ASP.NET Core 6.0</i><br>
-UI(to be added soon) interacts with application using API Controllers.<br>
+Angualar client interacts with application using API Controllers.<br>
 To test controllers we use <i>Swagger</i>.
 
 <br>➡️ <i>Entity Framework Core</i><br>
