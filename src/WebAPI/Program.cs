@@ -20,7 +20,7 @@ public class Program
         LogManager.LoadConfiguration(string.Concat(Directory.GetCurrentDirectory(),
             "/nlog.config"));
 
-        IServiceCollection services = builder.Services;
+        var services = builder.Services;
         IConfiguration configuration = builder.Configuration;
 
         services.ConfigureCors();

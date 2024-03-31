@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -11,8 +12,8 @@ namespace HospitalRegistrationSystem.Application.Services;
 
 public class ClientService : IClientService
 {
-    private readonly IRepositoryManager _repository;
     private readonly IMapper _mapper;
+    private readonly IRepositoryManager _repository;
 
     public ClientService(IRepositoryManager repository, IMapper mapper)
     {
@@ -28,11 +29,11 @@ public class ClientService : IClientService
 
     public async Task<IEnumerable<ClientCardDTO>> FindAsync(string searchString)
     {
-        IEnumerable<Client> clients = await _repository.Client.GetClientsAsync(trackChanges: false);
+        var clients = await _repository.Client.GetClientsAsync(false);
 
-        IEnumerable<Client> filteredClients = clients
+        var filteredClients = clients
             .Where(c => string.Join(" ", c.FirstName, c.MiddleName, c.LastName)
-            .Contains(searchString, System.StringComparison.InvariantCultureIgnoreCase));
+                .Contains(searchString, StringComparison.InvariantCultureIgnoreCase));
 
         var clientsDto = _mapper.Map<IEnumerable<ClientCardDTO>>(filteredClients);
 
@@ -41,7 +42,7 @@ public class ClientService : IClientService
 
     public async Task<IEnumerable<ClientCardDTO>> GetAllAsync()
     {
-        IEnumerable<Client> clients = await _repository.Client.GetClientsAsync(trackChanges: false);
+        var clients = await _repository.Client.GetClientsAsync(false);
 
         var clientsDto = _mapper.Map<IEnumerable<ClientCardDTO>>(clients);
 
@@ -50,7 +51,7 @@ public class ClientService : IClientService
 
     public async Task<ClientCardDTO> GetAsync(int clientId)
     {
-        Client client = await _repository.Client.GetClientAsync(clientId, trackChanges: false);
+        var client = await _repository.Client.GetClientAsync(clientId, false);
 
         var clientDto = _mapper.Map<ClientCardDTO>(client);
 

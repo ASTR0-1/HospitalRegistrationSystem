@@ -16,7 +16,7 @@ public static class ExceptionMiddlewareExtensions
         {
             appError.Run(async context =>
             {
-                context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                context.Response.StatusCode = (int) HttpStatusCode.InternalServerError;
                 context.Response.ContentType = "application/json";
 
                 var contextFeature = context.Features.Get<IExceptionHandlerFeature>();
@@ -24,7 +24,7 @@ public static class ExceptionMiddlewareExtensions
                 {
                     logger.LogError($"Something went wrong: {contextFeature.Error}");
 
-                    await context.Response.WriteAsync(new ErrorDetails()
+                    await context.Response.WriteAsync(new ErrorDetails
                     {
                         StatusCode = context.Response.StatusCode,
                         Message = "Internal Server Error."

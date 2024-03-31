@@ -11,24 +11,33 @@ public class DoctorRepository : RepositoryBase<Doctor>, IDoctorRepository
 {
     public DoctorRepository(RepositoryContext repositoryContext)
         : base(repositoryContext)
-    { }
+    {
+    }
 
-    public void CreateDoctor(Doctor doctor) =>
+    public void CreateDoctor(Doctor doctor)
+    {
         Create(doctor);
+    }
 
-    public void DeleteDoctor(Doctor doctor) =>
+    public void DeleteDoctor(Doctor doctor)
+    {
         Delete(doctor);
+    }
 
-    public async Task<Doctor> GetDoctorAsync(int id, bool trackChanges) =>
-        await FindByCondition(d => d.Id == id, trackChanges)
+    public async Task<Doctor> GetDoctorAsync(int id, bool trackChanges)
+    {
+        return await FindByCondition(d => d.Id == id, trackChanges)
             .Include(d => d.Appointments)
-                .ThenInclude(a => a.Client)
+            .ThenInclude(a => a.Client)
             .SingleOrDefaultAsync();
+    }
 
-    public async Task<IEnumerable<Doctor>> GetDoctorsAsync(bool trackChanges) =>
-        await FindAll(trackChanges)
+    public async Task<IEnumerable<Doctor>> GetDoctorsAsync(bool trackChanges)
+    {
+        return await FindAll(trackChanges)
             .Include(d => d.Appointments)
-                .ThenInclude(a => a.Client)
+            .ThenInclude(a => a.Client)
             .OrderBy(d => d.Id)
             .ToListAsync();
+    }
 }

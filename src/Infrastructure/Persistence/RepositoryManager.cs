@@ -6,13 +6,12 @@ namespace HospitalRegistrationSystem.Infrastructure.Persistence;
 
 public class RepositoryManager : IRepositoryManager
 {
+    private static readonly object _lock = new();
     private readonly RepositoryContext _context;
+    private IAppointmentRepository _appointmentRepository;
 
     private IClientRepository _clientRepository;
     private IDoctorRepository _doctorRepository;
-    private IAppointmentRepository _appointmentRepository;
-
-    private static readonly object _lock = new object();
 
     public RepositoryManager(RepositoryContext context)
     {
@@ -53,11 +52,13 @@ public class RepositoryManager : IRepositoryManager
             {
                 _doctorRepository ??= new DoctorRepository(_context);
 
-                return _doctorRepository; 
+                return _doctorRepository;
             }
         }
     }
 
-    public Task SaveAsync() =>
-        _context.SaveChangesAsync();
+    public Task SaveAsync()
+    {
+        return _context.SaveChangesAsync();
+    }
 }

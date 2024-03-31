@@ -1,138 +1,136 @@
-﻿using HospitalRegistrationSystem.Application.Interfaces.Data;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
+using HospitalRegistrationSystem.Application.Interfaces.Data;
 using HospitalRegistrationSystem.Domain.Entities;
 using HospitalRegistrationSystem.Infrastructure.Persistence.Repositories;
-using HospitalRegistrationSystem.Tests.Infrastructure.Repository.DoctorRepo;
 using NUnit.Framework;
-using System.Threading.Tasks;
-using System;
-using System.Linq;
 
-namespace HospitalRegistrationSystem.Tests.Infrastructure.Repository.DoctorRepo
+namespace HospitalRegistrationSystem.Tests.Infrastructure.Repository.DoctorRepo;
+
+[TestFixture]
+public class DoctorRepoTests
 {
-    [TestFixture]
-    public class DoctorRepoTests
+    [SetUp]
+    public void SetUpFixture()
     {
-        private IDoctorRepository _doctorRepository;
-        private DoctorSeedDataFixture _dataFixture;
+        _dataFixture = new DoctorSeedDataFixture();
+        _doctorRepository = new DoctorRepository(_dataFixture.RepositoryContext);
+    }
 
-        [SetUp]
-        public void SetUpFixture()
+    [TearDown]
+    public void TearDownFixture()
+    {
+        _dataFixture.Dispose();
+    }
+
+    private IDoctorRepository _doctorRepository;
+    private DoctorSeedDataFixture _dataFixture;
+
+    [Test]
+    public void Create_Null_ThrowArgumentNullException()
+    {
+        // Arrange
+        Doctor nullDoctor = null;
+        var expectedExceptionType = typeof(ArgumentNullException);
+
+        // Act
+        var actualExceptionType = Assert.Catch(() => _doctorRepository.CreateDoctor(nullDoctor)).GetType();
+
+        // Assert
+        Assert.That(actualExceptionType, Is.EqualTo(expectedExceptionType));
+    }
+
+    [Test]
+    public async Task Create_NotNull_AddValue()
+    {
+        // Arrange
+        var expectedFirstName = "f3";
+        Doctor doctor = new()
         {
-            _dataFixture = new DoctorSeedDataFixture();
-            _doctorRepository = new DoctorRepository(_dataFixture.RepositoryContext);
-        }
+            FirstName = "f3",
+            MiddleName = "m3",
+            LastName = "l3",
+            Gender = "g3",
+            Specialty = "s3"
+        };
 
-        [TearDown]
-        public void TearDownFixture()
-        {
-            _dataFixture.Dispose();
-        }
+        // Act
+        _doctorRepository.CreateDoctor(doctor);
+        await _dataFixture.RepositoryContext.SaveChangesAsync();
+        var actualFirstName = (await _doctorRepository.GetDoctorsAsync(false)).Last().FirstName;
 
-        [Test]
-        public void Create_Null_ThrowArgumentNullException()
-        {
-            // Arrange
-            Doctor nullDoctor = null;
-            Type expectedExceptionType = typeof(ArgumentNullException);
+        // Assert
+        Assert.That(actualFirstName, Is.EqualTo(expectedFirstName));
+    }
 
-            // Act
-            Type actualExceptionType = (Assert.Catch(() => _doctorRepository.CreateDoctor(nullDoctor))).GetType();
+    [Test]
+    public void Delete_Null_ThrowArgumentNullException()
+    {
+        // Arrange
+        Doctor nullDoctor = null;
+        var expectedExceptionType = typeof(ArgumentNullException);
 
-            // Assert
-            Assert.That(actualExceptionType, Is.EqualTo(expectedExceptionType));
-        }
+        // Act
+        var actualExceptionType = Assert.Catch(() => _doctorRepository.DeleteDoctor(nullDoctor)).GetType();
 
-        [Test]
-        public async Task Create_NotNull_AddValue()
-        {
-            // Arrange
-            string expectedFirstName = "f3";
-            Doctor doctor = new()
-            {
-                FirstName = "f3",
-                MiddleName = "m3",
-                LastName = "l3",
-                Gender = "g3",
-                Specialty = "s3"
-            };
+        // Assert
+        Assert.That(actualExceptionType, Is.EqualTo(expectedExceptionType));
+    }
 
-            // Act
-            _doctorRepository.CreateDoctor(doctor);
-            await _dataFixture.RepositoryContext.SaveChangesAsync();
-            string actualFirstName = (await _doctorRepository.GetDoctorsAsync(trackChanges: false)).Last().FirstName;
+    [Test]
+    public async Task Delete_Existing_DeleteValue()
+    {
+        // Arrange
+        var expectedFirstName = "f1";
+        var doctorToDelete = await _doctorRepository.GetDoctorAsync(2, true);
 
-            // Assert
-            Assert.That(actualFirstName, Is.EqualTo(expectedFirstName));
-        }
+        // Act
+        _doctorRepository.DeleteDoctor(doctorToDelete);
+        await _dataFixture.RepositoryContext.SaveChangesAsync();
+        var actualDiagnosis = (await _doctorRepository.GetDoctorsAsync(false)).Last().FirstName;
 
-        [Test]
-        public void Delete_Null_ThrowArgumentNullException()
-        {
-            // Arrange
-            Doctor nullDoctor = null;
-            Type expectedExceptionType = typeof(ArgumentNullException);
+        // Assert
+        Assert.That(actualDiagnosis, Is.EqualTo(expectedFirstName));
+    }
 
-            // Act
-            Type actualExceptionType = (Assert.Catch(() => _doctorRepository.DeleteDoctor(nullDoctor))).GetType();
+    [Test]
+    public async Task GetDoctorsAsync_GetValue()
+    {
+        // Arrange
+        var expectedCount = 2;
 
-            // Assert
-            Assert.That(actualExceptionType, Is.EqualTo(expectedExceptionType));
-        }
+        // Act
+        var actualCount = (await _doctorRepository.GetDoctorsAsync(false)).Count();
 
-        [Test]
-        public async Task Delete_Existing_DeleteValue()
-        {
-            // Arrange
-            string expectedFirstName = "f1";
-            var doctorToDelete = await _doctorRepository.GetDoctorAsync(2, true);
+        // Assert
+        Assert.That(actualCount, Is.EqualTo(expectedCount));
+    }
 
-            // Act
-            _doctorRepository.DeleteDoctor(doctorToDelete);
-            await _dataFixture.RepositoryContext.SaveChangesAsync();
-            string actualDiagnosis = (await _doctorRepository.GetDoctorsAsync(false)).Last().FirstName;
+    [Test]
+    public async Task GetDoctorAsync_NotExistingId_GetNull()
+    {
+        // Arrange
+        var notExistingId = -1;
+        Appointment expectedAppointment = null;
 
-            // Assert
-            Assert.That(actualDiagnosis, Is.EqualTo(expectedFirstName));
-        }
+        // Act
+        var actualDoctor = await _doctorRepository.GetDoctorAsync(notExistingId, false);
 
-        [Test]
-        public async Task GetDoctorsAsync_GetValue()
-        {
-            // Arrange
-            int expectedCount = 2;
+        // Assert
+        Assert.That(actualDoctor, Is.EqualTo(expectedAppointment));
+    }
 
-            // Act
-            int actualCount = (await _doctorRepository.GetDoctorsAsync(false)).Count();
+    [Test]
+    public async Task GetDoctorAsync_ExistingId_GetValue()
+    {
+        // Arrange
+        var expectedId = 1;
 
-            // Assert
-            Assert.That(actualCount, Is.EqualTo(expectedCount));
-        }
+        // Act
+        var actualId = (await _doctorRepository.GetDoctorAsync(expectedId, false)).Id;
 
-        [Test]
-        public async Task GetDoctorAsync_NotExistingId_GetNull()
-        {
-            // Arrange
-            int notExistingId = -1;
-            Appointment expectedAppointment = null;
-
-            // Act
-            var actualDoctor = await _doctorRepository.GetDoctorAsync(notExistingId, trackChanges: false);
-
-            // Assert
-            Assert.That(actualDoctor, Is.EqualTo(expectedAppointment));
-        }
-
-        [Test]
-        public async Task GetDoctorAsync_ExistingId_GetValue()
-        {
-            // Arrange
-            int expectedId = 1;
-
-            // Act
-            int actualId = (await _doctorRepository.GetDoctorAsync(expectedId, trackChanges: false)).Id;
-
-            // Assert
-            Assert.That(actualId, Is.EqualTo(expectedId));
-        }
+        // Assert
+        Assert.That(actualId, Is.EqualTo(expectedId));
     }
 }

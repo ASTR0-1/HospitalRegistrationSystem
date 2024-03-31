@@ -11,24 +11,33 @@ public class ClientRepository : RepositoryBase<Client>, IClientRepository
 {
     public ClientRepository(RepositoryContext repositoryContext)
         : base(repositoryContext)
-    { }
+    {
+    }
 
-    public void CreateClient(Client client) =>
+    public void CreateClient(Client client)
+    {
         Create(client);
+    }
 
-    public void DeleteClient(Client client) =>
+    public void DeleteClient(Client client)
+    {
         Delete(client);
+    }
 
-    public async Task<Client> GetClientAsync(int id, bool trackChanges) =>
-        await FindByCondition(c => c.Id == id, trackChanges)
+    public async Task<Client> GetClientAsync(int id, bool trackChanges)
+    {
+        return await FindByCondition(c => c.Id == id, trackChanges)
             .Include(d => d.Appointments)
-                .ThenInclude(a => a.Doctor)
+            .ThenInclude(a => a.Doctor)
             .SingleOrDefaultAsync();
+    }
 
-    public async Task<IEnumerable<Client>> GetClientsAsync(bool trackChanges) =>
-        await FindAll(trackChanges)
+    public async Task<IEnumerable<Client>> GetClientsAsync(bool trackChanges)
+    {
+        return await FindAll(trackChanges)
             .Include(d => d.Appointments)
-                .ThenInclude(a => a.Doctor)
+            .ThenInclude(a => a.Doctor)
             .OrderBy(c => c.Id)
             .ToListAsync();
+    }
 }

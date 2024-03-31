@@ -6,8 +6,6 @@ namespace HospitalRegistrationSystem.Application.Utility;
 
 public class PagedList<T> : List<T>
 {
-    public MetaData MetaData { get; set; }
-
     public PagedList(List<T> items, int count, int pageNumber, int pageSize)
     {
         MetaData = new MetaData
@@ -15,11 +13,13 @@ public class PagedList<T> : List<T>
             TotalCount = count,
             PageSize = pageSize,
             CurrentPage = pageNumber,
-            TotalPages = (int)Math.Ceiling(count / (double)pageSize)
+            TotalPages = (int) Math.Ceiling(count / (double) pageSize)
         };
 
-        this.AddRange(items);
+        AddRange(items);
     }
+
+    public MetaData MetaData { get; set; }
 
     public static PagedList<T> ToPagedList(IEnumerable<T> source, int pageNumber, int pageSize)
     {

@@ -11,9 +11,6 @@ namespace HospitalRegistrationSystem.Tests.Infrastructure.Repository.Appointment
 [TestFixture]
 public class AppointmentRepoTests
 {
-    private IAppointmentRepository _appointmentRepository;
-    private AppointmentSeedDataFixture _dataFixture;
-
     [SetUp]
     public void SetUpFixture()
     {
@@ -27,15 +24,19 @@ public class AppointmentRepoTests
         _dataFixture.Dispose();
     }
 
+    private IAppointmentRepository _appointmentRepository;
+    private AppointmentSeedDataFixture _dataFixture;
+
     [Test]
     public void Create_Null_ThrowArgumentNullException()
     {
         // Arrange
         Appointment nullAppointment = null;
-        Type expectedExceptionType = typeof(ArgumentNullException);
+        var expectedExceptionType = typeof(ArgumentNullException);
 
         // Act
-        Type actualExceptionType = (Assert.Catch(() => _appointmentRepository.CreateAppointment(nullAppointment))).GetType();
+        var actualExceptionType =
+            Assert.Catch(() => _appointmentRepository.CreateAppointment(nullAppointment)).GetType();
 
         // Assert
         Assert.That(actualExceptionType, Is.EqualTo(expectedExceptionType));
@@ -45,8 +46,9 @@ public class AppointmentRepoTests
     public async Task Create_NotNull_AddValue()
     {
         // Arrange
-        string expectedDiagnosis = "D3";
-        Appointment appointment = new Appointment {
+        var expectedDiagnosis = "D3";
+        var appointment = new Appointment
+        {
             ClientId = 2,
             DoctorId = 2,
             VisitTime = new DateTime(3033, 3, 3),
@@ -56,7 +58,7 @@ public class AppointmentRepoTests
         // Act
         _appointmentRepository.CreateAppointment(appointment);
         await _dataFixture.RepositoryContext.SaveChangesAsync();
-        string actualDiagnosis = (await _appointmentRepository.GetAppointmentsAsync(trackChanges: false)).Last().Diagnosis;
+        var actualDiagnosis = (await _appointmentRepository.GetAppointmentsAsync(false)).Last().Diagnosis;
 
         // Assert
         Assert.That(actualDiagnosis, Is.EqualTo(expectedDiagnosis));
@@ -67,10 +69,11 @@ public class AppointmentRepoTests
     {
         // Arrange
         Appointment nullAppointment = null;
-        Type expectedExceptionType = typeof(ArgumentNullException);
+        var expectedExceptionType = typeof(ArgumentNullException);
 
         // Act
-        Type actualExceptionType = (Assert.Catch(() => _appointmentRepository.DeleteAppointment(nullAppointment))).GetType();
+        var actualExceptionType =
+            Assert.Catch(() => _appointmentRepository.DeleteAppointment(nullAppointment)).GetType();
 
         // Assert
         Assert.That(actualExceptionType, Is.EqualTo(expectedExceptionType));
@@ -80,13 +83,13 @@ public class AppointmentRepoTests
     public async Task Delete_Existing_DeleteValue()
     {
         // Arrange
-        string expectedDiagnosis = "D1";
+        var expectedDiagnosis = "D1";
         var appointmentToDelete = await _appointmentRepository.GetAppointmentAsync(2, true);
 
         // Act
         _appointmentRepository.DeleteAppointment(appointmentToDelete);
         await _dataFixture.RepositoryContext.SaveChangesAsync();
-        string actualDiagnosis = (await _appointmentRepository.GetAppointmentsAsync(false)).Last().Diagnosis;
+        var actualDiagnosis = (await _appointmentRepository.GetAppointmentsAsync(false)).Last().Diagnosis;
 
         // Assert
         Assert.That(actualDiagnosis, Is.EqualTo(expectedDiagnosis));
@@ -96,10 +99,10 @@ public class AppointmentRepoTests
     public async Task GetAppointmentsAsync_GetValue()
     {
         // Arrange
-        int expectedCount = 2;
+        var expectedCount = 2;
 
         // Act
-        int actualCount = (await _appointmentRepository.GetAppointmentsAsync(false)).Count();
+        var actualCount = (await _appointmentRepository.GetAppointmentsAsync(false)).Count();
 
         // Assert
         Assert.That(actualCount, Is.EqualTo(expectedCount));
@@ -109,11 +112,11 @@ public class AppointmentRepoTests
     public async Task GetAppointmentAsync_NotExistingId_GetNull()
     {
         // Arrange
-        int notExistingId = -1;
+        var notExistingId = -1;
         Appointment expectedAppointment = null;
 
         // Act
-        var actualAppointment = await _appointmentRepository.GetAppointmentAsync(notExistingId, trackChanges: false);
+        var actualAppointment = await _appointmentRepository.GetAppointmentAsync(notExistingId, false);
 
         // Assert
         Assert.That(actualAppointment, Is.EqualTo(expectedAppointment));
@@ -123,10 +126,10 @@ public class AppointmentRepoTests
     public async Task GetAppointmentAsync_ExistingId_GetValue()
     {
         // Arrange
-        int expectedId = 1;
+        var expectedId = 1;
 
         // Act
-        int actualId = (await _appointmentRepository.GetAppointmentAsync(expectedId, trackChanges: false)).Id;
+        var actualId = (await _appointmentRepository.GetAppointmentAsync(expectedId, false)).Id;
 
         // Assert
         Assert.That(actualId, Is.EqualTo(expectedId));

@@ -1,9 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using FluentValidation;
-using FluentValidation.Results;
 using HospitalRegistrationSystem.Application.DTOs;
 using HospitalRegistrationSystem.Application.Interfaces;
 using HospitalRegistrationSystem.Application.Interfaces.Services;
@@ -24,7 +22,7 @@ public class DoctorsController : ControllerBase
     private readonly IValidator<DoctorForCreationDTO> _validator;
 
     public DoctorsController(IDoctorService doctorService, ILoggerManager logger,
-            IMapper mapper, IValidator<DoctorForCreationDTO> validator)
+        IMapper mapper, IValidator<DoctorForCreationDTO> validator)
     {
         _doctorService = doctorService;
         _logger = logger;
@@ -35,21 +33,21 @@ public class DoctorsController : ControllerBase
     [HttpGet(Name = "Doctors")]
     public async Task<IActionResult> GetDoctors([FromQuery] EntityParameters pagingParameters)
     {
-        string searchString = pagingParameters.SearchString;
+        var searchString = pagingParameters.SearchString;
 
         if (string.IsNullOrEmpty(searchString))
         {
-            IEnumerable<DoctorCardDTO> doctorsDtos = await _doctorService.GetAllAsync();
+            var doctorsDtos = await _doctorService.GetAllAsync();
             var pagedDoctors = PagedList<DoctorCardDTO>
                 .ToPagedList(doctorsDtos, pagingParameters.PageNumber, pagingParameters.PageSize);
 
             Response.Headers.Add("X-Pagination",
-               JsonConvert.SerializeObject(pagedDoctors.MetaData));
+                JsonConvert.SerializeObject(pagedDoctors.MetaData));
 
             return Ok(pagedDoctors);
         }
 
-        IEnumerable<DoctorCardDTO> searchedDoctorsDtos = await _doctorService.FindAsync(searchString);
+        var searchedDoctorsDtos = await _doctorService.FindAsync(searchString);
 
         if (!searchedDoctorsDtos.Any())
         {
@@ -59,9 +57,9 @@ public class DoctorsController : ControllerBase
         }
 
         var pagedDoctorsSearched = PagedList<DoctorCardDTO>
-                .ToPagedList(searchedDoctorsDtos, pagingParameters.PageNumber, pagingParameters.PageSize);
+            .ToPagedList(searchedDoctorsDtos, pagingParameters.PageNumber, pagingParameters.PageSize);
         Response.Headers.Add("X-Pagination",
-               JsonConvert.SerializeObject(pagedDoctorsSearched.MetaData));
+            JsonConvert.SerializeObject(pagedDoctorsSearched.MetaData));
 
         return Ok(pagedDoctorsSearched);
     }
@@ -76,7 +74,7 @@ public class DoctorsController : ControllerBase
             return BadRequest("DoctorCardDTO object is null");
         }
 
-        ValidationResult result = await _validator.ValidateAsync(doctorDto);
+        var result = await _validator.ValidateAsync(doctorDto);
 
         if (!result.IsValid)
         {
@@ -89,7 +87,7 @@ public class DoctorsController : ControllerBase
 
         await _doctorService.AddNewAsync(doctorEntity);
 
-        return CreatedAtRoute("Doctors", new { searchString = doctorDto.FirstName },
+        return CreatedAtRoute("Doctors", new {searchString = doctorDto.FirstName},
             doctorDto);
     }
 }

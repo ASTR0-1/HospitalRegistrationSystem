@@ -1,9 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using FluentValidation;
-using FluentValidation.Results;
 using HospitalRegistrationSystem.Application.DTOs;
 using HospitalRegistrationSystem.Application.Interfaces;
 using HospitalRegistrationSystem.Application.Interfaces.Services;
@@ -35,11 +33,11 @@ public class ClientsController : ControllerBase
     [HttpGet(Name = "Clients")]
     public async Task<IActionResult> GetClients([FromQuery] EntityParameters pagingParameters)
     {
-        string searchString = pagingParameters.SearchString;
+        var searchString = pagingParameters.SearchString;
 
         if (string.IsNullOrEmpty(searchString))
         {
-            IEnumerable<ClientCardDTO> clientsDtos = await _clientService.GetAllAsync();
+            var clientsDtos = await _clientService.GetAllAsync();
             var pagedClients = PagedList<ClientCardDTO>
                 .ToPagedList(clientsDtos, pagingParameters.PageNumber, pagingParameters.PageSize);
 
@@ -49,7 +47,7 @@ public class ClientsController : ControllerBase
             return Ok(pagedClients);
         }
 
-        IEnumerable<ClientCardDTO> searchedClientsDtos = await _clientService.FindAsync(searchString);
+        var searchedClientsDtos = await _clientService.FindAsync(searchString);
 
         if (!searchedClientsDtos.Any())
         {
@@ -76,7 +74,7 @@ public class ClientsController : ControllerBase
             return BadRequest("ClientCardDTO object is null");
         }
 
-        ValidationResult result = await _validator.ValidateAsync(clientDto);
+        var result = await _validator.ValidateAsync(clientDto);
 
         if (!result.IsValid)
         {
@@ -89,7 +87,7 @@ public class ClientsController : ControllerBase
 
         await _clientService.AddNewAsync(clientEntity);
 
-        return CreatedAtRoute("Clients", new { searchString = clientDto.FirstName },
+        return CreatedAtRoute("Clients", new {searchString = clientDto.FirstName},
             clientDto);
     }
 }

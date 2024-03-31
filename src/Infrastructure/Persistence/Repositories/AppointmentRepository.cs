@@ -11,24 +11,33 @@ public class AppointmentRepository : RepositoryBase<Appointment>, IAppointmentRe
 {
     public AppointmentRepository(RepositoryContext repositoryContext)
         : base(repositoryContext)
-    { }
+    {
+    }
 
-    public void CreateAppointment(Appointment appointment) =>
+    public void CreateAppointment(Appointment appointment)
+    {
         Create(appointment);
+    }
 
-    public void DeleteAppointment(Appointment appointment) =>
+    public void DeleteAppointment(Appointment appointment)
+    {
         Delete(appointment);
+    }
 
-    public async Task<Appointment> GetAppointmentAsync(int id, bool trackChanges) =>
-        await FindByCondition(a => a.Id == id, trackChanges)
+    public async Task<Appointment> GetAppointmentAsync(int id, bool trackChanges)
+    {
+        return await FindByCondition(a => a.Id == id, trackChanges)
             .Include(a => a.Client)
             .Include(a => a.Doctor)
             .SingleOrDefaultAsync();
+    }
 
-    public async Task<IEnumerable<Appointment>> GetAppointmentsAsync(bool trackChanges) =>
-        await FindAll(trackChanges)
+    public async Task<IEnumerable<Appointment>> GetAppointmentsAsync(bool trackChanges)
+    {
+        return await FindAll(trackChanges)
             .Include(a => a.Client)
             .Include(a => a.Doctor)
             .OrderBy(a => a.Id)
             .ToListAsync();
+    }
 }

@@ -11,8 +11,8 @@ namespace HospitalRegistrationSystem.Application.Services;
 
 public class AppointmentService : IAppointmentService
 {
-    private readonly IRepositoryManager _repository;
     private readonly IMapper _mapper;
+    private readonly IRepositoryManager _repository;
 
     public AppointmentService(IRepositoryManager repository, IMapper mapper)
     {
@@ -28,7 +28,7 @@ public class AppointmentService : IAppointmentService
 
     public async Task<IEnumerable<ClientAppointmentDTO>> GetAllAsync()
     {
-        IEnumerable<Appointment> appointments = await _repository.Appointment.GetAppointmentsAsync(trackChanges: false);
+        var appointments = await _repository.Appointment.GetAppointmentsAsync(false);
 
         var appointmentsDto = _mapper.Map<IEnumerable<ClientAppointmentDTO>>(appointments);
 
@@ -37,7 +37,7 @@ public class AppointmentService : IAppointmentService
 
     public async Task<ClientAppointmentDTO> GetAsync(int appointmentId)
     {
-        Appointment appointment = await _repository.Appointment.GetAppointmentAsync(appointmentId, trackChanges: false);
+        var appointment = await _repository.Appointment.GetAppointmentAsync(appointmentId, false);
 
         var appointmentDto = _mapper.Map<ClientAppointmentDTO>(appointment);
 
@@ -46,9 +46,9 @@ public class AppointmentService : IAppointmentService
 
     public async Task<IEnumerable<ClientAppointmentDTO>> GetByClientIdAsync(int clientId)
     {
-        IEnumerable<Appointment> appointments = await _repository.Appointment.GetAppointmentsAsync(trackChanges: false);
+        var appointments = await _repository.Appointment.GetAppointmentsAsync(false);
 
-        IEnumerable<Appointment> clientAppointments = appointments
+        var clientAppointments = appointments
             .Where(a => a.ClientId == clientId && a.IsVisited == false);
 
         var appointmentsDto = _mapper.Map<IEnumerable<ClientAppointmentDTO>>(clientAppointments);
@@ -58,9 +58,9 @@ public class AppointmentService : IAppointmentService
 
     public async Task<IEnumerable<DoctorAppointmentDTO>> GetByDoctorIdAsync(int doctorId)
     {
-        IEnumerable<Appointment> appointments = await _repository.Appointment.GetAppointmentsAsync(trackChanges: false);
+        var appointments = await _repository.Appointment.GetAppointmentsAsync(false);
 
-        IEnumerable<Appointment> doctorAppointments = appointments
+        var doctorAppointments = appointments
             .Where(a => a.DoctorId == doctorId && a.IsVisited == false);
 
         var appointmentsDto = _mapper.Map<IEnumerable<DoctorAppointmentDTO>>(doctorAppointments);
@@ -70,10 +70,10 @@ public class AppointmentService : IAppointmentService
 
     public async Task<IEnumerable<ClientAppointmentCardDTO>> GetVisitedByClientIdAsync(int clientId)
     {
-        IEnumerable<Appointment> appointments = await _repository.Appointment.GetAppointmentsAsync(trackChanges: false);
+        var appointments = await _repository.Appointment.GetAppointmentsAsync(false);
 
-        IEnumerable<Appointment> visitedClientAppointments = appointments
-            .Where(a => a.ClientId == clientId && a.IsVisited == true);
+        var visitedClientAppointments = appointments
+            .Where(a => a.ClientId == clientId && a.IsVisited);
 
         var appointmentsDto = _mapper.Map<IEnumerable<ClientAppointmentCardDTO>>(visitedClientAppointments);
 
@@ -82,7 +82,7 @@ public class AppointmentService : IAppointmentService
 
     public async Task<ClientAppointmentCardDTO> MarkAsVisitedAsync(int appointmentId, string diagnosis)
     {
-        Appointment appointment = await _repository.Appointment.GetAppointmentAsync(appointmentId, trackChanges: true);
+        var appointment = await _repository.Appointment.GetAppointmentAsync(appointmentId, true);
         if (appointment == null)
             return null;
 

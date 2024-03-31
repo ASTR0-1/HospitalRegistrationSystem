@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -11,8 +12,8 @@ namespace HospitalRegistrationSystem.Application.Services;
 
 public class DoctorService : IDoctorService
 {
-    private readonly IRepositoryManager _repository;
     private readonly IMapper _mapper;
+    private readonly IRepositoryManager _repository;
 
     public DoctorService(IRepositoryManager repository, IMapper mapper)
     {
@@ -28,11 +29,11 @@ public class DoctorService : IDoctorService
 
     public async Task<IEnumerable<DoctorCardDTO>> FindAsync(string searchString)
     {
-        IEnumerable<Doctor> doctors = await _repository.Doctor.GetDoctorsAsync(trackChanges: false);
+        var doctors = await _repository.Doctor.GetDoctorsAsync(false);
 
-        IEnumerable<Doctor> filteredDoctors = doctors
+        var filteredDoctors = doctors
             .Where(c => string.Join(" ", c.FirstName, c.MiddleName, c.LastName, c.Specialty)
-            .Contains(searchString, System.StringComparison.OrdinalIgnoreCase));
+                .Contains(searchString, StringComparison.OrdinalIgnoreCase));
 
         var doctorsDto = _mapper.Map<IEnumerable<DoctorCardDTO>>(filteredDoctors);
 
@@ -41,7 +42,7 @@ public class DoctorService : IDoctorService
 
     public async Task<IEnumerable<DoctorCardDTO>> GetAllAsync()
     {
-        IEnumerable<Doctor> doctors = await _repository.Doctor.GetDoctorsAsync(trackChanges: false);
+        var doctors = await _repository.Doctor.GetDoctorsAsync(false);
 
         var doctorsDto = _mapper.Map<IEnumerable<DoctorCardDTO>>(doctors);
 
@@ -50,7 +51,7 @@ public class DoctorService : IDoctorService
 
     public async Task<DoctorCardDTO> GetAsync(int doctorId)
     {
-        Doctor doctor = await _repository.Doctor.GetDoctorAsync(doctorId, trackChanges: false);
+        var doctor = await _repository.Doctor.GetDoctorAsync(doctorId, false);
 
         var doctorDto = _mapper.Map<DoctorCardDTO>(doctor);
 
