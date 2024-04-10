@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -35,7 +36,7 @@ public class AppointmentService : IAppointmentService
         return appointmentsDto;
     }
 
-    public async Task<ClientAppointmentDTO> GetAsync(int appointmentId)
+    public async Task<ClientAppointmentDTO> GetAsync(Guid appointmentId)
     {
         var appointment = await _repository.Appointment.GetAppointmentAsync(appointmentId, false);
 
@@ -46,52 +47,21 @@ public class AppointmentService : IAppointmentService
 
     public async Task<IEnumerable<ClientAppointmentDTO>> GetByClientIdAsync(int clientId)
     {
-        var appointments = await _repository.Appointment.GetAppointmentsAsync(false);
-
-        var clientAppointments = appointments
-            .Where(a => a.ClientId == clientId && a.IsVisited == false);
-
-        var appointmentsDto = _mapper.Map<IEnumerable<ClientAppointmentDTO>>(clientAppointments);
-
-        return appointmentsDto;
+        throw new NotImplementedException();
     }
 
     public async Task<IEnumerable<DoctorAppointmentDTO>> GetByDoctorIdAsync(int doctorId)
     {
-        var appointments = await _repository.Appointment.GetAppointmentsAsync(false);
-
-        var doctorAppointments = appointments
-            .Where(a => a.DoctorId == doctorId && a.IsVisited == false);
-
-        var appointmentsDto = _mapper.Map<IEnumerable<DoctorAppointmentDTO>>(doctorAppointments);
-
-        return appointmentsDto;
+        throw new NotImplementedException();
     }
 
     public async Task<IEnumerable<ClientAppointmentCardDTO>> GetVisitedByClientIdAsync(int clientId)
     {
-        var appointments = await _repository.Appointment.GetAppointmentsAsync(false);
-
-        var visitedClientAppointments = appointments
-            .Where(a => a.ClientId == clientId && a.IsVisited);
-
-        var appointmentsDto = _mapper.Map<IEnumerable<ClientAppointmentCardDTO>>(visitedClientAppointments);
-
-        return appointmentsDto;
+        throw new NotImplementedException();
     }
 
-    public async Task<ClientAppointmentCardDTO> MarkAsVisitedAsync(int appointmentId, string diagnosis)
+    public async Task<ClientAppointmentCardDTO> MarkAsVisitedAsync(Guid appointmentId, string diagnosis)
     {
-        var appointment = await _repository.Appointment.GetAppointmentAsync(appointmentId, true);
-        if (appointment == null)
-            return null;
-
-        appointment.IsVisited = true;
-        appointment.Diagnosis = diagnosis;
-
-        await _repository.SaveAsync();
-
-        var appointmentDto = _mapper.Map<ClientAppointmentCardDTO>(appointment);
-        return appointmentDto;
+        throw new NotImplementedException();
     }
 }

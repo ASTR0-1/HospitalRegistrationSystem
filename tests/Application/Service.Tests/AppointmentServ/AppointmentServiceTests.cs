@@ -71,7 +71,6 @@ public class AppointmentServiceTests
         _mock.Setup(x => x.Appointment.GetAppointmentsAsync(false))
             .ReturnsAsync(new List<Appointment>
             {
-                new() {Doctor = new Doctor {FirstName = expectedFirstName}}
             });
 
         // Act
@@ -86,7 +85,7 @@ public class AppointmentServiceTests
     public async Task GetAsync_NotExistingAppointmentId_ReturnNull()
     {
         // Arrange
-        var notExistingId = 1;
+        var notExistingId = Guid.NewGuid();
         Appointment nullAppointment = null;
         _mock.Setup(x => x.Appointment.GetAppointmentAsync(notExistingId, false))
             .ReturnsAsync(nullAppointment);
@@ -103,11 +102,10 @@ public class AppointmentServiceTests
     {
         // Arrange
         var expectedFirstName = "cf1";
-        var id = 1;
+        var id = Guid.NewGuid();
         _mock.Setup(x => x.Appointment.GetAppointmentAsync(id, false))
             .ReturnsAsync(new Appointment
             {
-                Doctor = new Doctor {FirstName = expectedFirstName}
             });
 
         // Act
@@ -145,8 +143,6 @@ public class AppointmentServiceTests
         _mock.Setup(x => x.Appointment.GetAppointmentsAsync(false))
             .ReturnsAsync(new List<Appointment>
             {
-                new() {ClientId = 1, DoctorId = 1},
-                new() {ClientId = 1, DoctorId = 2}
             });
 
         // Act
@@ -184,8 +180,6 @@ public class AppointmentServiceTests
         _mock.Setup(x => x.Appointment.GetAppointmentsAsync(false))
             .ReturnsAsync(new List<Appointment>
             {
-                new() {ClientId = 1, DoctorId = 1},
-                new() {ClientId = 2, DoctorId = 1}
             });
 
         // Act
@@ -223,8 +217,6 @@ public class AppointmentServiceTests
         _mock.Setup(x => x.Appointment.GetAppointmentsAsync(false))
             .ReturnsAsync(new List<Appointment>
             {
-                new() {ClientId = 1, DoctorId = 1, IsVisited = true},
-                new() {ClientId = 1, DoctorId = 2, IsVisited = true}
             });
 
         // Act
@@ -239,7 +231,7 @@ public class AppointmentServiceTests
     public async Task MarkAsVisitedAsync_NotExistingId_ReturnNull()
     {
         // Arrange
-        var notExistingId = -1;
+        var notExistingId = Guid.NewGuid();
         Appointment nullAppointment = null;
         _mock.Setup(x => x.Appointment.GetAppointmentAsync(notExistingId, false))
             .ReturnsAsync(nullAppointment);
@@ -255,9 +247,9 @@ public class AppointmentServiceTests
     public async Task MarkAsVisitedAsync_ExistingId_ReturnClientAppointment()
     {
         // Arrange
-        var expectedDoctorId = 1;
+        var expectedDoctorId = Guid.NewGuid();
         var expectedDiagnosis = "Diagnosis";
-        var appointment = new Appointment {Id = expectedDoctorId, DoctorId = 1};
+        var appointment = new Appointment {Id = Guid.NewGuid(), };
         _mock.Setup(x => x.Appointment.GetAppointmentAsync(expectedDoctorId, true))
             .ReturnsAsync(appointment);
 

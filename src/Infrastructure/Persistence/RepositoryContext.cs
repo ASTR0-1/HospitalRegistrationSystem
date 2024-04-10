@@ -1,10 +1,11 @@
 ﻿using System.Reflection;
 using HospitalRegistrationSystem.Domain.Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace HospitalRegistrationSystem.Infrastructure.Persistence;
 
-public class RepositoryContext : DbContext
+public class RepositoryContext : IdentityDbContext<ApplicationUser>
 {
     public RepositoryContext()
     {
@@ -15,14 +16,13 @@ public class RepositoryContext : DbContext
     {
     }
 
-    public DbSet<Client> Clients { get; set; }
-
-    public DbSet<Doctor> Doctors { get; set; }
-
+    public DbSet<ApplicationUser> ApplicationUsers { get; set; }
     public DbSet<Appointment> Appointments { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+
+        base.OnModelCreating(modelBuilder);
     }
 }

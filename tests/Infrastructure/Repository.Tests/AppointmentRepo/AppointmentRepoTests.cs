@@ -49,8 +49,6 @@ public class AppointmentRepoTests
         var expectedDiagnosis = "D3";
         var appointment = new Appointment
         {
-            ClientId = 2,
-            DoctorId = 2,
             VisitTime = new DateTime(3033, 3, 3),
             Diagnosis = "D3"
         };
@@ -84,7 +82,8 @@ public class AppointmentRepoTests
     {
         // Arrange
         var expectedDiagnosis = "D1";
-        var appointmentToDelete = await _appointmentRepository.GetAppointmentAsync(2, true);
+        // TODO: Remake guid
+        var appointmentToDelete = await _appointmentRepository.GetAppointmentAsync(Guid.Empty, true);
 
         // Act
         _appointmentRepository.DeleteAppointment(appointmentToDelete);
@@ -112,7 +111,7 @@ public class AppointmentRepoTests
     public async Task GetAppointmentAsync_NotExistingId_GetNull()
     {
         // Arrange
-        var notExistingId = -1;
+        var notExistingId = Guid.Empty;
         Appointment expectedAppointment = null;
 
         // Act
@@ -129,7 +128,8 @@ public class AppointmentRepoTests
         var expectedId = 1;
 
         // Act
-        var actualId = (await _appointmentRepository.GetAppointmentAsync(expectedId, false)).Id;
+        // TODO: Remake guid
+        var actualId = (await _appointmentRepository.GetAppointmentAsync(Guid.Empty, false)).Id;
 
         // Assert
         Assert.That(actualId, Is.EqualTo(expectedId));

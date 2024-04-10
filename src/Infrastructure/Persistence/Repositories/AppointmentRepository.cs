@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using HospitalRegistrationSystem.Application.Interfaces.Data;
@@ -24,19 +25,17 @@ public class AppointmentRepository : RepositoryBase<Appointment>, IAppointmentRe
         Delete(appointment);
     }
 
-    public async Task<Appointment> GetAppointmentAsync(int id, bool trackChanges)
+    public async Task<Appointment> GetAppointmentAsync(Guid id, bool trackChanges)
     {
         return await FindByCondition(a => a.Id == id, trackChanges)
-            .Include(a => a.Client)
-            .Include(a => a.Doctor)
+            .Include(a => a.ApplicationUsers)
             .SingleOrDefaultAsync();
     }
 
     public async Task<IEnumerable<Appointment>> GetAppointmentsAsync(bool trackChanges)
     {
         return await FindAll(trackChanges)
-            .Include(a => a.Client)
-            .Include(a => a.Doctor)
+            .Include(a => a.ApplicationUsers)
             .OrderBy(a => a.Id)
             .ToListAsync();
     }

@@ -1,7 +1,11 @@
 using System.IO;
+using HospitalRegistrationSystem.Application;
 using HospitalRegistrationSystem.Application.Interfaces;
 using HospitalRegistrationSystem.Application.Mappers;
+using HospitalRegistrationSystem.Infrastructure;
+using HospitalRegistrationSystem.Infrastructure.Identity;
 using HospitalRegistrationSystem.WebAPI.Exstensions;
+using HospitalRegistrationSystem.WebAPI.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Configuration;
@@ -27,9 +31,14 @@ public class Program
 
         services.ConfigureLoggerService();
 
-        services.ConfigureSqlContext(configuration);
-        services.ConfigureRepositoryManager();
+        services.AddAuthentication();
+        services.AddAuthorization();
+
+        services.ConfigureInfrastructure(configuration);
         services.ConfigureEntityServices();
+
+        services.ConfigureJwt(configuration);
+        services.AddScoped<IAuthenticationManager, AuthenticationManager>();
 
         services.AddAutoMapper(typeof(MappingProfile));
 
@@ -41,7 +50,7 @@ public class Program
 
         services.AddFluentValidation();
 
-        services.AddSwaggerGen();
+        services.ConfigureSwagger();
 
         var app = builder.Build();
 
