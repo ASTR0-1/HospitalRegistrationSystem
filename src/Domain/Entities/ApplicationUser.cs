@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace HospitalRegistrationSystem.Domain.Entities;
 
-public class ApplicationUser : IdentityUser
+public class ApplicationUser : IdentityUser<int>
 {
     public string FirstName { get; set; }
     public string MiddleName { get; set; }

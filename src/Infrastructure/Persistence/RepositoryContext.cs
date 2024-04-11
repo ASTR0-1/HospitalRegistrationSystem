@@ -1,11 +1,12 @@
 ﻿using System.Reflection;
 using HospitalRegistrationSystem.Domain.Entities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace HospitalRegistrationSystem.Infrastructure.Persistence;
 
-public class RepositoryContext : IdentityDbContext<ApplicationUser>
+public class RepositoryContext : IdentityDbContext<ApplicationUser, IdentityRole<int>, int>
 {
     public RepositoryContext()
     {

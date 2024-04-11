@@ -46,11 +46,10 @@ public static class ServiceExtensions
             opts.Password.RequireUppercase = false;
             opts.Password.RequireNonAlphanumeric = false;
             opts.Password.RequiredLength = 10;
-            opts.User.RequireUniqueEmail = true;
         });
 
-        builder = new IdentityBuilder(builder.UserType, typeof(IdentityRole), builder.Services);
+        builder = new IdentityBuilder(builder.UserType, typeof(IdentityRole<int>), builder.Services);
         builder.AddEntityFrameworkStores<RepositoryContext>()
-            .AddRoleManager<RoleManager<IdentityRole>>();
+            .AddRoleManager<RoleManager<IdentityRole<int>>>();
     }
 }

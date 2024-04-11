@@ -1,5 +1,8 @@
-﻿namespace HospitalRegistrationSystem.Application.DTOs;
+﻿using Newtonsoft.Json;
 
+namespace HospitalRegistrationSystem.Application.DTOs;
+
+[JsonObject(ItemNullValueHandling = NullValueHandling.Ignore)]
 public class UserCardDTO
 {
     public int Id { get; set; }
@@ -7,5 +10,6 @@ public class UserCardDTO
     public string MiddleName { get; set; }
     public string LastName { get; set; }
     public string Gender { get; set; }
-    public string Specialty { get; set; }
+    public string? Specialty { get; set; }
+    public string? ProfilePhotoUrl { get; set; }
 }
