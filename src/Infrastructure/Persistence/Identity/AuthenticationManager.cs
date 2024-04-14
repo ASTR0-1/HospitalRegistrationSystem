@@ -5,7 +5,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using HospitalRegistrationSystem.Application.DTOs;
+using HospitalRegistrationSystem.Application.DTOs.AuthenticationDTOs;
 using HospitalRegistrationSystem.Application.Interfaces;
 using HospitalRegistrationSystem.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
@@ -13,7 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
-namespace HospitalRegistrationSystem.Infrastructure.Identity;
+namespace HospitalRegistrationSystem.Infrastructure.Persistence.Identity;
 
 public class AuthenticationManager : IAuthenticationManager
 {
@@ -33,15 +33,17 @@ public class AuthenticationManager : IAuthenticationManager
         _user = await _userManager.Users
             .FirstOrDefaultAsync(u => u.PhoneNumber == userForAuthentication.PhoneNumber);
 
-        if (_user is null) 
+        if (_user is null)
             return false;
         var passwordCheck = await _userManager.CheckPasswordAsync(_user, userForAuthentication.Password);
 
         return passwordCheck;
     }
 
-    public async Task<string> CreateTokenAsync()
+    public async Task<string> CreateTokenAsync(ApplicationUser? user = null)
     {
+        _user ??= user;
+
         var signingCredentials = GetSigningCredentials();
         var claims = await GetClaims();
         var tokenOptions = GenerateTokeOptions(signingCredentials, claims);
@@ -51,12 +53,18 @@ public class AuthenticationManager : IAuthenticationManager
 
     private JwtSecurityToken GenerateTokeOptions(SigningCredentials signingCredentials, IEnumerable<Claim> claims)
     {
+        var validIssuer = _configuration.GetSection("JwtSettings").GetSection("validIssuer").Value;
+        var validAudience = _configuration.GetSection("JwtSettings").GetSection("validAudience").Value;
+        var expires = DateTime.Now
+            .AddMinutes(Convert.ToDouble(_configuration.GetSection("JwtSettings")
+                .GetSection("expires")
+                .Value));
+
         return new JwtSecurityToken(
-            _configuration.GetSection("JwtSettings").GetSection("validIssuer").Value,
-            _configuration.GetSection("JwtSettings").GetSection("validAudience").Value,
+            validIssuer,
+            validAudience,
             claims,
-            expires: DateTime.Now.AddMinutes(
-                Convert.ToDouble(_configuration.GetSection("JwtSettings").GetSection("expires").Value)),
+            expires: expires,
             signingCredentials: signingCredentials
         );
     }
@@ -78,7 +86,7 @@ public class AuthenticationManager : IAuthenticationManager
 
     private SigningCredentials GetSigningCredentials()
     {
-        var key = Encoding.UTF8.GetBytes(_configuration.GetSection("JwtSecret").Value!);
+        var key = Encoding.UTF8.GetBytes(_configuration.GetSection("JwtSettings").GetSection("secret").Value!);
         var secret = new SymmetricSecurityKey(key);
 
         return new SigningCredentials(secret, SecurityAlgorithms.HmacSha256);

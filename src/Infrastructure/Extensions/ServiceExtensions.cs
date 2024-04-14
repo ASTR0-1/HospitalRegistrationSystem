@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace HospitalRegistrationSystem.Infrastructure;
+namespace HospitalRegistrationSystem.Infrastructure.Extensions;
 
 public static class ServiceExtensions
 {
@@ -45,7 +45,7 @@ public static class ServiceExtensions
             opts.Password.RequireLowercase = false;
             opts.Password.RequireUppercase = false;
             opts.Password.RequireNonAlphanumeric = false;
-            opts.Password.RequiredLength = 10;
+            opts.Password.RequiredLength = 5;
         });
 
         builder = new IdentityBuilder(builder.UserType, typeof(IdentityRole<int>), builder.Services);

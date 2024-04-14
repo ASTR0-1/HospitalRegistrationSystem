@@ -16,16 +16,16 @@ public class ApplicationUserConfiguration : IEntityTypeConfiguration<Application
             .HasMaxLength(250)
             .IsRequired();
         builder.Property(u => u.MiddleName)
-            .HasMaxLength(250)
-            .IsRequired();
+            .HasMaxLength(250);
         builder.Property(u => u.LastName)
             .HasMaxLength(250)
             .IsRequired();
 
+        builder.Property(u => u.Gender)
+            .IsRequired();
+
         builder.Property(u => u.PhoneNumber)
             .IsRequired();
-        builder.HasIndex(u => u.PhoneNumber)
-            .IsUnique();
 
         builder.HasMany(u => u.Appointments)
             .WithMany(a => a.ApplicationUsers);

@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace HospitalRegistrationSystem.Application.DTOs;
+namespace HospitalRegistrationSystem.Application.DTOs.AppointmentDTOs;
 
-public class ClientAppointmentDTO
+public class ClientAppointmentDto
 {
     public int Id { get; set; }
 

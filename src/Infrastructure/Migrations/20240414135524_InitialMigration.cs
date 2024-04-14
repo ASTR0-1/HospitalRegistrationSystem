@@ -3,10 +3,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace HospitalRegistrationSystem.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class Init : Migration
+    public partial class InitialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -47,9 +49,10 @@ namespace HospitalRegistrationSystem.Infrastructure.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     FirstName = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
-                    MiddleName = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
+                    MiddleName = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
                     LastName = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
                     Gender = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Specialty = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -198,6 +201,18 @@ namespace HospitalRegistrationSystem.Infrastructure.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+                values: new object[,]
+                {
+                    { 1, null, "Doctor", "DOCTOR" },
+                    { 2, null, "Client", "CLIENT" },
+                    { 3, null, "Receptionist", "RECEPTIONIST" },
+                    { 4, null, "Supervisor", "SUPERVISOR" },
+                    { 5, null, "Master-Supervisor", "MASTER-SUPERVISOR" }
                 });
 
             migrationBuilder.CreateIndex(

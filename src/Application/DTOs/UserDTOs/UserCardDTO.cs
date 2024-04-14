@@ -1,9 +1,9 @@
 ﻿using Newtonsoft.Json;
 
-namespace HospitalRegistrationSystem.Application.DTOs;
+namespace HospitalRegistrationSystem.Application.DTOs.UserDTOs;
 
 [JsonObject(ItemNullValueHandling = NullValueHandling.Ignore)]
-public class UserCardDTO
+public class UserCardDto
 {
     public int Id { get; set; }
     public string FirstName { get; set; }

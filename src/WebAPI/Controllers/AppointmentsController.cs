@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using AutoMapper;
 using FluentValidation;
-using HospitalRegistrationSystem.Application.DTOs;
+using HospitalRegistrationSystem.Application.DTOs.AppointmentDTOs;
 using HospitalRegistrationSystem.Application.Interfaces;
 using HospitalRegistrationSystem.Application.Interfaces.Services;
 using HospitalRegistrationSystem.Application.Utility;
@@ -19,10 +19,10 @@ public class AppointmentsController : ControllerBase
     private readonly IAppointmentService _appointmentsService;
     private readonly ILoggerManager _logger;
     private readonly IMapper _mapper;
-    private readonly IValidator<AppointmentForCreationDTO> _validator;
+    private readonly IValidator<AppointmentForCreationDto> _validator;
 
     public AppointmentsController(IAppointmentService appointmentService,
-        ILoggerManager logger, IMapper mapper, IValidator<AppointmentForCreationDTO> validator)
+        ILoggerManager logger, IMapper mapper, IValidator<AppointmentForCreationDto> validator)
     {
         _appointmentsService = appointmentService;
         _logger = logger;
@@ -45,7 +45,7 @@ public class AppointmentsController : ControllerBase
 
         var clientAppointments = await _appointmentsService.GetByClientIdAsync(clientId);
 
-        var pagedClientAppointments = PagedList<ClientAppointmentDTO>
+        var pagedClientAppointments = PagedList<ClientAppointmentDto>
             .ToPagedList(clientAppointments, pagingParameters.PageNumber, pagingParameters.PageSize);
         Response.Headers.Add("X-Pagination",
             JsonConvert.SerializeObject(pagedClientAppointments.MetaData));
@@ -68,7 +68,7 @@ public class AppointmentsController : ControllerBase
 
         var clientAppointmentCards = await _appointmentsService.GetVisitedByClientIdAsync(clientId);
 
-        var pagedClientAppointments = PagedList<ClientAppointmentCardDTO>
+        var pagedClientAppointments = PagedList<ClientAppointmentCardDto>
             .ToPagedList(clientAppointmentCards, pagingParameters.PageNumber, pagingParameters.PageSize);
         Response.Headers.Add("X-Pagination",
             JsonConvert.SerializeObject(pagedClientAppointments.MetaData));
@@ -91,7 +91,7 @@ public class AppointmentsController : ControllerBase
 
         var doctorAppointments = await _appointmentsService.GetByDoctorIdAsync(doctorId);
 
-        var pagedDoctorAppointments = PagedList<DoctorAppointmentDTO>
+        var pagedDoctorAppointments = PagedList<DoctorAppointmentDto>
             .ToPagedList(doctorAppointments, pagingParameters.PageNumber, pagingParameters.PageSize);
 
         Response.Headers.Add("X-Pagination",
@@ -101,7 +101,7 @@ public class AppointmentsController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> PostAppointment([FromBody] AppointmentForCreationDTO appointmentDto)
+    public async Task<IActionResult> PostAppointment([FromBody] AppointmentForCreationDto appointmentDto)
     {
         if (appointmentDto == null)
         {

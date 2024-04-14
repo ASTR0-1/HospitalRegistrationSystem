@@ -6,7 +6,7 @@ namespace HospitalRegistrationSystem.Infrastructure.Persistence;
 
 public class RepositoryManager : IRepositoryManager
 {
-    private static readonly object _lock = new();
+    private static readonly object Lock = new();
     private readonly RepositoryContext _context;
 
     private IAppointmentRepository _appointmentRepository;
@@ -20,7 +20,7 @@ public class RepositoryManager : IRepositoryManager
     {
         get
         {
-            lock (_lock)
+            lock (Lock)
             {
                 _appointmentRepository ??= new AppointmentRepository(_context);
 

@@ -5,6 +5,7 @@
 	<RootNamespace>HospitalRegistrationSystem.Application</RootNamespace>
 	<AssemblyName>HospitalRegistrationSystem.Application</AssemblyName>
 	<Nullable>enable</Nullable>
+	<GenerateDocumentationFile>True</GenerateDocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
-using HospitalRegistrationSystem.Application.DTOs;
+using HospitalRegistrationSystem.Application.DTOs.AppointmentDTOs;
 using HospitalRegistrationSystem.Application.Interfaces.Data;
 using HospitalRegistrationSystem.Application.Interfaces.Services;
 using HospitalRegistrationSystem.Domain.Entities;
@@ -27,40 +27,40 @@ public class AppointmentService : IAppointmentService
         await _repository.SaveAsync();
     }
 
-    public async Task<IEnumerable<ClientAppointmentDTO>> GetAllAsync()
+    public async Task<IEnumerable<ClientAppointmentDto>> GetAllAsync()
     {
         var appointments = await _repository.Appointment.GetAppointmentsAsync(false);
 
-        var appointmentsDto = _mapper.Map<IEnumerable<ClientAppointmentDTO>>(appointments);
+        var appointmentsDto = _mapper.Map<IEnumerable<ClientAppointmentDto>>(appointments);
 
         return appointmentsDto;
     }
 
-    public async Task<ClientAppointmentDTO> GetAsync(Guid appointmentId)
+    public async Task<ClientAppointmentDto> GetAsync(Guid appointmentId)
     {
         var appointment = await _repository.Appointment.GetAppointmentAsync(appointmentId, false);
 
-        var appointmentDto = _mapper.Map<ClientAppointmentDTO>(appointment);
+        var appointmentDto = _mapper.Map<ClientAppointmentDto>(appointment);
 
         return appointmentDto;
     }
 
-    public async Task<IEnumerable<ClientAppointmentDTO>> GetByClientIdAsync(int clientId)
+    public async Task<IEnumerable<ClientAppointmentDto>> GetByClientIdAsync(int clientId)
     {
         throw new NotImplementedException();
     }
 
-    public async Task<IEnumerable<DoctorAppointmentDTO>> GetByDoctorIdAsync(int doctorId)
+    public async Task<IEnumerable<DoctorAppointmentDto>> GetByDoctorIdAsync(int doctorId)
     {
         throw new NotImplementedException();
     }
 
-    public async Task<IEnumerable<ClientAppointmentCardDTO>> GetVisitedByClientIdAsync(int clientId)
+    public async Task<IEnumerable<ClientAppointmentCardDto>> GetVisitedByClientIdAsync(int clientId)
     {
         throw new NotImplementedException();
     }
 
-    public async Task<ClientAppointmentCardDTO> MarkAsVisitedAsync(Guid appointmentId, string diagnosis)
+    public async Task<ClientAppointmentCardDto> MarkAsVisitedAsync(Guid appointmentId, string diagnosis)
     {
         throw new NotImplementedException();
     }

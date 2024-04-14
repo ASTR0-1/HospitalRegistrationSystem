@@ -6,6 +6,7 @@
 		<AssemblyName>HospitalRegistrationSystem.WebAPI</AssemblyName>
 		<UserSecretsId>de1e7002-8521-4344-ae02-9e02950aee3f</UserSecretsId>
 		<Nullable>enable</Nullable>
+		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 	</PropertyGroup>
 
   <ItemGroup>

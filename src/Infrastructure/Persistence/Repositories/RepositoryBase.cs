@@ -8,43 +8,43 @@ namespace HospitalRegistrationSystem.Infrastructure.Persistence.Repositories;
 
 public abstract class RepositoryBase<T> : IRepositoryBase<T> where T : class
 {
-    protected RepositoryContext _repositoryContext;
+    protected RepositoryContext RepositoryContext;
 
     public RepositoryBase(RepositoryContext repositoryContext)
     {
-        _repositoryContext = repositoryContext;
+        RepositoryContext = repositoryContext;
     }
 
     public void Create(T entity)
     {
-        _repositoryContext.Set<T>().Add(entity);
+        RepositoryContext.Set<T>().Add(entity);
     }
 
     public void Delete(T entity)
     {
-        _repositoryContext.Set<T>().Remove(entity);
+        RepositoryContext.Set<T>().Remove(entity);
     }
 
     public void Update(T entity)
     {
-        _repositoryContext.Set<T>().Update(entity);
+        RepositoryContext.Set<T>().Update(entity);
     }
 
     public IQueryable<T> FindAll(bool trackChanges)
     {
         return !trackChanges
-            ? _repositoryContext.Set<T>()
+            ? RepositoryContext.Set<T>()
                 .AsNoTracking()
-            : _repositoryContext.Set<T>();
+            : RepositoryContext.Set<T>();
     }
 
     public IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression, bool trackChanges)
     {
         return !trackChanges
-            ? _repositoryContext.Set<T>()
+            ? RepositoryContext.Set<T>()
                 .Where(expression)
                 .AsNoTracking()
-            : _repositoryContext.Set<T>()
+            : RepositoryContext.Set<T>()
                 .Where(expression);
     }
 }
