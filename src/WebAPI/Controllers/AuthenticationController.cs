@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using FluentValidation;
@@ -26,13 +27,20 @@ public class AuthenticationController : ControllerBase
     private readonly ILoggerManager _logger;
     private readonly IMapper _mapper;
 
-    public AuthenticationController(IAuthenticationManager authenticationManager, UserManager<ApplicationUser> userManager,
-        ILoggerManager logger, IMapper mapper)
+    private readonly IValidator<ClientForRegistrationDto> _clientForRegistrationDtoValidator;
+    private readonly IValidator<UserForAuthenticationDto> _userForAuthenticationDtoValidator;
+
+    public AuthenticationController(IAuthenticationManager authenticationManager, UserManager<ApplicationUser> userManager, ILoggerManager logger, 
+        IMapper mapper, IValidator<ClientForRegistrationDto> clientForRegistrationDtoValidator, IValidator<UserForAuthenticationDto> userForAuthenticationDtoValidator)
     {
         _authenticationManager = authenticationManager;
         _userManager = userManager;
+        
         _logger = logger;
         _mapper = mapper;
+
+        _clientForRegistrationDtoValidator = clientForRegistrationDtoValidator;
+        _userForAuthenticationDtoValidator = userForAuthenticationDtoValidator;
     }
 
     /// <summary>
@@ -44,8 +52,26 @@ public class AuthenticationController : ControllerBase
     [HttpPost("register")]
     [ProducesResponseType(typeof(AuthenticationResultDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(BadRequestObjectResult), StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> RegisterClient([FromBody] ClientForRegistrationDto clientForRegistrationDto)
+    [ProducesResponseType(typeof(UnprocessableEntityObjectResult), StatusCodes.Status422UnprocessableEntity)]
+    public async Task<IActionResult> RegisterClient(ClientForRegistrationDto clientForRegistrationDto)
     {
+        var validationResult = await _clientForRegistrationDtoValidator.ValidateAsync(clientForRegistrationDto);
+
+        if (!validationResult.IsValid)
+        {
+            _logger.LogInformation($"Registration failed with un processable entity." +
+                             $"\nErrors: {JsonConvert.SerializeObject(validationResult.Errors)}");
+
+            var validationErrors = validationResult.Errors.Select(error => new
+            {
+                error.PropertyName, 
+                error.ErrorMessage
+            });
+
+            return UnprocessableEntity(validationErrors);
+        }
+
+        // Validation passed, proceed with registration logic
         var user = _mapper.Map<ApplicationUser>(clientForRegistrationDto);
         user.UserName = user.PhoneNumber;
 
@@ -56,7 +82,7 @@ public class AuthenticationController : ControllerBase
             foreach (var error in result.Errors)
                 ModelState.TryAddModelError(error.Code, error.Description);
 
-            _logger.LogError($"Client registration failed for client with phone number: '{user.PhoneNumber}'. " +
+            _logger.LogInformation($"Client registration failed for client with phone number: '{user.PhoneNumber}'. " +
                              $"\nModelState: {JsonConvert.SerializeObject(ModelState)}");
 
             return BadRequest(ModelState);
@@ -82,6 +108,22 @@ public class AuthenticationController : ControllerBase
     [ProducesResponseType(typeof(UnauthorizedResult), StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> Authenticate([FromBody] UserForAuthenticationDto userForAuthenticationDto)
     {
+        var validationResult = await _userForAuthenticationDtoValidator.ValidateAsync(userForAuthenticationDto);
+
+        if (!validationResult.IsValid)
+        {
+            _logger.LogInformation($"Authentication failed with un processable entity." +
+                                   $"\nErrors: {JsonConvert.SerializeObject(validationResult.Errors)}");
+
+            var validationErrors = validationResult.Errors.Select(error => new
+            {
+                error.PropertyName,
+                error.ErrorMessage
+            });
+
+            return UnprocessableEntity(validationErrors);
+        }
+
         if (!await _authenticationManager.ValidateUserAsync(userForAuthenticationDto))
         {
             _logger.LogInformation($"Incorrect authenticate try of user with phone number: '{userForAuthenticationDto.Password}'.");

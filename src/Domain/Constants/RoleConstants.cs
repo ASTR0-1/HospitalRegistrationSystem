@@ -7,17 +7,4 @@ public static class RoleConstants
     public const string Receptionist = "Receptionist";
     public const string Supervisor = "Supervisor";
     public const string MasterSupervisor = "Master-Supervisor";
-
-    public static bool IsValidRole(string role)
-    {
-        return role switch
-        {
-            Doctor 
-                or Client
-                or Receptionist
-                or Supervisor
-                or MasterSupervisor => true,
-            _ => false
-        };
-    }
 }

@@ -1,4 +1,6 @@
-﻿using FluentValidation;
+﻿using System.Reflection;
+using System.Runtime.CompilerServices;
+using FluentValidation;
 using HospitalRegistrationSystem.Application.DTOs.AppointmentDTOs;
 using HospitalRegistrationSystem.Application.DTOs.AuthenticationDTOs;
 using HospitalRegistrationSystem.Application.Interfaces.Services;
@@ -16,6 +18,6 @@ public static class ServiceExtensions
 
     public static void AddFluentValidation(this IServiceCollection services)
     {
-        services.AddScoped<IValidator<AppointmentForCreationDto>, AppointmentForCreationDtoValidator>();
+        services.AddValidatorsFromAssemblyContaining<AppointmentForCreationDto>();
     }
 }
