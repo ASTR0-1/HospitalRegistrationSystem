@@ -17,7 +17,8 @@ namespace HospitalRegistrationSystem.Infrastructure.Migrations
                 name: "Appointments",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     VisitTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Diagnosis = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsVisited = table.Column<bool>(type: "bit", nullable: false)
@@ -61,7 +62,7 @@ namespace HospitalRegistrationSystem.Infrastructure.Migrations
                     PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
                     TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
                     LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
@@ -99,7 +100,7 @@ namespace HospitalRegistrationSystem.Infrastructure.Migrations
                 columns: table => new
                 {
                     ApplicationUsersId = table.Column<int>(type: "int", nullable: false),
-                    AppointmentsId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    AppointmentsId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -251,12 +252,6 @@ namespace HospitalRegistrationSystem.Infrastructure.Migrations
                 name: "EmailIndex",
                 table: "AspNetUsers",
                 column: "NormalizedEmail");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AspNetUsers_PhoneNumber",
-                table: "AspNetUsers",
-                column: "PhoneNumber",
-                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "UserNameIndex",

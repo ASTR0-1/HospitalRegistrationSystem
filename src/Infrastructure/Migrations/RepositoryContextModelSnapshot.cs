@@ -27,8 +27,8 @@ namespace HospitalRegistrationSystem.Infrastructure.Migrations
                     b.Property<int>("ApplicationUsersId")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("AppointmentsId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("AppointmentsId")
+                        .HasColumnType("int");
 
                     b.HasKey("ApplicationUsersId", "AppointmentsId");
 
@@ -96,7 +96,7 @@ namespace HospitalRegistrationSystem.Infrastructure.Migrations
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
@@ -124,17 +124,16 @@ namespace HospitalRegistrationSystem.Infrastructure.Migrations
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
-                    b.HasIndex("PhoneNumber")
-                        .IsUnique();
-
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
             modelBuilder.Entity("HospitalRegistrationSystem.Domain.Entities.Appointment", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Diagnosis")
                         .IsRequired()

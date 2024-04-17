@@ -138,7 +138,7 @@ public class AppointmentsController : ControllerBase
     }
 
     [HttpPut("{appointmentId}/markAsVisited")]
-    public async Task<IActionResult> PutVisitedAppointment(Guid appointmentId, [FromQuery] string diagnosis)
+    public async Task<IActionResult> PutVisitedAppointment(int appointmentId, [FromQuery] string diagnosis)
     {
         var appointment = await _appointmentsService.GetAsync(appointmentId);
 

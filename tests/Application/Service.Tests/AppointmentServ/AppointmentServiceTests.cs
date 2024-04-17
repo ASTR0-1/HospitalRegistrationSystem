@@ -69,9 +69,7 @@ public class AppointmentServiceTests
         // Arrange
         var expectedFirstName = "cf1";
         _mock.Setup(x => x.Appointment.GetAppointmentsAsync(false))
-            .ReturnsAsync(new List<Appointment>
-            {
-            });
+            .ReturnsAsync(new List<Appointment>());
 
         // Act
         var clientAppointment = (await _appointmentService.GetAllAsync()).Last();
@@ -85,7 +83,7 @@ public class AppointmentServiceTests
     public async Task GetAsync_NotExistingAppointmentId_ReturnNull()
     {
         // Arrange
-        var notExistingId = Guid.NewGuid();
+        var notExistingId = 0;
         Appointment nullAppointment = null;
         _mock.Setup(x => x.Appointment.GetAppointmentAsync(notExistingId, false))
             .ReturnsAsync(nullAppointment);
@@ -102,11 +100,9 @@ public class AppointmentServiceTests
     {
         // Arrange
         var expectedFirstName = "cf1";
-        var id = Guid.NewGuid();
+        var id = 0;
         _mock.Setup(x => x.Appointment.GetAppointmentAsync(id, false))
-            .ReturnsAsync(new Appointment
-            {
-            });
+            .ReturnsAsync(new Appointment());
 
         // Act
         var appointment = await _appointmentService.GetAsync(id);
@@ -141,9 +137,7 @@ public class AppointmentServiceTests
         // Arrange
         var expectedDoctorIds = (1, 2);
         _mock.Setup(x => x.Appointment.GetAppointmentsAsync(false))
-            .ReturnsAsync(new List<Appointment>
-            {
-            });
+            .ReturnsAsync(new List<Appointment>());
 
         // Act
         var clientAppointments = (await _appointmentService.GetByClientIdAsync(1)).ToList();
@@ -178,9 +172,7 @@ public class AppointmentServiceTests
         // Arrange
         var expectedDoctorIds = (1, 2);
         _mock.Setup(x => x.Appointment.GetAppointmentsAsync(false))
-            .ReturnsAsync(new List<Appointment>
-            {
-            });
+            .ReturnsAsync(new List<Appointment>());
 
         // Act
         var clientAppointments = (await _appointmentService.GetByDoctorIdAsync(1)).ToList();
@@ -215,9 +207,7 @@ public class AppointmentServiceTests
         // Arrange
         var expectedDoctorIds = (1, 2);
         _mock.Setup(x => x.Appointment.GetAppointmentsAsync(false))
-            .ReturnsAsync(new List<Appointment>
-            {
-            });
+            .ReturnsAsync(new List<Appointment>());
 
         // Act
         var clientAppointments = (await _appointmentService.GetVisitedByClientIdAsync(1)).ToList();
@@ -231,7 +221,7 @@ public class AppointmentServiceTests
     public async Task MarkAsVisitedAsync_NotExistingId_ReturnNull()
     {
         // Arrange
-        var notExistingId = Guid.NewGuid();
+        var notExistingId = 0;
         Appointment nullAppointment = null;
         _mock.Setup(x => x.Appointment.GetAppointmentAsync(notExistingId, false))
             .ReturnsAsync(nullAppointment);
@@ -246,20 +236,22 @@ public class AppointmentServiceTests
     [Test]
     public async Task MarkAsVisitedAsync_ExistingId_ReturnClientAppointment()
     {
+        throw new NotImplementedException();
+
         // Arrange
-        var expectedDoctorId = Guid.NewGuid();
+        var expectedDoctorId = 0;
         var expectedDiagnosis = "Diagnosis";
-        var appointment = new Appointment {Id = Guid.NewGuid(), };
-        _mock.Setup(x => x.Appointment.GetAppointmentAsync(expectedDoctorId, true))
-            .ReturnsAsync(appointment);
+        var appointment = new Appointment {Id = 0};
+        //_mock.Setup(x => x.Appointment.GetAppointmentAsync(expectedDoctorId, true))
+            //.ReturnsAsync(appointment);
 
         // Act
-        var clientAppointment = await _appointmentService.MarkAsVisitedAsync(expectedDoctorId, expectedDiagnosis);
-        var actualDoctorId = clientAppointment.DoctorId;
-        var actualDiagnosis = clientAppointment.Diagnosis;
+        //var clientAppointment = await _appointmentService.MarkAsVisitedAsync(expectedDoctorId, expectedDiagnosis);
+        //var actualDoctorId = clientAppointment.DoctorId;
+        //var actualDiagnosis = clientAppointment.Diagnosis;
 
         // Assert
-        Assert.That(actualDoctorId, Is.EqualTo(expectedDoctorId));
-        Assert.That(actualDiagnosis, Is.EqualTo(expectedDiagnosis));
+        //Assert.That(actualDoctorId, Is.EqualTo(expectedDoctorId));
+        //Assert.That(actualDiagnosis, Is.EqualTo(expectedDiagnosis));
     }
 }

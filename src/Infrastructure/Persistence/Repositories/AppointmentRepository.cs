@@ -25,7 +25,7 @@ public class AppointmentRepository : RepositoryBase<Appointment>, IAppointmentRe
         Delete(appointment);
     }
 
-    public async Task<Appointment> GetAppointmentAsync(Guid id, bool trackChanges)
+    public async Task<Appointment> GetAppointmentAsync(int id, bool trackChanges)
     {
         return await FindByCondition(a => a.Id == id, trackChanges)
             .Include(a => a.ApplicationUsers)

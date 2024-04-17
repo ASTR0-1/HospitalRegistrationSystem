@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using HospitalRegistrationSystem.Application.DTOs.AppointmentDTOs;
@@ -36,7 +35,7 @@ public class AppointmentService : IAppointmentService
         return appointmentsDto;
     }
 
-    public async Task<ClientAppointmentDto> GetAsync(Guid appointmentId)
+    public async Task<ClientAppointmentDto> GetAsync(int appointmentId)
     {
         var appointment = await _repository.Appointment.GetAppointmentAsync(appointmentId, false);
 
@@ -60,7 +59,7 @@ public class AppointmentService : IAppointmentService
         throw new NotImplementedException();
     }
 
-    public async Task<ClientAppointmentCardDto> MarkAsVisitedAsync(Guid appointmentId, string diagnosis)
+    public async Task<ClientAppointmentCardDto> MarkAsVisitedAsync(int appointmentId, string diagnosis)
     {
         throw new NotImplementedException();
     }
