@@ -3,47 +3,54 @@ using System.Threading.Tasks;
 using HospitalRegistrationSystem.Application.Extensions;
 using HospitalRegistrationSystem.Application.Interfaces;
 using HospitalRegistrationSystem.Application.Mappers;
-using HospitalRegistrationSystem.Domain.Entities;
 using HospitalRegistrationSystem.Infrastructure.Extensions;
-using HospitalRegistrationSystem.Infrastructure.Persistence.Identity;
 using HospitalRegistrationSystem.WebAPI.Exstensions;
 using HospitalRegistrationSystem.WebAPI.Extensions;
+using HospitalRegistrationSystem.WebAPI.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.HttpOverrides;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NLog;
 
 namespace HospitalRegistrationSystem.WebAPI;
 
-public class Program
+/// <summary>
+///     Main entry point of the application.
+/// </summary>
+public abstract class Program
 {
+    /// <summary>
+    ///     Main method of the application.
+    /// </summary>
+    /// <param name="args">Command line arguments.</param>
     public static async Task Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        LogManager.LoadConfiguration(string.Concat(Directory.GetCurrentDirectory(),
-            "/nlog.config"));
+        LogManager.Setup()
+            .LoadConfigurationFromFile(string.Concat(Directory.GetCurrentDirectory(), "/nlog.config"));
 
         var services = builder.Services;
-        IConfiguration configuration = builder.Configuration;
+        var configuration = builder.Configuration;
 
         services.ConfigureCors();
 
-        services.ConfigureLoggerService();
+        services.ConfigureLoggerManager();
 
         services.AddAuthentication();
-        services.AddAuthorization();
 
         services.ConfigureInfrastructure(configuration);
         services.ConfigureEntityServices();
 
-        services.ConfigureJwt(configuration);
-        services.AddScoped<IAuthenticationManager, AuthenticationManager>();
+        services.AddHttpContextAccessor();
+        services.AddScoped<ICurrentUserService, CurrentUserService>();
+
+        services.ConfigureAuthenticationManager();
 
         services.AddAutoMapper(typeof(MappingProfile));
+
+        services.ConfigureAzureBlob(configuration);
 
         services.AddControllers(config =>
         {
@@ -87,6 +94,7 @@ public class Program
             ForwardedHeaders = ForwardedHeaders.All
         });
 
+        app.UseAuthentication();
         app.UseAuthorization();
 
         app.MapControllers();

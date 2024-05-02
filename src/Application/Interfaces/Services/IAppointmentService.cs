@@ -9,7 +9,9 @@ namespace HospitalRegistrationSystem.Application.Interfaces.Services;
 public interface IAppointmentService
 {
     Task AddNewAsync(Appointment appointment);
+
     Task<ClientAppointmentCardDto> MarkAsVisitedAsync(int appointmentId, string diagnosis);
+    
     Task<IEnumerable<ClientAppointmentDto>> GetAllAsync();
     Task<ClientAppointmentDto> GetAsync(int appointmentId);
     Task<IEnumerable<ClientAppointmentDto>> GetByClientIdAsync(int clientId);

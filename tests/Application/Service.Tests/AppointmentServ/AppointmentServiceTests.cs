@@ -7,6 +7,7 @@ using HospitalRegistrationSystem.Application.Interfaces.Data;
 using HospitalRegistrationSystem.Application.Interfaces.Services;
 using HospitalRegistrationSystem.Application.Mappers;
 using HospitalRegistrationSystem.Application.Services;
+using HospitalRegistrationSystem.Application.Utility;
 using HospitalRegistrationSystem.Domain.Entities;
 using Moq;
 using NUnit.Framework;
@@ -68,8 +69,8 @@ public class AppointmentServiceTests
     {
         // Arrange
         var expectedFirstName = "cf1";
-        _mock.Setup(x => x.Appointment.GetAppointmentsAsync(false))
-            .ReturnsAsync(new List<Appointment>());
+        //_mock.Setup(x => x.Appointment.GetAppointmentsAsync(null, false))
+            //.ReturnsAsync(new PagedList<Appointment>(null));
 
         // Act
         var clientAppointment = (await _appointmentService.GetAllAsync()).Last();
@@ -117,12 +118,12 @@ public class AppointmentServiceTests
     {
         // Arrange
         var notExistingId = -1;
-        _mock.Setup(x => x.Appointment.GetAppointmentsAsync(false))
-            .ReturnsAsync(new List<Appointment>
-            {
-                new(),
-                new()
-            });
+        //_mock.Setup(x => x.Appointment.GetAppointmentsAsync(null,false))
+        //    .ReturnsAsync(new List<Appointment>
+        //    {
+        //        new(),
+        //        new()
+        //    });
 
         // Act
         var clientAppointments = await _appointmentService.GetByClientIdAsync(notExistingId);
@@ -136,8 +137,8 @@ public class AppointmentServiceTests
     {
         // Arrange
         var expectedDoctorIds = (1, 2);
-        _mock.Setup(x => x.Appointment.GetAppointmentsAsync(false))
-            .ReturnsAsync(new List<Appointment>());
+        //_mock.Setup(x => x.Appointment.GetAppointmentsAsync(null, false))
+        //    .ReturnsAsync(new List<Appointment>());
 
         // Act
         var clientAppointments = (await _appointmentService.GetByClientIdAsync(1)).ToList();
@@ -152,12 +153,12 @@ public class AppointmentServiceTests
     {
         // Arrange
         var notExistingId = -1;
-        _mock.Setup(x => x.Appointment.GetAppointmentsAsync(false))
-            .ReturnsAsync(new List<Appointment>
-            {
-                new(),
-                new()
-            });
+        //_mock.Setup(x => x.Appointment.GetAppointmentsAsync(null, false))
+        //    .ReturnsAsync(new List<Appointment>
+        //    {
+        //        new(),
+        //        new()
+        //    });
 
         // Act
         var clientAppointments = await _appointmentService.GetByDoctorIdAsync(notExistingId);
@@ -171,8 +172,8 @@ public class AppointmentServiceTests
     {
         // Arrange
         var expectedDoctorIds = (1, 2);
-        _mock.Setup(x => x.Appointment.GetAppointmentsAsync(false))
-            .ReturnsAsync(new List<Appointment>());
+        //_mock.Setup(x => x.Appointment.GetAppointmentsAsync(null, false))
+        //    .ReturnsAsync(new List<Appointment>());
 
         // Act
         var clientAppointments = (await _appointmentService.GetByDoctorIdAsync(1)).ToList();
@@ -187,12 +188,12 @@ public class AppointmentServiceTests
     {
         // Arrange
         var notExistingId = -1;
-        _mock.Setup(x => x.Appointment.GetAppointmentsAsync(false))
-            .ReturnsAsync(new List<Appointment>
-            {
-                new(),
-                new()
-            });
+        //_mock.Setup(x => x.Appointment.GetAppointmentsAsync(null, false))
+        //    .ReturnsAsync(new List<Appointment>
+        //    {
+        //        new(),
+        //        new()
+        //    });
 
         // Act
         var clientAppointments = await _appointmentService.GetVisitedByClientIdAsync(notExistingId);
@@ -206,8 +207,8 @@ public class AppointmentServiceTests
     {
         // Arrange
         var expectedDoctorIds = (1, 2);
-        _mock.Setup(x => x.Appointment.GetAppointmentsAsync(false))
-            .ReturnsAsync(new List<Appointment>());
+        //_mock.Setup(x => x.Appointment.GetAppointmentsAsync(null, false))
+        //    .ReturnsAsync(new List<Appointment>());
 
         // Act
         var clientAppointments = (await _appointmentService.GetVisitedByClientIdAsync(1)).ToList();

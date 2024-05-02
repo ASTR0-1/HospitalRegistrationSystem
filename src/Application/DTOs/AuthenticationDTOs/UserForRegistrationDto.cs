@@ -1,6 +1,6 @@
 ﻿namespace HospitalRegistrationSystem.Application.DTOs.AuthenticationDTOs;
 
-public class ClientForRegistrationDto
+public class UserForRegistrationDto
 {
     public string? FirstName { get; set; }
     public string? MiddleName { get; set; }

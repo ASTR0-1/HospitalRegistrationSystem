@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using HospitalRegistrationSystem.Application.DTOs;
+using HospitalRegistrationSystem.Application.DTOs.ApplicationUserDTOs;
 using HospitalRegistrationSystem.Application.DTOs.AuthenticationDTOs;
 using HospitalRegistrationSystem.Domain.Entities;
 
@@ -9,6 +9,9 @@ public class MappingProfile : Profile
 {
     public MappingProfile()
     {
-        CreateMap<ClientForRegistrationDto, ApplicationUser>();
+        CreateMap<UserForRegistrationDto, ApplicationUser>();
+
+        CreateMap<ApplicationUser, ApplicationUserDto>()
+            .ReverseMap();
     }
 }

@@ -28,7 +28,7 @@ public class AppointmentService : IAppointmentService
 
     public async Task<IEnumerable<ClientAppointmentDto>> GetAllAsync()
     {
-        var appointments = await _repository.Appointment.GetAppointmentsAsync(false);
+        var appointments = await _repository.Appointment.GetAppointmentsAsync(null, trackChanges: false);
 
         var appointmentsDto = _mapper.Map<IEnumerable<ClientAppointmentDto>>(appointments);
 

@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using FluentValidation;
+﻿using FluentValidation;
 using HospitalRegistrationSystem.Application.DTOs.AuthenticationDTOs;
 
 namespace HospitalRegistrationSystem.Application.Validation;
 
-public class ClientForRegistrationDtoValidator : AbstractValidator<ClientForRegistrationDto>
+public class UserForRegistrationDtoValidator : AbstractValidator<UserForRegistrationDto>
 {
-    public ClientForRegistrationDtoValidator()
+    public UserForRegistrationDtoValidator()
     {
         RuleFor(e => e.FirstName)
             .NotEmpty()
@@ -19,17 +14,17 @@ public class ClientForRegistrationDtoValidator : AbstractValidator<ClientForRegi
         RuleFor(e => e.LastName)
             .NotEmpty()
             .WithMessage("LastName is required");
-        
+
         RuleFor(e => e.PhoneNumber)
             .NotEmpty()
             .WithMessage("PhoneNumber is required")
             .Matches(@"^\+?\d{10,13}")
             .WithMessage("Phone number must be 10 digits");
-        
+
         RuleFor(e => e.Gender)
             .NotEmpty()
             .WithMessage("Gender is required");
-        
+
         RuleFor(e => e.Password)
             .NotEmpty()
             .WithMessage("Password is required")

@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace HospitalRegistrationSystem.Application.DTOs.AuthenticationDTOs;
+﻿namespace HospitalRegistrationSystem.Application.DTOs.AuthenticationDTOs;
 
 public class UserForAuthenticationDto
 {

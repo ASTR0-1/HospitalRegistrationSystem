@@ -1,10 +1,10 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using FluentValidation;
 using HospitalRegistrationSystem.Application.DTOs.AuthenticationDTOs;
 using HospitalRegistrationSystem.Application.Interfaces;
+using HospitalRegistrationSystem.Application.Interfaces.Identity;
 using HospitalRegistrationSystem.Domain.Constants;
 using HospitalRegistrationSystem.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
@@ -22,49 +22,49 @@ namespace HospitalRegistrationSystem.WebAPI.Controllers;
 public class AuthenticationController : ControllerBase
 {
     private readonly IAuthenticationManager _authenticationManager;
-    private readonly UserManager<ApplicationUser> _userManager;
-    
-    private readonly ILoggerManager _logger;
-    private readonly IMapper _mapper;
 
-    private readonly IValidator<ClientForRegistrationDto> _clientForRegistrationDtoValidator;
+    private readonly IValidator<UserForRegistrationDto> _userForRegistrationDtoValidator;
     private readonly IValidator<UserForAuthenticationDto> _userForAuthenticationDtoValidator;
 
-    public AuthenticationController(IAuthenticationManager authenticationManager, UserManager<ApplicationUser> userManager, ILoggerManager logger, 
-        IMapper mapper, IValidator<ClientForRegistrationDto> clientForRegistrationDtoValidator, IValidator<UserForAuthenticationDto> userForAuthenticationDtoValidator)
+    private readonly ILoggerManager _logger;
+    private readonly IMapper _mapper;
+    private readonly UserManager<ApplicationUser> _userManager;
+
+    public AuthenticationController(IAuthenticationManager authenticationManager, UserManager<ApplicationUser> userManager, ILoggerManager logger,
+        IMapper mapper, IValidator<UserForRegistrationDto> userForRegistrationDtoValidator, IValidator<UserForAuthenticationDto> userForAuthenticationDtoValidator)
     {
         _authenticationManager = authenticationManager;
         _userManager = userManager;
-        
+
         _logger = logger;
         _mapper = mapper;
 
-        _clientForRegistrationDtoValidator = clientForRegistrationDtoValidator;
+        _userForRegistrationDtoValidator = userForRegistrationDtoValidator;
         _userForAuthenticationDtoValidator = userForAuthenticationDtoValidator;
     }
 
     /// <summary>
     ///     Registers client by provided information and credentials.
     /// </summary>
-    /// <param name="clientForRegistrationDto">Data transfer object to create the user.</param>
+    /// <param name="userForRegistrationDto">Data transfer object to create the user.</param>
     /// <returns>Model with UserId and token.</returns>
     /// <remarks>HTTP POST: api/authentication/register</remarks>
     [HttpPost("register")]
     [ProducesResponseType(typeof(AuthenticationResultDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(BadRequestObjectResult), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(UnprocessableEntityObjectResult), StatusCodes.Status422UnprocessableEntity)]
-    public async Task<IActionResult> RegisterClient(ClientForRegistrationDto clientForRegistrationDto)
+    public async Task<IActionResult> Register(UserForRegistrationDto userForRegistrationDto)
     {
-        var validationResult = await _clientForRegistrationDtoValidator.ValidateAsync(clientForRegistrationDto);
+        var validationResult = await _userForRegistrationDtoValidator.ValidateAsync(userForRegistrationDto);
 
         if (!validationResult.IsValid)
         {
             _logger.LogInformation($"Registration failed with un processable entity." +
-                             $"\nErrors: {JsonConvert.SerializeObject(validationResult.Errors)}");
+                                   $"\nErrors: {JsonConvert.SerializeObject(validationResult.Errors)}");
 
             var validationErrors = validationResult.Errors.Select(error => new
             {
-                error.PropertyName, 
+                error.PropertyName,
                 error.ErrorMessage
             });
 
@@ -72,18 +72,18 @@ public class AuthenticationController : ControllerBase
         }
 
         // Validation passed, proceed with registration logic
-        var user = _mapper.Map<ApplicationUser>(clientForRegistrationDto);
+        var user = _mapper.Map<ApplicationUser>(userForRegistrationDto);
         user.UserName = user.PhoneNumber;
 
-        var result = await _userManager.CreateAsync(user, clientForRegistrationDto.Password);
+        var result = await _userManager.CreateAsync(user, userForRegistrationDto.Password);
 
         if (!result.Succeeded)
         {
             foreach (var error in result.Errors)
                 ModelState.TryAddModelError(error.Code, error.Description);
 
-            _logger.LogInformation($"Client registration failed for client with phone number: '{user.PhoneNumber}'. " +
-                             $"\nModelState: {JsonConvert.SerializeObject(ModelState)}");
+            _logger.LogInformation($"User registration failed for user with phone number: '{user.PhoneNumber}'. " +
+                                   $"\nModelState: {JsonConvert.SerializeObject(ModelState)}");
 
             return BadRequest(ModelState);
         }
@@ -126,7 +126,8 @@ public class AuthenticationController : ControllerBase
 
         if (!await _authenticationManager.ValidateUserAsync(userForAuthenticationDto))
         {
-            _logger.LogInformation($"Incorrect authenticate try of user with phone number: '{userForAuthenticationDto.Password}'.");
+            _logger.LogInformation(
+                $"Incorrect authenticate try of user with phone number: '{userForAuthenticationDto.Password}'.");
 
             return Unauthorized();
         }

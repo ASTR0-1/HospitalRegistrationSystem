@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using HospitalRegistrationSystem.Application.Interfaces.Data;
+using HospitalRegistrationSystem.Application.Utility;
 using HospitalRegistrationSystem.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,33 +11,30 @@ namespace HospitalRegistrationSystem.Infrastructure.Persistence.Repositories;
 
 public class AppointmentRepository : RepositoryBase<Appointment>, IAppointmentRepository
 {
-    public AppointmentRepository(RepositoryContext repositoryContext)
-        : base(repositoryContext)
+    public AppointmentRepository(ApplicationContext applicationContext)
+        : base(applicationContext)
     {
     }
 
-    public void CreateAppointment(Appointment appointment)
+    public async Task<Appointment?> GetAppointmentAsync(int id, bool trackChanges = false)
     {
-        Create(appointment);
-    }
-
-    public void DeleteAppointment(Appointment appointment)
-    {
-        Delete(appointment);
-    }
-
-    public async Task<Appointment> GetAppointmentAsync(int id, bool trackChanges)
-    {
-        return await FindByCondition(a => a.Id == id, trackChanges)
+        var appointment = await FindByCondition(a => a.Id == id, trackChanges)
             .Include(a => a.ApplicationUsers)
             .SingleOrDefaultAsync();
+
+        return appointment;
     }
 
-    public async Task<IEnumerable<Appointment>> GetAppointmentsAsync(bool trackChanges)
+    public async Task<PagedList<Appointment>> GetAppointmentsAsync(PagingParameters paging, bool trackChanges = false)
     {
-        return await FindAll(trackChanges)
+        var appointments = await FindAll(trackChanges)
             .Include(a => a.ApplicationUsers)
             .OrderBy(a => a.Id)
             .ToListAsync();
+
+        return PagedList<Appointment>.ToPagedList(appointments, paging.PageNumber, paging.PageSize);
     }
+    public void CreateAppointment(Appointment appointment) => Create(appointment);
+
+    public void DeleteAppointment(Appointment appointment) => Delete(appointment);
 }

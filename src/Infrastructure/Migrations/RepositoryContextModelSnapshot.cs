@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace HospitalRegistrationSystem.Infrastructure.Migrations
 {
-    [DbContext(typeof(RepositoryContext))]
+    [DbContext(typeof(ApplicationContext))]
     partial class RepositoryContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

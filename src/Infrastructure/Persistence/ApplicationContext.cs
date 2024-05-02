@@ -6,13 +6,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace HospitalRegistrationSystem.Infrastructure.Persistence;
 
-public class RepositoryContext : IdentityDbContext<ApplicationUser, IdentityRole<int>, int>
+public class ApplicationContext : IdentityDbContext<ApplicationUser, IdentityRole<int>, int>
 {
-    public RepositoryContext()
+    public ApplicationContext()
     {
     }
 
-    public RepositoryContext(DbContextOptions options)
+    public ApplicationContext(DbContextOptions options)
         : base(options)
     {
     }

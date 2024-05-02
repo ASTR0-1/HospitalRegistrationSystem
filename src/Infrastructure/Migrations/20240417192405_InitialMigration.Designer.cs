@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace HospitalRegistrationSystem.Infrastructure.Migrations
 {
-    [DbContext(typeof(RepositoryContext))]
+    [DbContext(typeof(ApplicationContext))]
     [Migration("20240417192405_InitialMigration")]
     partial class InitialMigration
     {
