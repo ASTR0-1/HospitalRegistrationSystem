@@ -38,7 +38,7 @@ public interface IRepositoryBase<T> where T : class
     void Update(T entity);
 
     /// <summary>
-    /// Deletes an entity.
+    ///     Deletes an entity.
     /// </summary>
     /// <param name="entity">The entity to delete.</param>
     void Delete(T entity);
