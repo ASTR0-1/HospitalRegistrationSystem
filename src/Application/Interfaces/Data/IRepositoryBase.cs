@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 namespace HospitalRegistrationSystem.Application.Interfaces.Data;
 
 /// <summary>
-/// Represents a base repository interface for CRUD operations.
+///     Represents a base repository interface for CRUD operations.
 /// </summary>
 /// <typeparam name="T">The entity type.</typeparam>
 public interface IRepositoryBase<T> where T : class
