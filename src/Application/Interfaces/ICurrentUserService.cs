@@ -6,7 +6,7 @@
 public interface ICurrentUserService
 {
     /// <summary>
-    /// Gets the application user ID.
+    ///     Gets the application user ID.
     /// </summary>
     /// <returns>The application user ID.</returns>
     public int GetApplicationUserId();
