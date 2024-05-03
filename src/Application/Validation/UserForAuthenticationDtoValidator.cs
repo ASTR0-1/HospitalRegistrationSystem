@@ -8,7 +8,8 @@ public class UserForAuthenticationDtoValidator : AbstractValidator<UserForAuthen
     public UserForAuthenticationDtoValidator()
     {
         RuleFor(x => x.PhoneNumber)
-            .NotEmpty().WithMessage("Phone number is required")
+            .NotEmpty()
+            .WithMessage("Phone number is required")
             .Matches(@"^\+?\d{10,13}")
             .WithMessage("Phone number must be 10 digits");
 
