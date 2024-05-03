@@ -12,7 +12,7 @@ public interface ICurrentUserService
     public int GetApplicationUserId();
 
     /// <summary>
-    /// Checks if the current user is in the specified role.
+    ///     Checks if the current user is in the specified role.
     /// </summary>
     /// <param name="role">The role to check.</param>
     /// <returns>True if the current user is in the specified role, otherwise false.</returns>
