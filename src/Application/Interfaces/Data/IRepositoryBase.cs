@@ -26,7 +26,7 @@ public interface IRepositoryBase<T> where T : class
     IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression, bool trackChanges);
 
     /// <summary>
-    /// Creates a new entity.
+    ///     Creates a new entity.
     /// </summary>
     /// <param name="entity">The entity to create.</param>
     void Create(T entity);
