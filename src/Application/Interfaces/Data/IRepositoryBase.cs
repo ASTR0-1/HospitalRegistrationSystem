@@ -11,7 +11,7 @@ namespace HospitalRegistrationSystem.Application.Interfaces.Data;
 public interface IRepositoryBase<T> where T : class
 {
     /// <summary>
-    /// Retrieves all entities.
+    ///     Retrieves all entities.
     /// </summary>
     /// <param name="trackChanges">Indicates whether to track changes in the entities.</param>
     /// <returns>An <see cref="IQueryable{T}"/> representing the collection of entities.</returns>
