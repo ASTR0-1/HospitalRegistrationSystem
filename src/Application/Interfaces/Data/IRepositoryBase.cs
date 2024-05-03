@@ -18,7 +18,7 @@ public interface IRepositoryBase<T> where T : class
     IQueryable<T> FindAll(bool trackChanges);
 
     /// <summary>
-    /// Retrieves entities based on the specified condition.
+    ///     Retrieves entities based on the specified condition.
     /// </summary>
     /// <param name="expression">The condition to filter the entities.</param>
     /// <param name="trackChanges">Indicates whether to track changes in the entities.</param>
