@@ -32,7 +32,7 @@ public interface IRepositoryBase<T> where T : class
     void Create(T entity);
 
     /// <summary>
-    /// Updates an existing entity.
+    ///     Updates an existing entity.
     /// </summary>
     /// <param name="entity">The entity to update.</param>
     void Update(T entity);
