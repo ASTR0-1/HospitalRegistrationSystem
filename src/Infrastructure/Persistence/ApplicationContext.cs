@@ -1,0 +1,29 @@
+﻿using System.Reflection;
+using HospitalRegistrationSystem.Domain.Entities;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+
+namespace HospitalRegistrationSystem.Infrastructure.Persistence;
+
+public class ApplicationContext : IdentityDbContext<ApplicationUser, IdentityRole<int>, int>
+{
+    public ApplicationContext()
+    {
+    }
+
+    public ApplicationContext(DbContextOptions options)
+        : base(options)
+    {
+    }
+
+    public DbSet<ApplicationUser> ApplicationUsers { get; set; }
+    public DbSet<Appointment> Appointments { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+
+        base.OnModelCreating(modelBuilder);
+    }
+}

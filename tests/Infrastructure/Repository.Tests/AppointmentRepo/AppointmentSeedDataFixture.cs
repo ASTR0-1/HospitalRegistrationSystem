@@ -9,58 +9,28 @@ public class AppointmentSeedDataFixture : IDisposable
 {
     public AppointmentSeedDataFixture()
     {
-        RepositoryContext.Appointments.Add(new Appointment
+        ApplicationContext.Appointments.Add(new Appointment
         {
-            Client = new Client
-            {
-                FirstName = "f1",
-                MiddleName = "m1",
-                LastName = "l1",
-                Gender = "g1"
-            },
-            Doctor = new Doctor
-            {
-                FirstName = "f1",
-                MiddleName = "m1",
-                LastName = "l1",
-                Gender = "g1",
-                Specialty = "s1"
-            },
             VisitTime = new DateTime(2022, 1, 1),
             Diagnosis = "D1"
         });
 
-        RepositoryContext.Appointments.Add(new Appointment
+        ApplicationContext.Appointments.Add(new Appointment
         {
-            Client = new Client
-            {
-                FirstName = "f2",
-                MiddleName = "m2",
-                LastName = "l2",
-                Gender = "g2"
-            },
-            Doctor = new Doctor
-            {
-                FirstName = "f2",
-                MiddleName = "m2",
-                LastName = "l2",
-                Gender = "g2",
-                Specialty = "s2"
-            },
             VisitTime = new DateTime(2022, 2, 2),
             Diagnosis = "D2"
         });
-        RepositoryContext.SaveChanges();
+        ApplicationContext.SaveChanges();
     }
 
-    public RepositoryContext RepositoryContext { get; } = new(
-        new DbContextOptionsBuilder<RepositoryContext>()
+    public ApplicationContext ApplicationContext { get; } = new(
+        new DbContextOptionsBuilder<ApplicationContext>()
             .UseInMemoryDatabase(Guid.NewGuid().ToString())
             .Options);
 
     public void Dispose()
     {
-        RepositoryContext.Database.EnsureDeleted();
-        RepositoryContext.Dispose();
+        ApplicationContext.Database.EnsureDeleted();
+        ApplicationContext.Dispose();
     }
 }

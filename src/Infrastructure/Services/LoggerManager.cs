@@ -5,25 +5,25 @@ namespace HospitalRegistrationSystem.Infrastructure.Services;
 
 public class LoggerManager : ILoggerManager
 {
-    private static readonly ILogger _logger = LogManager.GetCurrentClassLogger();
+    private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
     public void LogDebug(string message)
     {
-        _logger.Debug(message);
+        Logger.Debug(message);
     }
 
     public void LogError(string message)
     {
-        _logger.Error(message);
+        Logger.Error(message);
     }
 
     public void LogInformation(string message)
     {
-        _logger.Info(message);
+        Logger.Info(message);
     }
 
     public void LogWarning(string message)
     {
-        _logger.Warn(message);
+        Logger.Warn(message);
     }
 }

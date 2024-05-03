@@ -2,7 +2,7 @@
 
 public class PagingParameters
 {
-    private const int _maxPageSize = 10;
+    private const int MaxPageSize = 10;
 
     private int _pageSize = 4;
     public int PageNumber { get; set; } = 1;
@@ -10,6 +10,6 @@ public class PagingParameters
     public int PageSize
     {
         get => _pageSize;
-        set => _pageSize = value > _maxPageSize ? _maxPageSize : value;
+        set => _pageSize = value > MaxPageSize ? MaxPageSize : value;
     }
 }

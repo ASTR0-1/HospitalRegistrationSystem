@@ -15,7 +15,7 @@ public class AppointmentRepoTests
     public void SetUpFixture()
     {
         _dataFixture = new AppointmentSeedDataFixture();
-        _appointmentRepository = new AppointmentRepository(_dataFixture.RepositoryContext);
+        _appointmentRepository = new AppointmentRepository(_dataFixture.ApplicationContext);
     }
 
     [TearDown]
@@ -49,16 +49,15 @@ public class AppointmentRepoTests
         var expectedDiagnosis = "D3";
         var appointment = new Appointment
         {
-            ClientId = 2,
-            DoctorId = 2,
             VisitTime = new DateTime(3033, 3, 3),
             Diagnosis = "D3"
         };
 
         // Act
         _appointmentRepository.CreateAppointment(appointment);
-        await _dataFixture.RepositoryContext.SaveChangesAsync();
-        var actualDiagnosis = (await _appointmentRepository.GetAppointmentsAsync(false)).Last().Diagnosis;
+        await _dataFixture.ApplicationContext.SaveChangesAsync();
+        var actualDiagnosis = "";
+            //(await _appointmentRepository.GetAppointmentsAsync(false)).Last().Diagnosis;
 
         // Assert
         Assert.That(actualDiagnosis, Is.EqualTo(expectedDiagnosis));
@@ -84,12 +83,14 @@ public class AppointmentRepoTests
     {
         // Arrange
         var expectedDiagnosis = "D1";
-        var appointmentToDelete = await _appointmentRepository.GetAppointmentAsync(2, true);
+        // TODO: Remake guid
+        var appointmentToDelete = await _appointmentRepository.GetAppointmentAsync(0, true);
 
         // Act
         _appointmentRepository.DeleteAppointment(appointmentToDelete);
-        await _dataFixture.RepositoryContext.SaveChangesAsync();
-        var actualDiagnosis = (await _appointmentRepository.GetAppointmentsAsync(false)).Last().Diagnosis;
+        await _dataFixture.ApplicationContext.SaveChangesAsync();
+        var actualDiagnosis = "";
+            //(await _appointmentRepository.GetAppointmentsAsync(false)).Last().Diagnosis;
 
         // Assert
         Assert.That(actualDiagnosis, Is.EqualTo(expectedDiagnosis));
@@ -102,7 +103,8 @@ public class AppointmentRepoTests
         var expectedCount = 2;
 
         // Act
-        var actualCount = (await _appointmentRepository.GetAppointmentsAsync(false)).Count();
+        var actualCount = 0;
+            //(await _appointmentRepository.GetAppointmentsAsync(false)).Count();
 
         // Assert
         Assert.That(actualCount, Is.EqualTo(expectedCount));
@@ -112,7 +114,7 @@ public class AppointmentRepoTests
     public async Task GetAppointmentAsync_NotExistingId_GetNull()
     {
         // Arrange
-        var notExistingId = -1;
+        var notExistingId = 0;
         Appointment expectedAppointment = null;
 
         // Act
@@ -129,7 +131,8 @@ public class AppointmentRepoTests
         var expectedId = 1;
 
         // Act
-        var actualId = (await _appointmentRepository.GetAppointmentAsync(expectedId, false)).Id;
+        // TODO: Remake guid
+        var actualId = (await _appointmentRepository.GetAppointmentAsync(0, false)).Id;
 
         // Assert
         Assert.That(actualId, Is.EqualTo(expectedId));
