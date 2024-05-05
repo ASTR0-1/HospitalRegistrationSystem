@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { Routes, RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
@@ -19,9 +20,13 @@ import { ClientVisitedAppointmentsComponent } from './appointments/client-visite
 import { DoctorAppointmentsComponent } from './appointments/doctor-appointments/doctor.appointments.component';
 import { MarkAppointmentComponent } from './appointments/mark-appointment/mark.appointment.component';
 import { AddAppointmentComponent } from './appointments/add-appointment/add.appointment.component';
+import { LoginComponent } from './authentication/login/login.component';
+import { RegisterComponent } from './authentication/register/register.component';
 
 const appRoutes: Routes = [
 	{ path: '', component: HomeComponent },
+	{ path: 'login', component: LoginComponent},
+	{ path: 'register', component: RegisterComponent},
 	{ path: 'clients', component: ClientsComponent },
 	{ path: 'clients/new', component: AddClientComponent },
 	{
@@ -58,6 +63,7 @@ const appRoutes: Routes = [
 		BrowserModule,
 		FormsModule,
 		HttpClientModule,
+		MatFormFieldModule,
 		RouterModule.forRoot(appRoutes),
 	],
 	declarations: [
@@ -73,6 +79,8 @@ const appRoutes: Routes = [
 		DoctorAppointmentsComponent,
 		MarkAppointmentComponent,
 		AddAppointmentComponent,
+  		LoginComponent,
+		RegisterComponent
 	],
 	bootstrap: [AppComponent],
 	providers: [],
