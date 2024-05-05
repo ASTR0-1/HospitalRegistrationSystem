@@ -14,9 +14,10 @@ public static class ServiceExtensions
         services.AddCors(opts =>
         {
             opts.AddPolicy("CorsPolicy", builder =>
-                builder.AllowAnyHeader()
+                builder.WithOrigins("http://localhost:4200")
+                    .AllowAnyHeader()
                     .AllowAnyMethod()
-                    .AllowAnyOrigin()
+                    .AllowCredentials()
                     .WithExposedHeaders("X-Pagination"));
         });
     }
