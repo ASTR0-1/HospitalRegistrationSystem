@@ -25,5 +25,10 @@ public class ApplicationUserConfiguration : IEntityTypeConfiguration<Application
 
         builder.HasMany(u => u.Appointments)
             .WithMany(a => a.ApplicationUsers);
+
+        builder.HasOne(u => u.Hospital)
+            .WithMany(h => h.ApplicationUsers)
+            .HasForeignKey(u => u.HospitalId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }

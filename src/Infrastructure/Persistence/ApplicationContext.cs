@@ -20,6 +20,13 @@ public class ApplicationContext : IdentityDbContext<ApplicationUser, IdentityRol
     public DbSet<ApplicationUser> ApplicationUsers { get; set; }
     public DbSet<Appointment> Appointments { get; set; }
 
+    public DbSet<Country> Countries { get; set; }
+    public DbSet<City> Cities { get; set; }
+    public DbSet<Region> Regions { get; set; }
+
+    public DbSet<Hospital> Hospitals { get; set; }
+
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
