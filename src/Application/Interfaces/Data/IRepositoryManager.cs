@@ -18,6 +18,26 @@ public interface IRepositoryManager
     IApplicationUserRepository ApplicationUser { get; }
 
     /// <summary>
+    ///    Gets the country repository.
+    /// </summary>
+    ICountryRepository Country { get; }
+
+    /// <summary>
+    ///    Gets the region repository.
+    /// </summary>
+    IRegionRepository Region { get; }
+
+    /// <summary>
+    ///   Gets the city repository.
+    /// </summary>
+    ICityRepository City { get; }
+
+    /// <summary>
+    ///   Gets the hospital repository.
+    /// </summary>
+    IHospitalRepository Hospital { get; }
+
+    /// <summary>
     ///     Saves changes made in database asynchronously.
     /// </summary>
     /// <returns>A task representing the asynchronous save operation.</returns>

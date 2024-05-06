@@ -13,7 +13,7 @@ namespace HospitalRegistrationSystem.Application.Interfaces.Data;
 public interface IApplicationUserRepository
 {
     /// <summary>
-    ///     Get application users by role asynchronously.
+    ///     Get application users by role asynchronously with paging.
     /// </summary>
     /// <param name="paging">The paging parameters.</param>
     /// <param name="role">The role to filter by.</param>

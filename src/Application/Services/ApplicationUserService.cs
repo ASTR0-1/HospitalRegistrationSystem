@@ -54,10 +54,9 @@ public class ApplicationUserService : IApplicationUserService
     {
         var applicationUsers = await _repository.ApplicationUser.GetApplicationUsersByRoleAsync(role, paging);
 
-        var applicationUsersDto = _mapper.Map<IEnumerable<ApplicationUserDto>>(applicationUsers);
-        var pagedApplicationUserDtos = PagedList<ApplicationUserDto>.ToPagedList(applicationUsersDto, paging.PageNumber, paging.PageSize);
+        var applicationUsersDto = _mapper.Map<PagedList<ApplicationUserDto>>(applicationUsers);
 
-        return Result<PagedList<ApplicationUserDto>>.Success(pagedApplicationUserDtos);
+        return Result<PagedList<ApplicationUserDto>>.Success(applicationUsersDto);
     }
 
     /// <inheritdoc />

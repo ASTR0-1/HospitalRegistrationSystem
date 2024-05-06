@@ -27,12 +27,11 @@ public class AppointmentRepository : RepositoryBase<Appointment>, IAppointmentRe
 
     public async Task<PagedList<Appointment>> GetAppointmentsAsync(PagingParameters paging, bool trackChanges = false)
     {
-        var appointments = await FindAll(trackChanges)
+        var appointments = FindAll(trackChanges)
             .Include(a => a.ApplicationUsers)
-            .OrderBy(a => a.Id)
-            .ToListAsync();
+            .OrderBy(a => a.Id);
 
-        return PagedList<Appointment>.ToPagedList(appointments, paging.PageNumber, paging.PageSize);
+        return await PagedList<Appointment>.ToPagedListAsync(appointments, paging.PageNumber, paging.PageSize);
     }
     public void CreateAppointment(Appointment appointment) => Create(appointment);
 

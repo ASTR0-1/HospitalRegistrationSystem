@@ -18,6 +18,10 @@ public class RepositoryManager : IRepositoryManager
 
     private IAppointmentRepository? _appointmentRepository;
     private IApplicationUserRepository? _applicationUserRepository;
+    private ICountryRepository? _countryRepository;
+    private IRegionRepository? _regionRepository;
+    private ICityRepository? _cityRepository;
+    private IHospitalRepository? _hospitalRepository;
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="RepositoryManager"/> class.
@@ -30,9 +34,7 @@ public class RepositoryManager : IRepositoryManager
         _userManager = userManager;
     }
 
-    /// <summary>
-    ///     Gets the appointment repository.
-    /// </summary>
+    /// <inheritdoc />
     public IAppointmentRepository Appointment
     {
         get
@@ -46,9 +48,7 @@ public class RepositoryManager : IRepositoryManager
         }
     }
 
-    /// <summary>
-    ///     Gets the application user repository.
-    /// </summary>
+    /// <inheritdoc />
     public IApplicationUserRepository ApplicationUser
     {
         get
@@ -61,10 +61,63 @@ public class RepositoryManager : IRepositoryManager
             }
         }
     }
-    
-    /// <summary>
-    ///     Saves the changes made in database asynchronously.
-    /// </summary>
-    /// <returns>A task representing the asynchronous save operation.</returns>
+
+    /// <inheritdoc />
+    public ICountryRepository Country
+    {
+        get
+        {
+            lock (Lock)
+            {
+                _countryRepository ??= new CountryRepository(_context);
+
+                return _countryRepository;
+            }
+        }
+    }
+
+    /// <inheritdoc />
+    public IRegionRepository Region
+    {
+        get
+        {
+            lock (Lock)
+            {
+                _regionRepository ??= new RegionRepository(_context);
+
+                return _regionRepository;
+            }
+        }
+    }
+
+    /// <inheritdoc />
+    public ICityRepository City
+    {
+        get
+        {
+            lock (Lock)
+            {
+                _cityRepository ??= new CityRepository(_context);
+
+                return _cityRepository;
+            }
+        }
+    }
+
+    /// <inheritdoc />
+    public IHospitalRepository Hospital
+    {
+        get
+        {
+            lock (Lock)
+            {
+                _hospitalRepository ??= new HospitalRepository(_context);
+
+                return _hospitalRepository;
+            }
+        }
+    }
+
+    /// <inheritdoc />
     public Task SaveAsync() => _context.SaveChangesAsync();
 }
