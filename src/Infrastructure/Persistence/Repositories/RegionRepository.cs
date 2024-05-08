@@ -8,12 +8,12 @@ using Microsoft.EntityFrameworkCore;
 namespace HospitalRegistrationSystem.Infrastructure.Persistence.Repositories;
 
 /// <summary>
-///     Represents a repository for managing regions.
+/// Represents a repository for managing regions.
 /// </summary>
 public class RegionRepository : RepositoryBase<Region>, IRegionRepository
 {
     /// <summary>
-    ///     Initializes a new instance of the <see cref="RegionRepository"/> class.
+    /// Initializes a new instance of the <see cref="RegionRepository"/> class.
     /// </summary>
     /// <param name="applicationContext">The application context.</param>
     public RegionRepository(ApplicationContext applicationContext)
