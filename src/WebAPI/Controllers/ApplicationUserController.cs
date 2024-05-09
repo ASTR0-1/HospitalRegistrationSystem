@@ -6,6 +6,7 @@ using HospitalRegistrationSystem.Application.DTOs.ApplicationUserDTOs;
 using HospitalRegistrationSystem.Application.Interfaces;
 using HospitalRegistrationSystem.Application.Interfaces.Services;
 using HospitalRegistrationSystem.Application.Utility;
+using HospitalRegistrationSystem.Domain.Constants;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -123,10 +124,11 @@ public class ApplicationUserController : ControllerBase
     /// <param name="userId">The user ID.</param>
     /// <param name="role">The role.</param>
     /// <returns>The result of the assignment operation.</returns>
+    [Authorize(Roles = $"{RoleConstants.MasterSupervisor},{RoleConstants.Supervisor}")]
     [HttpPost("{userId:int}/role/{role}")]
     public async Task<IActionResult> AssignUserToRole(int userId, string role)
     {
-        var result = await _userService.AssignUserToRoleAsync(userId, role);
+        var result = await _userService.AssignEmployeeAsync(userId, role);
 
         if (!result.IsSuccess)
         {

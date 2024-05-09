@@ -74,7 +74,8 @@ public class AuthenticationManager : IAuthenticationManager
     {
         var claims = new List<Claim>
         {
-            new(ClaimTypes.NameIdentifier, _user!.Id.ToString())
+            new(ClaimTypes.NameIdentifier, _user!.Id.ToString()),
+            new("HospitalId", _user!.HospitalId.ToString()!)
         };
 
         var roles = await _userManager.GetRolesAsync(_user);

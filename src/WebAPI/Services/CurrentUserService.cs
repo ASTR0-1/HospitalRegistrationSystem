@@ -23,6 +23,16 @@ public class CurrentUserService : ICurrentUserService
     /// <inheritdoc />
     public int GetApplicationUserId() => int.Parse(_user.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
+    /// <inheritdoc/>
+    public int? GetApplicationUserHospitalId()
+    {
+        var canParse = int.TryParse(_user.FindFirstValue("HospitalId")!, out var hospitalId);
+        if (canParse)
+            return null;
+
+        return hospitalId;
+    } 
+
     /// <inheritdoc />
     public bool IsInRole(string role) => _user.IsInRole(role);
 }

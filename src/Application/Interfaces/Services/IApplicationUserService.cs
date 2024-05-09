@@ -35,10 +35,12 @@ public interface IApplicationUserService
     Task<Result> UpdateAsync(ApplicationUserDto applicationUserDto);
 
     /// <summary>
-    ///     Assigns a role to an application user.
+    ///     Assigns an employee to a hospital.
     /// </summary>
-    /// <param name="userId">The ID of the user to assign the role to.</param>
+    /// <param name="userId">The ID of the user to assign.</param>
+    /// <param name="specialty">The specialty of the user.</param>
     /// <param name="role">The role to assign.</param>
+    /// <param name="hospitalId">The ID of the hospital to assign the user to.</param>
     /// <returns>A task that represents the asynchronous operation. The task result indicates the success or failure of the assignment operation as a <see cref="Result"/>.</returns>
-    Task<Result> AssignUserToRoleAsync(int userId, string role);
+    Task<Result> AssignEmployeeAsync(int userId, string? specialty, string role, int hospitalId);
 }

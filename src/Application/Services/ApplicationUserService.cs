@@ -100,7 +100,7 @@ public class ApplicationUserService : IApplicationUserService
     }
 
     /// <inheritdoc />
-    public async Task<Result> AssignUserToRoleAsync(int userId, string role)
+    public async Task<Result> AssignEmployeeAsync(int userId, string? specialty, string role, int hospitalId)
     {
         var applicationUser = await _repository.ApplicationUser.GetApplicationUserAsync(userId);
         if (applicationUser is null)
@@ -110,8 +110,8 @@ public class ApplicationUserService : IApplicationUserService
         if (!roleExists)
             return Result.Failure(RoleError.RoleNotFound(role));
 
-        if (!CanCallerAssignRole(role))
-            return Result.Failure(ApplicationUserError.UnauthorizedRoleAssignment(_currentUserService.GetApplicationUserId(), role));
+        if (!CanCallerAssignEmployee(role, hospitalId))
+            return Result.Failure(ApplicationUserError.UnauthorizedEmployeeAssignment(_currentUserService.GetApplicationUserId(), role, hospitalId));
 
         var result = await _repository.ApplicationUser.AssignUserToRoleAsync(applicationUser, role);
 
@@ -124,23 +124,28 @@ public class ApplicationUserService : IApplicationUserService
             return Result.Failure(ApplicationUserError.RoleAssignmentFailed(role, sb.ToString()));
         }
 
+        applicationUser.Specialty = specialty;
+        await _repository.ApplicationUser.UpdateApplicationUserAsync(applicationUser);
+
         return Result.Success();
     }
 
-    private bool CanCallerAssignRole(string role)
+    private bool CanCallerAssignEmployee(string role, int hospitalId)
     {
         if (_currentUserService.IsInRole(RoleConstants.MasterSupervisor))
             return true;
 
-        if (_currentUserService.IsInRole(RoleConstants.Supervisor))
-        {
-            return role switch
-            {
-                RoleConstants.Doctor or RoleConstants.Receptionist => true,
-                _ => false
-            };
-        }
+        if (!_currentUserService.IsInRole(RoleConstants.Supervisor)) 
+            return false;
 
-        return false;
+        var canAssignRole = role switch
+        {
+            RoleConstants.Doctor or RoleConstants.Receptionist => true,
+            _ => false
+        };
+
+        var canAssignHospital = _currentUserService.GetApplicationUserHospitalId() == hospitalId;
+
+        return canAssignRole && canAssignHospital;
     }
 }
