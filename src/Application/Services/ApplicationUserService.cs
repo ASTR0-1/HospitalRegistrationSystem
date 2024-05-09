@@ -100,7 +100,7 @@ public class ApplicationUserService : IApplicationUserService
     }
 
     /// <inheritdoc />
-    public async Task<Result> AssignEmployeeAsync(int userId, string? specialty, string role, int hospitalId)
+    public async Task<Result> AssignEmployeeAsync(int userId, string role, int hospitalId, string? specialty)
     {
         var applicationUser = await _repository.ApplicationUser.GetApplicationUserAsync(userId);
         if (applicationUser is null)

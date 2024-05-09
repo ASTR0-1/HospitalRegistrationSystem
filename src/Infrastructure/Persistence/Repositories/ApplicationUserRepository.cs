@@ -11,7 +11,7 @@ namespace HospitalRegistrationSystem.Infrastructure.Persistence.Repositories;
 /// <summary>
 ///     Represents a repository for accessing and manipulating application users in the data layer.
 /// </summary>
-public class ApplicationUserRepository : RepositoryBase<ApplicationUser>, IApplicationUserRepository
+public class ApplicationUserRepository : IApplicationUserRepository
 {
     private readonly UserManager<ApplicationUser> _userManager;
 
@@ -19,9 +19,7 @@ public class ApplicationUserRepository : RepositoryBase<ApplicationUser>, IAppli
     ///     Initializes a new instance of the <see cref="ApplicationUserRepository" /> class.
     /// </summary>
     /// <param name="userManager">The user manager.</param>
-    /// <param name="applicationContext">The application context.</param>
-    public ApplicationUserRepository(UserManager<ApplicationUser> userManager, ApplicationContext applicationContext)
-        : base(applicationContext)
+    public ApplicationUserRepository(UserManager<ApplicationUser> userManager)
     {
         _userManager = userManager;
     }

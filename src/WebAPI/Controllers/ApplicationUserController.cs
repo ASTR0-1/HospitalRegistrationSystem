@@ -61,7 +61,7 @@ public class ApplicationUserController : ControllerBase
     /// </summary>
     /// <param name="paging">The paging parameters.</param>
     /// <param name="role">The role.</param>
-    /// <param name="searchQuery">The search query.</param>
+    /// <param name="searchQuery">The search query.(optional)</param>
     /// <returns>The list of application users.</returns>
     [HttpGet("role/{role}")]
     public async Task<ActionResult<PagedList<ApplicationUserDto>>> GetAllByRole([FromQuery] PagingParameters paging, string role, string? searchQuery = null)
@@ -79,7 +79,7 @@ public class ApplicationUserController : ControllerBase
     /// <param name="paging">The paging parameters.</param>
     /// <param name="hospitalId">The hospital ID.</param>
     /// <param name="role">The role.</param>
-    /// <param name="searchQuery">The search query.</param>
+    /// <param name="searchQuery">The search query.(optional)</param>
     /// <returns>The list of application users.</returns>
     [HttpGet("hospital/{hospitalId:int}/role/{role}")]
     public async Task<ActionResult<List<ApplicationUserDto>>> GetAllByHospitalAndRole([FromQuery] PagingParameters paging, int hospitalId, string role, string? searchQuery = null)
@@ -119,16 +119,18 @@ public class ApplicationUserController : ControllerBase
     }
 
     /// <summary>
-    ///     Assigns a user to the specified role.
+    ///     Assigns an employee to a role for a specific hospital.
     /// </summary>
-    /// <param name="userId">The user ID.</param>
-    /// <param name="role">The role.</param>
+    /// <param name="userId">The ID of the user to assign.</param>
+    /// <param name="role">The role to assign.</param>
+    /// <param name="hospitalId">The ID of the hospital.</param>
+    /// <param name="specialty">The specialty of the employee (optional).</param>
     /// <returns>The result of the assignment operation.</returns>
     [Authorize(Roles = $"{RoleConstants.MasterSupervisor},{RoleConstants.Supervisor}")]
     [HttpPost("{userId:int}/role/{role}")]
-    public async Task<IActionResult> AssignUserToRole(int userId, string role)
+    public async Task<IActionResult> AssignEmployee(int userId, string role, int hospitalId, string? specialty)
     {
-        var result = await _userService.AssignEmployeeAsync(userId, role);
+        var result = await _userService.AssignEmployeeAsync(userId, role, hospitalId, specialty);
 
         if (!result.IsSuccess)
         {
