@@ -12,7 +12,6 @@ namespace HospitalRegistrationSystem.WebAPI.Controllers;
 /// <summary>
 ///     Controller for managing countries.
 /// </summary>
-[Authorize(Roles = RoleConstants.MasterSupervisor)]
 [ApiController]
 [Route("api/countries")]
 public class CountryController : ControllerBase
@@ -80,6 +79,7 @@ public class CountryController : ControllerBase
     /// </summary>
     /// <param name="countryCreationDto">The country creation DTO.</param>
     /// <returns>The result of the add operation.</returns>
+    [Authorize(Roles = RoleConstants.MasterSupervisor)]
     [HttpPost]
     public async Task<IActionResult> AddNew([FromBody] CountryDto countryCreationDto)
     {
@@ -100,6 +100,7 @@ public class CountryController : ControllerBase
     /// </summary>
     /// <param name="countryId">The country ID.</param>
     /// <returns>The result of the delete operation.</returns>
+    [Authorize(Roles = RoleConstants.MasterSupervisor)]
     [HttpDelete("{countryId:int}")]
     public async Task<IActionResult> Delete(int countryId)
     {

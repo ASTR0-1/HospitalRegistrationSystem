@@ -12,7 +12,6 @@ namespace HospitalRegistrationSystem.WebAPI.Controllers;
 /// <summary>
 ///     Controller for managing regions.
 /// </summary>
-[Authorize(Roles = RoleConstants.MasterSupervisor)]
 [ApiController]
 [Route("api/regions")]
 public class RegionController : ControllerBase
@@ -80,6 +79,7 @@ public class RegionController : ControllerBase
     /// </summary>
     /// <param name="regionCreationDto">The region creation DTO.</param>
     /// <returns>The result of the add operation.</returns>
+    [Authorize(Roles = RoleConstants.MasterSupervisor)]
     [HttpPost]
     public async Task<IActionResult> AddNew([FromBody] RegionDto regionCreationDto)
     {
@@ -100,6 +100,7 @@ public class RegionController : ControllerBase
     /// </summary>
     /// <param name="regionId">The region ID.</param>
     /// <returns>The result of the delete operation.</returns>
+    [Authorize(Roles = RoleConstants.MasterSupervisor)]
     [HttpDelete("{regionId:int}")]
     public async Task<IActionResult> Delete(int regionId)
     {

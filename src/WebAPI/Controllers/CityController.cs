@@ -12,7 +12,6 @@ namespace HospitalRegistrationSystem.WebAPI.Controllers;
 /// <summary>
 ///     Controller for managing cities.
 /// </summary>
-[Authorize(Roles = RoleConstants.MasterSupervisor)]
 [ApiController]
 [Route("api/cities")]
 public class CityController : ControllerBase
@@ -80,6 +79,7 @@ public class CityController : ControllerBase
     /// </summary>
     /// <param name="cityCreationDto">The city creation DTO.</param>
     /// <returns>The result of the add operation.</returns>
+    [Authorize(Roles = RoleConstants.MasterSupervisor)]
     [HttpPost]
     public async Task<IActionResult> AddNew([FromBody] CityDto cityCreationDto)
     {
@@ -100,6 +100,7 @@ public class CityController : ControllerBase
     /// </summary>
     /// <param name="cityId">The city ID.</param>
     /// <returns>The result of the delete operation.</returns>
+    [Authorize(Roles = RoleConstants.MasterSupervisor)]
     [HttpDelete("{cityId:int}")]
     public async Task<IActionResult> Delete(int cityId)
     {

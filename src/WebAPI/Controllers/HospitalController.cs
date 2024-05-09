@@ -3,6 +3,7 @@ using HospitalRegistrationSystem.Application.DTOs.HospitalDTOs;
 using HospitalRegistrationSystem.Application.Interfaces;
 using HospitalRegistrationSystem.Application.Interfaces.Services;
 using HospitalRegistrationSystem.Application.Utility;
+using HospitalRegistrationSystem.Domain.Constants;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -80,6 +81,7 @@ public class HospitalController : ControllerBase
     /// </summary>
     /// <param name="hospitalCreationDto">The hospital creation DTO.</param>
     /// <returns>The result of the add operation.</returns>
+    [Authorize(Roles = RoleConstants.MasterSupervisor)]
     [HttpPost]
     public async Task<IActionResult> AddNew([FromBody] HospitalForCreationDto hospitalCreationDto)
     {
@@ -100,6 +102,7 @@ public class HospitalController : ControllerBase
     /// </summary>
     /// <param name="hospitalId">The hospital ID.</param>
     /// <returns>The result of the delete operation.</returns>
+    [Authorize(Roles = RoleConstants.MasterSupervisor)]
     [HttpDelete("{hospitalId:int}")]
     public async Task<IActionResult> Delete(int hospitalId)
     {
