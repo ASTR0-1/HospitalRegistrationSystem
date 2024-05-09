@@ -28,12 +28,6 @@ public class ApplicationContext : IdentityDbContext<ApplicationUser, IdentityRol
 
     public DbSet<Hospital> Hospitals { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        optionsBuilder.LogTo(Console.WriteLine, LogLevel.Information);
-
-        base.OnConfiguring(optionsBuilder);
-    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
