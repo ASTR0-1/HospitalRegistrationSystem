@@ -12,7 +12,6 @@ namespace HospitalRegistrationSystem.WebAPI.Controllers;
 /// <summary>
 ///     Controller for managing hospitals.
 /// </summary>
-[Authorize]
 [ApiController]
 [Route("api/hospitals")]
 public class HospitalController : ControllerBase
