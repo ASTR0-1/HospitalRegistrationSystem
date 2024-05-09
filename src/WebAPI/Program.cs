@@ -4,6 +4,7 @@ using HospitalRegistrationSystem.Application.Extensions;
 using HospitalRegistrationSystem.Application.Interfaces;
 using HospitalRegistrationSystem.Application.Mappers;
 using HospitalRegistrationSystem.Infrastructure.Extensions;
+using HospitalRegistrationSystem.WebAPI.ActionFilters;
 using HospitalRegistrationSystem.WebAPI.Exstensions;
 using HospitalRegistrationSystem.WebAPI.Extensions;
 using HospitalRegistrationSystem.WebAPI.Services;
@@ -11,6 +12,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json.Serialization;
 using NLog;
 
 namespace HospitalRegistrationSystem.WebAPI;
@@ -52,11 +54,19 @@ public abstract class Program
 
         services.ConfigureAzureBlob(configuration);
 
-        services.AddControllers(config =>
+        services.AddControllers(options =>
         {
-            config.RespectBrowserAcceptHeader = true;
-            config.ReturnHttpNotAcceptable = true;
-        }).AddNewtonsoftJson();
+            options.RespectBrowserAcceptHeader = true;
+            options.ReturnHttpNotAcceptable = true;
+
+            options.Filters.Add<PaginationHeaderFilter>();
+        }).AddNewtonsoftJson(opts =>
+        {
+            opts.SerializerSettings.ContractResolver = new DefaultContractResolver
+            {
+                NamingStrategy = new CamelCaseNamingStrategy()
+            };
+        });
 
         services.AddFluentValidation();
 

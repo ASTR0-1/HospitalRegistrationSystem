@@ -11,5 +11,5 @@ public static class ApplicationUserError
 
     public static Error RoleAssignmentFailed(string role, string errors) => new("User role assignment failed", $"The user could not be assigned to the role '{role}'. Errors: {errors}");
 
-    public static Error UnauthorizedRoleAssignment(int userId, string role) => new("Unauthorized role assignment", $"The user with ID '{userId}' is not authorized to assign users to the role '{role}'.");
+    public static Error UnauthorizedEmployeeAssignment(int userId, string role, int hospitalId) => new("Unauthorized employee assignment", $"The user with ID '{userId}' is not authorized to assign employees. Assigning role: '{role}'. Assigning hospital id: {hospitalId}.");
 }

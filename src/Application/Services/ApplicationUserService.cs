@@ -29,7 +29,7 @@ public class ApplicationUserService : IApplicationUserService
     /// </summary>
     /// <param name="repository">The repository manager.</param>
     /// <param name="mapper">The mapper.</param>
-    /// <param name="_currentUserService">The current user service.</param>
+    /// <param name="currentUserService">The current user service.</param>
     public ApplicationUserService(IRepositoryManager repository, IMapper mapper, ICurrentUserService currentUserService)
     {
         _repository = repository;
@@ -50,14 +50,19 @@ public class ApplicationUserService : IApplicationUserService
     }
 
     /// <inheritdoc />
-    public async Task<Result<PagedList<ApplicationUserDto>>> GetAllByRoleAsync(PagingParameters paging, string role)
+    public async Task<Result<PagedList<ApplicationUserDto>>> GetAllAsync(PagingParameters paging, string? searchQuery, string role, int? hospitalId = null)
     {
-        var applicationUsers = await _repository.ApplicationUser.GetApplicationUsersByRoleAsync(role, paging);
+        if (hospitalId is not null && 
+            await _repository.Hospital.GetHospitalAsync(hospitalId.Value) is null)
+        {
+            return Result<PagedList<ApplicationUserDto>>.Failure(HospitalError.HospitalIdNotFound(hospitalId.Value));
+        }
 
-        var applicationUsersDto = _mapper.Map<IEnumerable<ApplicationUserDto>>(applicationUsers);
-        var pagedApplicationUserDtos = PagedList<ApplicationUserDto>.ToPagedList(applicationUsersDto, paging.PageNumber, paging.PageSize);
+        var applicationUsers = await _repository.ApplicationUser.GetApplicationUsersAsync(paging, searchQuery, role, hospitalId);
 
-        return Result<PagedList<ApplicationUserDto>>.Success(pagedApplicationUserDtos);
+        var applicationUsersDto = _mapper.Map<PagedList<ApplicationUserDto>>(applicationUsers);
+
+        return Result<PagedList<ApplicationUserDto>>.Success(applicationUsersDto);
     }
 
     /// <inheritdoc />
@@ -95,7 +100,7 @@ public class ApplicationUserService : IApplicationUserService
     }
 
     /// <inheritdoc />
-    public async Task<Result> AssignUserToRoleAsync(int userId, string role)
+    public async Task<Result> AssignEmployeeAsync(int userId, string role, int hospitalId, string? specialty)
     {
         var applicationUser = await _repository.ApplicationUser.GetApplicationUserAsync(userId);
         if (applicationUser is null)
@@ -105,8 +110,8 @@ public class ApplicationUserService : IApplicationUserService
         if (!roleExists)
             return Result.Failure(RoleError.RoleNotFound(role));
 
-        if (!CanCallerAssignRole(role))
-            return Result.Failure(ApplicationUserError.UnauthorizedRoleAssignment(_currentUserService.GetApplicationUserId(), role));
+        if (!CanCallerAssignEmployee(role, hospitalId))
+            return Result.Failure(ApplicationUserError.UnauthorizedEmployeeAssignment(_currentUserService.GetApplicationUserId(), role, hospitalId));
 
         var result = await _repository.ApplicationUser.AssignUserToRoleAsync(applicationUser, role);
 
@@ -119,23 +124,28 @@ public class ApplicationUserService : IApplicationUserService
             return Result.Failure(ApplicationUserError.RoleAssignmentFailed(role, sb.ToString()));
         }
 
+        applicationUser.Specialty = specialty;
+        await _repository.ApplicationUser.UpdateApplicationUserAsync(applicationUser);
+
         return Result.Success();
     }
 
-    private bool CanCallerAssignRole(string role)
+    private bool CanCallerAssignEmployee(string role, int hospitalId)
     {
         if (_currentUserService.IsInRole(RoleConstants.MasterSupervisor))
             return true;
 
-        if (_currentUserService.IsInRole(RoleConstants.Supervisor))
-        {
-            return role switch
-            {
-                RoleConstants.Doctor or RoleConstants.Receptionist => true,
-                _ => false
-            };
-        }
+        if (!_currentUserService.IsInRole(RoleConstants.Supervisor)) 
+            return false;
 
-        return false;
+        var canAssignRole = role switch
+        {
+            RoleConstants.Doctor or RoleConstants.Receptionist => true,
+            _ => false
+        };
+
+        var canAssignHospital = _currentUserService.GetApplicationUserHospitalId() == hospitalId;
+
+        return canAssignRole && canAssignHospital;
     }
 }

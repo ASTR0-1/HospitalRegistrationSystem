@@ -12,6 +12,12 @@ public interface ICurrentUserService
     public int GetApplicationUserId();
 
     /// <summary>
+    ///     Gets the application user's hospital ID.
+    /// </summary>
+    /// <returns>The application user's hospital ID</returns>
+    public int? GetApplicationUserHospitalId();
+
+    /// <summary>
     ///     Checks if the current user is in the specified role.
     /// </summary>
     /// <param name="role">The role to check.</param>

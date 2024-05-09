@@ -13,5 +13,10 @@ public class ApplicationUser : IdentityUser<int>
 
     public string? Specialty { get; set; }
 
+    public string? ProfilePhotoUrl { get; set; }
+
     public ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
+
+    public int? HospitalId { get; set; }
+    public Hospital? Hospital { get; set; }
 }
