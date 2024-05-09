@@ -18,12 +18,14 @@ public interface IApplicationUserService
     Task<Result<ApplicationUserDto>> GetAsync(int userId);
 
     /// <summary>
-    ///     Retrieves all application users by their role.
+    ///     Retrieves all application users based on the provided parameters.
     /// </summary>
     /// <param name="paging">The paging parameters.</param>
+    /// <param name="searchQuery">The search query.</param>
     /// <param name="role">The role of the users to retrieve.</param>
+    /// <param name="hospitalId">The ID of the hospital to filter by.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains a paged list of application users as a <see cref="Result{T}"/> where T is <see cref="PagedList{ApplicationUserDto}"/>.</returns>
-    Task<Result<PagedList<ApplicationUserDto>>> GetAllByRoleAsync(PagingParameters paging, string role);
+    Task<Result<PagedList<ApplicationUserDto>>> GetAllAsync(PagingParameters paging, string? searchQuery, string role, int? hospitalId = null);
 
     /// <summary>
     ///     Updates an application user.

@@ -29,7 +29,7 @@ public class ApplicationUserService : IApplicationUserService
     /// </summary>
     /// <param name="repository">The repository manager.</param>
     /// <param name="mapper">The mapper.</param>
-    /// <param name="_currentUserService">The current user service.</param>
+    /// <param name="currentUserService">The current user service.</param>
     public ApplicationUserService(IRepositoryManager repository, IMapper mapper, ICurrentUserService currentUserService)
     {
         _repository = repository;
@@ -50,9 +50,15 @@ public class ApplicationUserService : IApplicationUserService
     }
 
     /// <inheritdoc />
-    public async Task<Result<PagedList<ApplicationUserDto>>> GetAllByRoleAsync(PagingParameters paging, string role)
+    public async Task<Result<PagedList<ApplicationUserDto>>> GetAllAsync(PagingParameters paging, string? searchQuery, string role, int? hospitalId = null)
     {
-        var applicationUsers = await _repository.ApplicationUser.GetApplicationUsersByRoleAsync(role, paging);
+        if (hospitalId is not null && 
+            await _repository.Hospital.GetHospitalAsync(hospitalId.Value) is null)
+        {
+            return Result<PagedList<ApplicationUserDto>>.Failure(HospitalError.HospitalIdNotFound(hospitalId.Value));
+        }
+
+        var applicationUsers = await _repository.ApplicationUser.GetApplicationUsersAsync(paging, searchQuery, role, hospitalId);
 
         var applicationUsersDto = _mapper.Map<PagedList<ApplicationUserDto>>(applicationUsers);
 

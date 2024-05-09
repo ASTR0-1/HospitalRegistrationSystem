@@ -58,13 +58,39 @@ public class ApplicationUserController : ControllerBase
     /// <summary>
     ///     Gets all application users with the specified role.
     /// </summary>
-    /// <param name="role">The role.</param>
     /// <param name="paging">The paging parameters.</param>
+    /// <param name="role">The role.</param>
+    /// <param name="searchQuery">The search query.</param>
     /// <returns>The list of application users.</returns>
-    [HttpPost("role/{role}")]
-    public async Task<ActionResult<PagedList<ApplicationUserDto>>> GetAllByRole(string role, [FromBody] PagingParameters paging)
+    [HttpGet("role/{role}")]
+    public async Task<ActionResult<PagedList<ApplicationUserDto>>> GetAllByRole([FromQuery] PagingParameters paging, string role, string? searchQuery = null)
     {
-        var result = await _userService.GetAllByRoleAsync(paging, role);
+        var result = await _userService.GetAllAsync(paging, searchQuery, role);
+
+        var userDtos = result.Value;
+
+        return Ok(userDtos);
+    }
+
+    /// <summary>
+    ///     Gets all application users with the specified role for a specific hospital.
+    /// </summary>
+    /// <param name="paging">The paging parameters.</param>
+    /// <param name="hospitalId">The hospital ID.</param>
+    /// <param name="role">The role.</param>
+    /// <param name="searchQuery">The search query.</param>
+    /// <returns>The list of application users.</returns>
+    [HttpGet("hospital/{hospitalId:int}/role/{role}")]
+    public async Task<ActionResult<List<ApplicationUserDto>>> GetAllByHospitalAndRole([FromQuery] PagingParameters paging, int hospitalId, string role, string? searchQuery = null)
+    {
+        var result = await _userService.GetAllAsync(paging, searchQuery, role, hospitalId);
+
+        if (!result.IsSuccess)
+        {
+            _logger.LogInformation(result.Error.Description);
+
+            return BadRequest(result.Error.Message);
+        }
 
         var userDtos = result.Value;
 
