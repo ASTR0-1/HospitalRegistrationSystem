@@ -12,5 +12,4 @@ public class ApplicationUserDto
     public string Gender { get; set; }
     public string? Specialty { get; set; }
     public string? ProfilePhotoUrl { get; set; }
-    public string Role { get; set; }
 }
