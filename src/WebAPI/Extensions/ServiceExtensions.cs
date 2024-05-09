@@ -28,10 +28,13 @@ public static class ServiceExtensions
         {
             c.SwaggerDoc("v1", new OpenApiInfo {Title = "Hospital Registration System", Version = "v1"});
 
+
             // Include the XML comments for Swagger
             var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
             var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
             c.IncludeXmlComments(xmlPath);
         });
+
+        services.AddSwaggerGenNewtonsoftSupport();
     }
 }

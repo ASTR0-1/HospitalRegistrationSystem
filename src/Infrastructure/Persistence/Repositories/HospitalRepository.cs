@@ -22,12 +22,26 @@ public class HospitalRepository : RepositoryBase<Hospital>, IHospitalRepository
     }
 
     /// <inheritdoc/>
-    public async Task<Hospital?> GetHospitalAsync(int id, bool trackChanges = false)
+    public async Task<PagedList<Hospital>> GetHospitalsAsync(PagingParameters paging, string searchQuery, bool trackChanges = false)
     {
-        var hospital = await FindByCondition(h => h.Id == id, trackChanges)
-            .SingleOrDefaultAsync();
+        var searchTerms = searchQuery.Split(' ')
+            .Select(term => $"%{term.ToLower().Trim()}%")
+            .ToList();
 
-        return hospital;
+        var hospitalsQuery = FindByCondition(
+                    h => searchTerms.Any(term => EF.Functions.Like(h.Address.City!.Region!.Name, term) ||
+                                                 EF.Functions.Like(h.Address.City.Name, term) ||
+                                                 EF.Functions.Like(h.Address.City.Region.Name, term) ||
+                                                 EF.Functions.Like(h.Address.City.Region.Country!.Name, term) ||
+                                                 EF.Functions.Like(h.Address.Street, term)
+                    ),
+                    trackChanges,
+                    h => h.Address.City!,
+                    h => h.Address.City!.Region!,
+                    h => h.Address.City!.Region!.Country!)
+                .OrderBy(h => h.Id);
+
+        return await PagedList<Hospital>.ToPagedListAsync(hospitalsQuery, paging.PageNumber, paging.PageSize);
     }
 
     /// <inheritdoc/>
@@ -37,6 +51,15 @@ public class HospitalRepository : RepositoryBase<Hospital>, IHospitalRepository
             .OrderBy(h => h.Id);
 
         return await PagedList<Hospital>.ToPagedListAsync(hospitalsQuery, paging.PageNumber, paging.PageSize);
+    }
+
+    /// <inheritdoc/>
+    public async Task<Hospital?> GetHospitalAsync(int id, bool trackChanges = false)
+    {
+        var hospital = await FindByCondition(h => h.Id == id, trackChanges)
+            .SingleOrDefaultAsync();
+
+        return hospital;
     }
 
     /// <inheritdoc/>

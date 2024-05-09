@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using HospitalRegistrationSystem.Application.Utility;
 using HospitalRegistrationSystem.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
@@ -13,12 +11,14 @@ namespace HospitalRegistrationSystem.Application.Interfaces.Data;
 public interface IApplicationUserRepository
 {
     /// <summary>
-    ///     Get application users by role asynchronously with paging.
+    ///     Get the paged list of application users based on the provided parameters.
     /// </summary>
     /// <param name="paging">The paging parameters.</param>
+    /// <param name="searchQuery">The search query.</param>
     /// <param name="role">The role to filter by.</param>
+    /// <param name="hospitalId">The ID of the hospital to filter by.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains the paged list of application users.</returns>
-    Task<PagedList<ApplicationUser>> GetApplicationUsersByRoleAsync(string role, PagingParameters paging);
+    Task<PagedList<ApplicationUser>> GetApplicationUsersAsync(PagingParameters paging, string? searchQuery, string role, int? hospitalId = null);
 
     /// <summary>
     ///     Get an application user by user ID asynchronously.

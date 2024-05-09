@@ -55,7 +55,7 @@ public class RepositoryManager : IRepositoryManager
         {
             lock (Lock)
             {
-                _applicationUserRepository ??= new ApplicationUserRepository(_userManager);
+                _applicationUserRepository ??= new ApplicationUserRepository(_userManager, _context);
 
                 return _applicationUserRepository;
             }

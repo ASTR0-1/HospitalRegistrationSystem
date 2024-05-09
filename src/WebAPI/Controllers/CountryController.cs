@@ -3,6 +3,7 @@ using HospitalRegistrationSystem.Application.DTOs.LocationDTOs;
 using HospitalRegistrationSystem.Application.Interfaces;
 using HospitalRegistrationSystem.Application.Interfaces.Services;
 using HospitalRegistrationSystem.Application.Utility;
+using HospitalRegistrationSystem.Domain.Constants;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,9 +12,9 @@ namespace HospitalRegistrationSystem.WebAPI.Controllers;
 /// <summary>
 ///     Controller for managing countries.
 /// </summary>
-[Authorize]
+[Authorize(Roles = RoleConstants.MasterSupervisor)]
 [ApiController]
-[Microsoft.AspNetCore.Components.Route("api/countries")]
+[Route("api/countries")]
 public class CountryController : ControllerBase
 {
     private readonly ILoggerManager _logger;

@@ -24,29 +24,16 @@ public abstract class RepositoryBase<T> : IRepositoryBase<T> where T : class
         _applicationContext = applicationContext;
     }
 
-    /// <summary>
-    ///     Creates a new entity.
-    /// </summary>
-    /// <param name="entity">The entity to create.</param>
+    /// <inheritdoc />
     public void Create(T entity) => _applicationContext.Set<T>().Add(entity);
 
-    /// <summary>
-    ///     Deletes an entity.
-    /// </summary>
-    /// <param name="entity">The entity to delete.</param>
+    /// <inheritdoc />
     public void Delete(T entity) => _applicationContext.Set<T>().Remove(entity);
 
-    /// <summary>
-    ///     Updates an entity.
-    /// </summary>
-    /// <param name="entity">The entity to update.</param>
+    /// <inheritdoc />
     public void Update(T entity) => _applicationContext.Set<T>().Update(entity);
 
-    /// <summary>
-    ///     Finds all entities.
-    /// </summary>
-    /// <param name="trackChanges">Flag indicating whether to track changes.</param>
-    /// <returns>The queryable collection of entities.</returns>
+    /// <inheritdoc />
     public IQueryable<T> FindAll(bool trackChanges)
     {
         return !trackChanges
@@ -55,19 +42,16 @@ public abstract class RepositoryBase<T> : IRepositoryBase<T> where T : class
             : _applicationContext.Set<T>();
     }
 
-    /// <summary>
-    ///     Finds entities based on a condition.
-    /// </summary>
-    /// <param name="expression">The condition expression.</param>
-    /// <param name="trackChanges">Flag indicating whether to track changes.</param>
-    /// <returns>The queryable collection of entities.</returns>
-    public IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression, bool trackChanges)
+    /// <inheritdoc />
+    public IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression, bool trackChanges, params Expression<Func<T, object>>[] includeProperties)
     {
-        return !trackChanges
-            ? _applicationContext.Set<T>()
-                .Where(expression)
-                .AsNoTracking()
-            : _applicationContext.Set<T>()
-                .Where(expression);
+        IQueryable<T> query = _applicationContext.Set<T>();
+
+        if (!trackChanges)
+            query = query.AsNoTracking();
+
+        query = includeProperties.Aggregate(query, (current, includeProperty) => current.Include(includeProperty));
+
+        return query.Where(expression);
     }
 }

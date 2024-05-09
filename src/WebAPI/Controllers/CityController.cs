@@ -3,6 +3,7 @@ using HospitalRegistrationSystem.Application.DTOs.LocationDTOs;
 using HospitalRegistrationSystem.Application.Interfaces;
 using HospitalRegistrationSystem.Application.Interfaces.Services;
 using HospitalRegistrationSystem.Application.Utility;
+using HospitalRegistrationSystem.Domain.Constants;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,7 +12,7 @@ namespace HospitalRegistrationSystem.WebAPI.Controllers;
 /// <summary>
 ///     Controller for managing cities.
 /// </summary>
-[Authorize]
+[Authorize(Roles = RoleConstants.MasterSupervisor)]
 [ApiController]
 [Route("api/cities")]
 public class CityController : ControllerBase
