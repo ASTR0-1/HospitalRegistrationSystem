@@ -4,7 +4,6 @@ using HospitalRegistrationSystem.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 
 namespace HospitalRegistrationSystem.Infrastructure.Persistence;
 
