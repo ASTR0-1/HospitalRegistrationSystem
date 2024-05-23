@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using AutoMapper;
 using FluentValidation;
+using HospitalRegistrationSystem.Application.DTOs;
 using HospitalRegistrationSystem.Application.DTOs.AuthenticationDTOs;
 using HospitalRegistrationSystem.Application.Interfaces;
 using HospitalRegistrationSystem.Application.Interfaces.Identity;
@@ -12,6 +13,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 
 namespace HospitalRegistrationSystem.WebAPI.Controllers;
@@ -89,12 +91,12 @@ public class AuthenticationController : ControllerBase
         }
 
         await _userManager.AddToRoleAsync(user, RoleConstants.Client);
-        var token = await _authenticationManager.CreateTokenAsync(user);
+        var token = await _authenticationManager.CreateTokenAsync(user, true);
 
         return Ok(new AuthenticationResultDto
         {
             UserId = user.Id,
-            //Token = token
+            Token = token
         });
     }
 
@@ -134,12 +136,36 @@ public class AuthenticationController : ControllerBase
 
         var user = await _userManager.Users
             .FirstAsync(u => u.PhoneNumber == userForAuthenticationDto.PhoneNumber);
-        var token = await _authenticationManager.CreateTokenAsync();
+        var token = await _authenticationManager.CreateTokenAsync(populateExpiration: true);
 
         return Ok(new AuthenticationResultDto
         {
             UserId = user.Id,
-            //Token = token
+            Token = token
         });
+    }
+
+    /// <summary>
+    ///     Refreshes the authentication token.
+    /// </summary>
+    /// <param name="tokenDto">The token DTO.</param>
+    /// <returns>The refreshed token.</returns>
+    [HttpPost("refresh")]
+    [ProducesResponseType(typeof(TokenDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(UnauthorizedResult), StatusCodes.Status401Unauthorized)]
+    public async Task<IActionResult> RefreshToken([FromBody] TokenDto tokenDto)
+    {
+        try
+        {
+            var token = await _authenticationManager.RefreshTokenAsync(tokenDto);
+
+            return Ok(token);
+        }
+        catch (SecurityTokenException ex)
+        {
+            _logger.LogError($"Error occurred while refreshing token: {ex.Message}");
+
+            return Unauthorized();
+        }
     }
 }
