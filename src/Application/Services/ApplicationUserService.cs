@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using HospitalRegistrationSystem.Application.DTOs.ApplicationUserDTOs;
@@ -9,9 +7,8 @@ using HospitalRegistrationSystem.Application.Interfaces.Data;
 using HospitalRegistrationSystem.Application.Interfaces.Services;
 using HospitalRegistrationSystem.Application.Utility;
 using HospitalRegistrationSystem.Domain.Constants;
-using HospitalRegistrationSystem.Domain.Entities;
 using HospitalRegistrationSystem.Domain.Errors;
-using HospitalRegistrationSystem.Domain.Shared;
+using HospitalRegistrationSystem.Domain.Shared.ResultPattern;
 
 namespace HospitalRegistrationSystem.Application.Services;
 

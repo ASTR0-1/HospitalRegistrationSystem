@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using HospitalRegistrationSystem.Application.DTOs.LocationDTOs;
 using HospitalRegistrationSystem.Application.Utility;
-using HospitalRegistrationSystem.Domain.Shared;
+using HospitalRegistrationSystem.Domain.Shared.ResultPattern;
 
 namespace HospitalRegistrationSystem.Application.Interfaces.Services;
 

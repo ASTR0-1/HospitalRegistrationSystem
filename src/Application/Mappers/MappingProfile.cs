@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using AutoMapper;
+﻿using AutoMapper;
 using HospitalRegistrationSystem.Application.DTOs.ApplicationUserDTOs;
 using HospitalRegistrationSystem.Application.DTOs.AuthenticationDTOs;
 using HospitalRegistrationSystem.Application.DTOs.HospitalDTOs;

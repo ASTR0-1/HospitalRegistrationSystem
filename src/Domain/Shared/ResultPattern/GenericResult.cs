@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace HospitalRegistrationSystem.Domain.Shared;
+﻿namespace HospitalRegistrationSystem.Domain.Shared.ResultPattern;
 
 /// <summary>
 ///     Represents a generic result of the operation.

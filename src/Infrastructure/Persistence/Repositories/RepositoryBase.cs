@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Linq.Expressions;
 using HospitalRegistrationSystem.Application.Interfaces.Data;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace HospitalRegistrationSystem.Infrastructure.Persistence.Repositories;

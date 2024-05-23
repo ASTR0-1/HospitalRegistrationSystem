@@ -6,7 +6,7 @@ using HospitalRegistrationSystem.Application.Interfaces.Services;
 using HospitalRegistrationSystem.Application.Utility;
 using HospitalRegistrationSystem.Domain.Entities;
 using HospitalRegistrationSystem.Domain.Errors;
-using HospitalRegistrationSystem.Domain.Shared;
+using HospitalRegistrationSystem.Domain.Shared.ResultPattern;
 
 namespace HospitalRegistrationSystem.Application.Services;
 

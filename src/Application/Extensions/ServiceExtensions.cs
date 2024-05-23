@@ -2,7 +2,6 @@
 using HospitalRegistrationSystem.Application.DTOs.AppointmentDTOs;
 using HospitalRegistrationSystem.Application.Interfaces.Services;
 using HospitalRegistrationSystem.Application.Services;
-using HospitalRegistrationSystem.Domain.Entities;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace HospitalRegistrationSystem.Application.Extensions;

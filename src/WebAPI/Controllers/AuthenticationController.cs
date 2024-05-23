@@ -94,7 +94,7 @@ public class AuthenticationController : ControllerBase
         return Ok(new AuthenticationResultDto
         {
             UserId = user.Id,
-            Token = token
+            //Token = token
         });
     }
 
@@ -139,7 +139,7 @@ public class AuthenticationController : ControllerBase
         return Ok(new AuthenticationResultDto
         {
             UserId = user.Id,
-            Token = token
+            //Token = token
         });
     }
 }

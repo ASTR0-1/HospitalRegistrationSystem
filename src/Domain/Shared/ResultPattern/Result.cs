@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace HospitalRegistrationSystem.Domain.Shared;
+namespace HospitalRegistrationSystem.Domain.Shared.ResultPattern;
 
 /// <summary>
 ///     Represents the result of an operation.
@@ -15,7 +11,7 @@ public class Result
     ///     Initializes a new instance of the <see cref="Result"/> class.
     /// </summary>
     /// <param name="isSuccess">A boolean indicating whether the result is a success or failure.</param>
-    /// <param name="error">An instance of the <see cref="Shared.Error"/> class representing the error if the result is a failure.</param>
+    /// <param name="error">An instance of the <see cref="Error"/> class representing the error if the result is a failure.</param>
     protected Result(bool isSuccess, Error error)
     {
         if (isSuccess && error != Error.None
@@ -52,7 +48,7 @@ public class Result
     /// <summary>
     ///     Creates a new instance of <see cref="Result"/> representing a failure result with the provided error.
     /// </summary>
-    /// <param name="error">An instance of the <see cref="Shared.Error"/> class representing the error.</param>
+    /// <param name="error">An instance of the <see cref="Error"/> class representing the error.</param>
     /// <returns>A new instance of <see cref="Result"/> representing a failure result.</returns>
     public static Result Failure(Error error) => new(false, error);
 }

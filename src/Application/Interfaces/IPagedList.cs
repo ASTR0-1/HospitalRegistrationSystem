@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using HospitalRegistrationSystem.Application.Utility;
+﻿using HospitalRegistrationSystem.Application.Utility;
 
 namespace HospitalRegistrationSystem.Application.Interfaces;
 

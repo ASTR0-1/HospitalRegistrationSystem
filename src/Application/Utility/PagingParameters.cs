@@ -1,7 +1,4 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
-
-namespace HospitalRegistrationSystem.Application.Utility;
+﻿namespace HospitalRegistrationSystem.Application.Utility;
 
 /// <summary>
 ///     Represents the paging parameters for retrieving data.

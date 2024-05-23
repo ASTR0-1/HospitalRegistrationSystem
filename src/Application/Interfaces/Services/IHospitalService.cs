@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using HospitalRegistrationSystem.Application.DTOs.HospitalDTOs;
 using HospitalRegistrationSystem.Application.Utility;
-using HospitalRegistrationSystem.Domain.Shared;
+using HospitalRegistrationSystem.Domain.Shared.ResultPattern;
 
 namespace HospitalRegistrationSystem.Application.Interfaces.Services;
 

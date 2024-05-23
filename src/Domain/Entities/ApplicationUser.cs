@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Identity;
 
 namespace HospitalRegistrationSystem.Domain.Entities;
@@ -19,4 +20,7 @@ public class ApplicationUser : IdentityUser<int>
 
     public int? HospitalId { get; set; }
     public Hospital? Hospital { get; set; }
+
+    public string? RefreshToken { get; set; }
+    public DateTime? RefreshTokenExpiryTime { get; set; }
 }
