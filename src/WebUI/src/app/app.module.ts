@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { Routes, RouterModule } from '@angular/router';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 
@@ -22,11 +22,12 @@ import { MarkAppointmentComponent } from './appointments/mark-appointment/mark.a
 import { AddAppointmentComponent } from './appointments/add-appointment/add.appointment.component';
 import { LoginComponent } from './authentication/login/login.component';
 import { RegisterComponent } from './authentication/register/register.component';
+import { AuthInterceptor } from './interceptors/auth.interceptor';
 
 const appRoutes: Routes = [
 	{ path: '', component: HomeComponent },
-	{ path: 'login', component: LoginComponent},
-	{ path: 'register', component: RegisterComponent},
+	{ path: 'login', component: LoginComponent },
+	{ path: 'register', component: RegisterComponent },
 	{ path: 'clients', component: ClientsComponent },
 	{ path: 'clients/new', component: AddClientComponent },
 	{
@@ -79,10 +80,12 @@ const appRoutes: Routes = [
 		DoctorAppointmentsComponent,
 		MarkAppointmentComponent,
 		AddAppointmentComponent,
-  		LoginComponent,
-		RegisterComponent
+		LoginComponent,
+		RegisterComponent,
 	],
 	bootstrap: [AppComponent],
-	providers: [],
+	providers: [
+		{ provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+	],
 })
 export class AppModule {}
