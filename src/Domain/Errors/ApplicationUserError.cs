@@ -1,5 +1,4 @@
-﻿using System;
-using HospitalRegistrationSystem.Domain.Shared;
+﻿using HospitalRegistrationSystem.Domain.Shared.ResultPattern;
 
 namespace HospitalRegistrationSystem.Domain.Errors;
 

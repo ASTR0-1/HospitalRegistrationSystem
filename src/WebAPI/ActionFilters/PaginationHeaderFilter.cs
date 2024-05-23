@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 
 namespace HospitalRegistrationSystem.WebAPI.ActionFilters;
 

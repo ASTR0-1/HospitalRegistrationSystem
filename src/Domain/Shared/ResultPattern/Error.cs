@@ -1,4 +1,4 @@
-﻿namespace HospitalRegistrationSystem.Domain.Shared;
+﻿namespace HospitalRegistrationSystem.Domain.Shared.ResultPattern;
 
 /// <summary>
 ///     Represents an error with a message and description.

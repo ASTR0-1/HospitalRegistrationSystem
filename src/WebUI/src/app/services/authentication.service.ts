@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, tap } from 'rxjs';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { UserForAuthenticationDto } from '../entities/authentication/userForAuthenticationDto';
 import { UserForRegistrationDto } from '../entities/authentication/userForRegistrationDto';
@@ -16,6 +16,9 @@ export class AuthenticationService {
 
 	public isInvalidLogin$ = this.isInvalidLoginSubject.asObservable();
 	public isInvalidRegister$ = this.isInvalidRegisterSubject.asObservable();
+
+	private isRefreshing = false;
+    private refreshTokenSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
 
 	constructor(private http: HttpClient) {}
 
@@ -67,15 +70,45 @@ export class AuthenticationService {
 			);
 	}
 
-	private processSucceedAuth(response: Object) {
-		const token = (<any>response).token;
-		const userId = (<any>response).userId;
+	public refreshToken(): Observable<any> {
+		const jwt = localStorage.getItem('jwt');
+		const refreshToken = localStorage.getItem('refresh');
+		
+		return this.http.post(this.uri + '/refresh', { accessToken: jwt, refreshToken }).pipe(
+			tap((response: any) => {
+				const userId = <string>localStorage.getItem('userId');
+				const token = response.accessToken;
+				const refreshToken = response.refreshToken;
 
-		this.saveCredsToLocalStorage(token, userId);
+				this.saveCredsToLocalStorage(token, userId, refreshToken);
+			})
+		);
 	}
 
-	private saveCredsToLocalStorage(token: string, userId: string) {
+	public logout() {
+		localStorage.removeItem('jwt');
+		localStorage.removeItem('refresh');
+		localStorage.removeItem('userId');
+
+		this.isInvalidLoginSubject.next(false);
+        this.isInvalidRegisterSubject.next(false);
+	}
+
+	public getAuthToken() {
+        return localStorage.getItem('jwt');
+    }
+
+	private processSucceedAuth(response: any) {
+		const token = response.token.accessToken;
+		const refreshToken = response.token.refreshToken;
+		const userId = response.userId;
+
+		this.saveCredsToLocalStorage(token, userId, refreshToken);
+	}
+
+	private saveCredsToLocalStorage(token: string, userId: string, refreshToken: string) {
 		localStorage.setItem('jwt', token);
+		localStorage.setItem('refresh', refreshToken)
 		localStorage.setItem('userId', userId);
 	}
 }

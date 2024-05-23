@@ -3,5 +3,5 @@
 public class AuthenticationResultDto
 {
     public int UserId { get; set; }
-    public string Token { get; set; }
+    public TokenDto Token { get; set; }
 }
