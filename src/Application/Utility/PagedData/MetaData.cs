@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
-namespace HospitalRegistrationSystem.Application.Utility;
+namespace HospitalRegistrationSystem.Application.Utility.PagedData;
 
 /// <summary>
 ///     Represents the metadata for a paginated result.

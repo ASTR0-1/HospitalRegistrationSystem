@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using HospitalRegistrationSystem.Application.Interfaces.Data;
-using HospitalRegistrationSystem.Application.Utility;
+using HospitalRegistrationSystem.Application.Utility.PagedData;
 using HospitalRegistrationSystem.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 

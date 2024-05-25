@@ -1,4 +1,4 @@
-﻿namespace HospitalRegistrationSystem.Application.Utility;
+﻿namespace HospitalRegistrationSystem.Application.Utility.PagedData;
 
 /// <summary>
 ///     Represents the paging parameters for retrieving data.
@@ -23,7 +23,7 @@ public class PagingParameters
     public int PageSize
     {
         get => _pageSize;
-        set => _pageSize = value > MaxPageSize 
+        set => _pageSize = value > MaxPageSize
             ? MaxPageSize
             : value;
     }

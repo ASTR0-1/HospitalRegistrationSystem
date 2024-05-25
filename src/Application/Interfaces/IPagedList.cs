@@ -1,4 +1,4 @@
-﻿using HospitalRegistrationSystem.Application.Utility;
+﻿using HospitalRegistrationSystem.Application.Utility.PagedData;
 
 namespace HospitalRegistrationSystem.Application.Interfaces;
 

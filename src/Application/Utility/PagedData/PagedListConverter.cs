@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using AutoMapper;
 
-namespace HospitalRegistrationSystem.Application.Utility;
+namespace HospitalRegistrationSystem.Application.Utility.PagedData;
 
 /// <summary>
 ///     Converts a PagedList of one type to a PagedList of another type using AutoMapper.

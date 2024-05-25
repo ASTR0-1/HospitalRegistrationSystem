@@ -3,7 +3,7 @@ using HospitalRegistrationSystem.Application.DTOs.ApplicationUserDTOs;
 using HospitalRegistrationSystem.Application.DTOs.AuthenticationDTOs;
 using HospitalRegistrationSystem.Application.DTOs.HospitalDTOs;
 using HospitalRegistrationSystem.Application.DTOs.LocationDTOs;
-using HospitalRegistrationSystem.Application.Utility;
+using HospitalRegistrationSystem.Application.Utility.PagedData;
 using HospitalRegistrationSystem.Domain.Entities;
 
 namespace HospitalRegistrationSystem.Application.Mappers;

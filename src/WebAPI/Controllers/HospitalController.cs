@@ -2,7 +2,7 @@
 using HospitalRegistrationSystem.Application.DTOs.HospitalDTOs;
 using HospitalRegistrationSystem.Application.Interfaces;
 using HospitalRegistrationSystem.Application.Interfaces.Services;
-using HospitalRegistrationSystem.Application.Utility;
+using HospitalRegistrationSystem.Application.Utility.PagedData;
 using HospitalRegistrationSystem.Domain.Constants;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

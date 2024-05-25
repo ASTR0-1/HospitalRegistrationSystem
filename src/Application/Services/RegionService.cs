@@ -3,7 +3,7 @@ using AutoMapper;
 using HospitalRegistrationSystem.Application.DTOs.LocationDTOs;
 using HospitalRegistrationSystem.Application.Interfaces.Data;
 using HospitalRegistrationSystem.Application.Interfaces.Services;
-using HospitalRegistrationSystem.Application.Utility;
+using HospitalRegistrationSystem.Application.Utility.PagedData;
 using HospitalRegistrationSystem.Domain.Entities;
 using HospitalRegistrationSystem.Domain.Errors;
 using HospitalRegistrationSystem.Domain.Shared.ResultPattern;
