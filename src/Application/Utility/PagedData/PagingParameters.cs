@@ -3,7 +3,7 @@
 /// <summary>
 ///     Represents the paging parameters for retrieving data.
 /// </summary>
-public class PagingParameters
+public abstract class PagingParameters
 {
     private const int MaxPageSize = 50;
 

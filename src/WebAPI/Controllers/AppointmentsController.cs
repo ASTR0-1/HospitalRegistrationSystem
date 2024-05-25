@@ -18,6 +18,7 @@ public class AppointmentsController : ControllerBase
     private readonly IAppointmentService _appointmentsService;
     private readonly ILoggerManager _logger;
     private readonly IMapper _mapper;
+    
     private readonly IValidator<AppointmentForCreationDto> _validator;
 
     public AppointmentsController(IAppointmentService appointmentService,
