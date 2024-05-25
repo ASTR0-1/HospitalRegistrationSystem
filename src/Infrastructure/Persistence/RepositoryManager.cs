@@ -22,6 +22,7 @@ public class RepositoryManager : IRepositoryManager
     private IRegionRepository? _regionRepository;
     private ICityRepository? _cityRepository;
     private IHospitalRepository? _hospitalRepository;
+    private IDoctorScheduleRepository? _doctorScheduleRepository;
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="RepositoryManager"/> class.
@@ -114,6 +115,20 @@ public class RepositoryManager : IRepositoryManager
                 _hospitalRepository ??= new HospitalRepository(_context);
 
                 return _hospitalRepository;
+            }
+        }
+    }
+
+    /// <inheritdoc />
+    public IDoctorScheduleRepository DoctorSchedule
+    {
+        get
+        {
+            lock (Lock)
+            {
+                _doctorScheduleRepository ??= new DoctorScheduleRepository(_context);
+
+                return _doctorScheduleRepository;
             }
         }
     }

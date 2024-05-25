@@ -4,7 +4,7 @@ using FluentValidation;
 using HospitalRegistrationSystem.Application.DTOs.AppointmentDTOs;
 using HospitalRegistrationSystem.Application.Interfaces;
 using HospitalRegistrationSystem.Application.Interfaces.Services;
-using HospitalRegistrationSystem.Application.Utility;
+using HospitalRegistrationSystem.Application.Utility.PagedData;
 using HospitalRegistrationSystem.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -18,6 +18,7 @@ public class AppointmentsController : ControllerBase
     private readonly IAppointmentService _appointmentsService;
     private readonly ILoggerManager _logger;
     private readonly IMapper _mapper;
+    
     private readonly IValidator<AppointmentForCreationDto> _validator;
 
     public AppointmentsController(IAppointmentService appointmentService,

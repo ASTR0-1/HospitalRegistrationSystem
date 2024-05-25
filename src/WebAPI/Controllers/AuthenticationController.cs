@@ -2,8 +2,8 @@
 using System.Threading.Tasks;
 using AutoMapper;
 using FluentValidation;
-using HospitalRegistrationSystem.Application.DTOs;
 using HospitalRegistrationSystem.Application.DTOs.AuthenticationDTOs;
+using HospitalRegistrationSystem.Application.DTOs.TokenDTOs;
 using HospitalRegistrationSystem.Application.Interfaces;
 using HospitalRegistrationSystem.Application.Interfaces.Identity;
 using HospitalRegistrationSystem.Domain.Constants;
@@ -24,16 +24,16 @@ namespace HospitalRegistrationSystem.WebAPI.Controllers;
 public class AuthenticationController : ControllerBase
 {
     private readonly IAuthenticationManager _authenticationManager;
+    private readonly UserManager<ApplicationUser> _userManager;
+    private readonly ILoggerManager _logger;
+    private readonly IMapper _mapper;
 
     private readonly IValidator<UserForRegistrationDto> _userForRegistrationDtoValidator;
     private readonly IValidator<UserForAuthenticationDto> _userForAuthenticationDtoValidator;
 
-    private readonly ILoggerManager _logger;
-    private readonly IMapper _mapper;
-    private readonly UserManager<ApplicationUser> _userManager;
-
-    public AuthenticationController(IAuthenticationManager authenticationManager, UserManager<ApplicationUser> userManager, ILoggerManager logger,
-        IMapper mapper, IValidator<UserForRegistrationDto> userForRegistrationDtoValidator, IValidator<UserForAuthenticationDto> userForAuthenticationDtoValidator)
+    public AuthenticationController(IAuthenticationManager authenticationManager, UserManager<ApplicationUser> userManager,
+        ILoggerManager logger, IMapper mapper,
+        IValidator<UserForRegistrationDto> userForRegistrationDtoValidator, IValidator<UserForAuthenticationDto> userForAuthenticationDtoValidator)
     {
         _authenticationManager = authenticationManager;
         _userManager = userManager;

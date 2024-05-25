@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using HospitalRegistrationSystem.Application.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace HospitalRegistrationSystem.Application.Utility;
+namespace HospitalRegistrationSystem.Application.Utility.PagedData;
 
 /// <inheritdoc cref="IPagedList"/>
 /// <typeparam name="T">The type of items in the paged list.</typeparam>

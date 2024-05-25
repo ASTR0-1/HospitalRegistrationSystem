@@ -1,4 +1,6 @@
-﻿namespace HospitalRegistrationSystem.Application.DTOs.AuthenticationDTOs;
+﻿using HospitalRegistrationSystem.Application.DTOs.TokenDTOs;
+
+namespace HospitalRegistrationSystem.Application.DTOs.AuthenticationDTOs;
 
 public class AuthenticationResultDto
 {

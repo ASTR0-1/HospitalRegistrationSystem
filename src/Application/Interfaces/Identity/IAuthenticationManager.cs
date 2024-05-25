@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
-using HospitalRegistrationSystem.Application.DTOs;
 using HospitalRegistrationSystem.Application.DTOs.AuthenticationDTOs;
+using HospitalRegistrationSystem.Application.DTOs.TokenDTOs;
 using HospitalRegistrationSystem.Domain.Entities;
 
 namespace HospitalRegistrationSystem.Application.Interfaces.Identity;

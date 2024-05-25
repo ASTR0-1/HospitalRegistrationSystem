@@ -28,14 +28,19 @@ public interface IRepositoryManager
     IRegionRepository Region { get; }
 
     /// <summary>
-    ///   Gets the city repository.
+    ///     Gets the city repository.
     /// </summary>
     ICityRepository City { get; }
 
     /// <summary>
-    ///   Gets the hospital repository.
+    ///     Gets the hospital repository.
     /// </summary>
     IHospitalRepository Hospital { get; }
+
+    /// <summary>
+    ///     Gets the doctor schedule repository.
+    /// </summary>
+    IDoctorScheduleRepository DoctorSchedule { get; }
 
     /// <summary>
     ///     Saves changes made in database asynchronously.

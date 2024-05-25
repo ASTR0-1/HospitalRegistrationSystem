@@ -1,4 +1,4 @@
-﻿namespace HospitalRegistrationSystem.Application.DTOs;
+﻿namespace HospitalRegistrationSystem.Application.DTOs.TokenDTOs;
 
 public class TokenDto
 {
