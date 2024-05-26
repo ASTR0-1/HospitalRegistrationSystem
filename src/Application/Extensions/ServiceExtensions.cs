@@ -17,6 +17,7 @@ public static class ServiceExtensions
         services.AddScoped<ICityService, CityService>();
         services.AddScoped<IHospitalService, HospitalService>();
         services.AddScoped<IDoctorScheduleService, DoctorScheduleService>();
+        services.AddScoped<IFeedbackService, FeedbackService>();
     }
 
     public static void AddFluentValidation(this IServiceCollection services)

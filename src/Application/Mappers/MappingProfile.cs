@@ -4,6 +4,7 @@ using AutoMapper;
 using HospitalRegistrationSystem.Application.DTOs.ApplicationUserDTOs;
 using HospitalRegistrationSystem.Application.DTOs.AuthenticationDTOs;
 using HospitalRegistrationSystem.Application.DTOs.DoctorScheduleDTOs;
+using HospitalRegistrationSystem.Application.DTOs.FeedbackDTOs;
 using HospitalRegistrationSystem.Application.DTOs.HospitalDTOs;
 using HospitalRegistrationSystem.Application.DTOs.LocationDTOs;
 using HospitalRegistrationSystem.Application.Utility.PagedData;
@@ -55,6 +56,10 @@ public class MappingProfile : Profile
         CreateMap<DoctorScheduleForManipulationDto, DoctorSchedule>()
             .ForMember(dest => dest.WorkingHours, opt => 
                 opt.MapFrom(src => EncodeWorkingHours(src.WorkingHoursList)));
+
+        CreateMap<Feedback, FeedbackDto>();
+
+        CreateMap<FeedbackForCreationDto, Feedback>();
     }
 
     private List<int> DecodeWorkingHours(int workingHours)

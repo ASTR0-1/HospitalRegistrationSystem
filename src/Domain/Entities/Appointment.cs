@@ -11,4 +11,7 @@ public class Appointment
     public bool IsVisited { get; set; }
 
     public ICollection<ApplicationUser> ApplicationUsers { get; set; } = [];
+
+    public int? FeedbackId { get; set; }
+    public Feedback? Feedback { get; set; }
 }

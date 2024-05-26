@@ -62,6 +62,11 @@ public class ApplicationContext : IdentityDbContext<ApplicationUser, IdentityRol
     /// </summary>
     public DbSet<DoctorSchedule> DoctorSchedules { get; init; } = null!;
 
+    /// <summary>
+    ///     Gets the feedbacks.
+    /// </summary>
+    public DbSet<Feedback> Feedbacks { get; init; } = null!;
+
     /// <inheritdoc />
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
