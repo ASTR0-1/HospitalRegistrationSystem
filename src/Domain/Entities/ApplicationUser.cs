@@ -58,6 +58,12 @@ public class ApplicationUser : IdentityUser<int>
     public Hospital? Hospital { get; set; }
 
     /// <summary>
+    ///     Gets or sets the doctor visit cost.
+    /// </summary>
+    /// <remarks>Applies only to doctor role.</remarks>
+    public decimal? VisitCost { get; set; }
+
+    /// <summary>
     ///     Gets or sets the doctor schedules associated with the user.
     /// </summary>
     /// <remarks>Applies only to doctor role.</remarks>

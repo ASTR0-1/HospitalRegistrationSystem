@@ -60,6 +60,9 @@ public class HospitalService : IHospitalService
         if (city is null)
             return Result.Failure(CityError.CityIdNotFound(hospitalForCreationDto.CityId));
 
+        if (hospitalForCreationDto.HospitalFeePercent <= 0)
+            return Result.Failure(HospitalError.HospitalFeePercentInvalid(hospitalForCreationDto.Name, hospitalForCreationDto.HospitalFeePercent));
+
         var hospital = _mapper.Map<Hospital>(hospitalForCreationDto);
 
         _repository.Hospital.CreateHospital(hospital);

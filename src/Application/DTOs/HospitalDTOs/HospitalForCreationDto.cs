@@ -3,6 +3,7 @@
 public class HospitalForCreationDto
 {
     public string Name { get; set; }
+    public decimal HospitalFeePercent { get; set; }
 
     public int CityId { get; set; }
     public string Street { get; set; }
