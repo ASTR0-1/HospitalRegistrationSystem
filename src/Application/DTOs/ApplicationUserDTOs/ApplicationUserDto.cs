@@ -11,5 +11,8 @@ public class ApplicationUserDto
     public string LastName { get; set; }
     public string Gender { get; set; }
     public string? Specialty { get; set; }
+    public decimal? VisitCost { get; set; }
+    public decimal? TotalServiceCost { get; set; }
+    public int? HospitalId { get; set; }
     public string? ProfilePhotoUrl { get; set; }
 }

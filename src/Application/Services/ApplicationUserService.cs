@@ -1,4 +1,6 @@
-﻿using System.Text;
+﻿using System;
+using System.Globalization;
+using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using HospitalRegistrationSystem.Application.DTOs.ApplicationUserDTOs;
@@ -9,6 +11,7 @@ using HospitalRegistrationSystem.Application.Utility.PagedData;
 using HospitalRegistrationSystem.Domain.Constants;
 using HospitalRegistrationSystem.Domain.Errors;
 using HospitalRegistrationSystem.Domain.Shared.ResultPattern;
+using Microsoft.Extensions.Configuration;
 
 namespace HospitalRegistrationSystem.Application.Services;
 
@@ -20,6 +23,7 @@ public class ApplicationUserService : IApplicationUserService
     private readonly IMapper _mapper;
     private readonly IRepositoryManager _repository;
     private readonly ICurrentUserService _currentUserService;
+    private readonly IConfiguration _configuration;
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="ApplicationUserService"/> class.
@@ -27,11 +31,13 @@ public class ApplicationUserService : IApplicationUserService
     /// <param name="repository">The repository manager.</param>
     /// <param name="mapper">The mapper.</param>
     /// <param name="currentUserService">The current user service.</param>
-    public ApplicationUserService(IRepositoryManager repository, IMapper mapper, ICurrentUserService currentUserService)
+    /// <param name="configuration">The configuration.</param>
+    public ApplicationUserService(IRepositoryManager repository, IMapper mapper, ICurrentUserService currentUserService, IConfiguration configuration)
     {
         _repository = repository;
         _mapper = mapper;
         _currentUserService = currentUserService;
+        _configuration = configuration;
     }
 
     /// <inheritdoc />
@@ -57,9 +63,17 @@ public class ApplicationUserService : IApplicationUserService
 
         var applicationUsers = await _repository.ApplicationUser.GetApplicationUsersAsync(paging, searchQuery, role, hospitalId);
 
-        var applicationUsersDto = _mapper.Map<PagedList<ApplicationUserDto>>(applicationUsers);
+        var applicationUserDtos = _mapper.Map<PagedList<ApplicationUserDto>>(applicationUsers);
+        if (role.Equals(RoleConstants.Doctor, StringComparison.InvariantCultureIgnoreCase))
+        {
+            foreach (var applicationUserDto in applicationUserDtos)
+            {
+                var hospital = await _repository.Hospital.GetHospitalAsync((int)applicationUserDto.HospitalId!);
+                applicationUserDto.TotalServiceCost = CalculateTotalServiceCost((decimal) applicationUserDto.VisitCost!, hospital!.HospitalFeePercent);
+            }
+        }
 
-        return Result<PagedList<ApplicationUserDto>>.Success(applicationUsersDto);
+        return Result<PagedList<ApplicationUserDto>>.Success(applicationUserDtos);
     }
 
     /// <inheritdoc />
@@ -97,7 +111,8 @@ public class ApplicationUserService : IApplicationUserService
     }
 
     /// <inheritdoc />
-    public async Task<Result> AssignEmployeeAsync(int userId, string role, int hospitalId, string? specialty)
+    public async Task<Result> AssignEmployeeAsync(int userId, string role, int hospitalId, string? specialty,
+        decimal? doctorPrice)
     {
         var applicationUser = await _repository.ApplicationUser.GetApplicationUserAsync(userId);
         if (applicationUser is null)
@@ -106,6 +121,18 @@ public class ApplicationUserService : IApplicationUserService
         var roleExists = RoleConstants.RoleExists(role);
         if (!roleExists)
             return Result.Failure(RoleError.RoleNotFound(role));
+
+        if (role.Equals(RoleConstants.Doctor, StringComparison.InvariantCultureIgnoreCase) )
+        {
+            if (string.IsNullOrEmpty(specialty))
+                return Result.Failure(ApplicationUserError.SpecialtyRequiredForDoctor(userId));
+
+            if (doctorPrice is null or <= 0)
+                return Result.Failure(ApplicationUserError.DoctorPriceInvalid(userId, doctorPrice));
+        }
+
+        if (await _repository.Hospital.GetHospitalAsync(hospitalId) is null)
+            return Result.Failure(HospitalError.HospitalIdNotFound(hospitalId));
 
         if (!CanCallerAssignEmployee(role, hospitalId))
             return Result.Failure(ApplicationUserError.UnauthorizedEmployeeAssignment(_currentUserService.GetApplicationUserId(), role, hospitalId));
@@ -121,7 +148,9 @@ public class ApplicationUserService : IApplicationUserService
             return Result.Failure(ApplicationUserError.RoleAssignmentFailed(role, sb.ToString()));
         }
 
+        applicationUser.HospitalId = hospitalId;
         applicationUser.Specialty = specialty;
+        applicationUser.VisitCost = doctorPrice;
         await _repository.ApplicationUser.UpdateApplicationUserAsync(applicationUser);
 
         return Result.Success();
@@ -144,5 +173,17 @@ public class ApplicationUserService : IApplicationUserService
         var canAssignHospital = _currentUserService.GetApplicationUserHospitalId() == hospitalId;
 
         return canAssignRole && canAssignHospital;
+    }
+
+    private decimal CalculateTotalServiceCost(decimal visitCost, decimal hospitalFeePercent)
+    {
+        var systemFeeSection = _configuration.GetSection("SystemSettings:SystemFeePercent");
+        var systemFeeString = systemFeeSection.Value;
+        if (!decimal.TryParse(systemFeeString, NumberStyles.Float, CultureInfo.InvariantCulture, out var systemFeePercent))
+            throw new Exception("Invalid system fee value");
+
+        var totalServiceCost = visitCost + (visitCost * hospitalFeePercent / 100) + (visitCost * systemFeePercent / 100);
+
+        return totalServiceCost;
     }
 }

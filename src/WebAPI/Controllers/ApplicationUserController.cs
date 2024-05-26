@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using HospitalRegistrationSystem.Application.DTOs.ApplicationUserDTOs;
 using HospitalRegistrationSystem.Application.Interfaces;
@@ -61,6 +62,7 @@ public class ApplicationUserController : ControllerBase
     /// <param name="role">The role.</param>
     /// <param name="searchQuery">The search query.(optional)</param>
     /// <returns>The list of application users.</returns>
+    [AllowAnonymous]
     [HttpGet("role/{role}")]
     public async Task<ActionResult<PagedList<ApplicationUserDto>>> GetAllByRole([FromQuery] PagingParameters paging, string role, string? searchQuery = null)
     {
@@ -79,6 +81,7 @@ public class ApplicationUserController : ControllerBase
     /// <param name="role">The role.</param>
     /// <param name="searchQuery">The search query.(optional)</param>
     /// <returns>The list of application users.</returns>
+    [AllowAnonymous]
     [HttpGet("hospital/{hospitalId:int}/role/{role}")]
     public async Task<ActionResult<List<ApplicationUserDto>>> GetAllByHospitalAndRole([FromQuery] PagingParameters paging, int hospitalId, string role, string? searchQuery = null)
     {
@@ -123,12 +126,14 @@ public class ApplicationUserController : ControllerBase
     /// <param name="role">The role to assign.</param>
     /// <param name="hospitalId">The ID of the hospital.</param>
     /// <param name="specialty">The specialty of the employee (optional).</param>
+    /// <param name="doctorPrice">The doctor price for the Doctor role.</param>
     /// <returns>The result of the assignment operation.</returns>
     [Authorize(Roles = $"{RoleConstants.MasterSupervisor},{RoleConstants.Supervisor}")]
     [HttpPost("{userId:int}/role/{role}")]
-    public async Task<IActionResult> AssignEmployee(int userId, string role, int hospitalId, string? specialty)
+    public async Task<IActionResult> AssignEmployee(int userId, string role, 
+        [Required] int hospitalId, string specialty, decimal doctorPrice)
     {
-        var result = await _userService.AssignEmployeeAsync(userId, role, hospitalId, specialty);
+        var result = await _userService.AssignEmployeeAsync(userId, role, hospitalId, specialty, doctorPrice);
 
         if (!result.IsSuccess)
         {
