@@ -4,7 +4,7 @@
 ///     Represents a generic result of the operation.
 /// </summary>
 /// <typeparam name="T">The type of the value that the result can hold.</typeparam>
-public class Result<T> : Result where T : class
+public class Result<T> : Result
 {
     /// <summary>
     ///     Initializes a new instance of the <see cref="Result{T}"/> class.
@@ -35,5 +35,5 @@ public class Result<T> : Result where T : class
     /// </summary>
     /// <param name="error">An instance of the <see cref="Error"/> class representing the error.</param>
     /// <returns>A new instance of <see cref="Result{T}"/> representing a failure result.</returns>
-    public static Result<T> Failure(Error error) => new(false, error, null);
+    public static Result<T> Failure(Error error) => new(false, error, default);
 }

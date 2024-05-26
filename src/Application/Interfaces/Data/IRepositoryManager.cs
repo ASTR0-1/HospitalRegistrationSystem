@@ -43,6 +43,11 @@ public interface IRepositoryManager
     IDoctorScheduleRepository DoctorSchedule { get; }
 
     /// <summary>
+    ///    Gets the feedback repository.
+    /// </summary>
+    IFeedbackRepository Feedback { get; }
+
+    /// <summary>
     ///     Saves changes made in database asynchronously.
     /// </summary>
     /// <returns>A task representing the asynchronous save operation.</returns>

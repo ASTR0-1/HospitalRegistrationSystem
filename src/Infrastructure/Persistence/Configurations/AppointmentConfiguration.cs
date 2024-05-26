@@ -14,5 +14,9 @@ public class AppointmentConfiguration : IEntityTypeConfiguration<Appointment>
 
         builder.HasMany(a => a.ApplicationUsers)
             .WithMany(u => u.Appointments);
+
+        builder.HasOne(a => a.Feedback)
+            .WithOne(f => f.Appointment)
+            .HasForeignKey<Appointment>(a => a.FeedbackId);
     }
 }
