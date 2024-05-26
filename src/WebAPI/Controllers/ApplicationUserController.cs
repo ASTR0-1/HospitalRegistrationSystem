@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using HospitalRegistrationSystem.Application.DTOs.ApplicationUserDTOs;
 using HospitalRegistrationSystem.Application.Interfaces;
@@ -7,6 +10,7 @@ using HospitalRegistrationSystem.Application.Interfaces.Services;
 using HospitalRegistrationSystem.Application.Utility.PagedData;
 using HospitalRegistrationSystem.Domain.Constants;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HospitalRegistrationSystem.WebAPI.Controllers;
@@ -21,16 +25,19 @@ public class ApplicationUserController : ControllerBase
 {
     private readonly ILoggerManager _logger;
     private readonly IApplicationUserService _userService;
+    private readonly IFileStorageManager _fileStorageManager;
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="ApplicationUserController"/> class.
     /// </summary>
     /// <param name="logger">The logger.</param>
     /// <param name="userService">The user service.</param>
-    public ApplicationUserController(ILoggerManager logger, IApplicationUserService userService)
+    /// <param name="fileStorageManager">The file storage manager.</param>
+    public ApplicationUserController(ILoggerManager logger, IApplicationUserService userService, IFileStorageManager fileStorageManager)
     {
         _logger = logger;
         _userService = userService;
+        _fileStorageManager = fileStorageManager;
     }
 
     /// <summary>
@@ -97,6 +104,32 @@ public class ApplicationUserController : ControllerBase
         var userDtos = result.Value;
 
         return Ok(userDtos);
+    }
+
+    /// <summary>
+    ///     Uploads a profile photo for the application user.
+    /// </summary>
+    /// <param name="file">The profile photo file.</param>
+    /// <returns>The result of the upload operation.</returns>
+    [HttpPost("uploadProfilePhoto")]
+    public async Task<IActionResult> UploadProfilePhoto([FromForm] IFormFile file)
+    {
+        var photoUrl = await _fileStorageManager.UploadAsync(file.OpenReadStream(), "", $"{Guid.NewGuid().ToString()}");
+
+        var userId = Convert.ToInt32(User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value);
+        var result = await _userService.GetAsync(userId);
+        if (result.IsFailure)
+        {
+            _logger.LogInformation(result.Error.Description);
+
+            return BadRequest(result.Error.Message);
+        }
+
+        var user = result.Value;
+        user.ProfilePhotoUrl = photoUrl;
+        await _userService.UpdateAsync(user);
+
+        return Ok();
     }
 
     /// <summary>
