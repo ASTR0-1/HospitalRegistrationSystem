@@ -11,6 +11,8 @@ public class AppointmentConfiguration : IEntityTypeConfiguration<Appointment>
         builder.HasKey(a => a.Id);
         builder.Property(a => a.VisitTime)
             .IsRequired();
+        builder.Property(a => a.Diagnosis)
+            .IsRequired(false);
 
         builder.HasMany(a => a.ApplicationUsers)
             .WithMany(u => u.Appointments);
