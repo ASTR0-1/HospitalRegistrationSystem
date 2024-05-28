@@ -11,14 +11,16 @@ public class AppointmentSeedDataFixture : IDisposable
     {
         ApplicationContext.Appointments.Add(new Appointment
         {
-            VisitTime = new DateTime(2022, 1, 1),
-            Diagnosis = "D1"
+            Id = 1,
+            VisitTime = DateTime.Now.AddDays(1),
+            IsVisited = false
         });
 
         ApplicationContext.Appointments.Add(new Appointment
         {
-            VisitTime = new DateTime(2022, 2, 2),
-            Diagnosis = "D2"
+            Id = 2,
+            VisitTime = DateTime.Now.AddDays(2),
+            IsVisited = false
         });
         ApplicationContext.SaveChanges();
     }

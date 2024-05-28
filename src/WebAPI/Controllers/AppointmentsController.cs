@@ -1,156 +1,200 @@
-﻿using System.Threading.Tasks;
-using AutoMapper;
+﻿using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 using FluentValidation;
 using HospitalRegistrationSystem.Application.DTOs.AppointmentDTOs;
 using HospitalRegistrationSystem.Application.Interfaces;
 using HospitalRegistrationSystem.Application.Interfaces.Services;
 using HospitalRegistrationSystem.Application.Utility.PagedData;
+using HospitalRegistrationSystem.Domain.Constants;
 using HospitalRegistrationSystem.Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
 namespace HospitalRegistrationSystem.WebAPI.Controllers;
 
+/// <summary>
+///     Represents a controller for managing appointments.
+/// </summary>
 [Route("api/appointments")]
 [ApiController]
 public class AppointmentsController : ControllerBase
 {
     private readonly IAppointmentService _appointmentsService;
     private readonly ILoggerManager _logger;
-    private readonly IMapper _mapper;
-    
+
     private readonly IValidator<AppointmentForCreationDto> _validator;
 
-    public AppointmentsController(IAppointmentService appointmentService,
-        ILoggerManager logger, IMapper mapper, IValidator<AppointmentForCreationDto> validator)
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="AppointmentsController"/> class.
+    /// </summary>
+    /// <param name="appointmentService">The appointment service.</param>
+    /// <param name="logger">The logger.</param>
+    /// <param name="validator">The validator.</param>
+    public AppointmentsController(IAppointmentService appointmentService, ILoggerManager logger, IValidator<AppointmentForCreationDto> validator)
     {
         _appointmentsService = appointmentService;
         _logger = logger;
-        _mapper = mapper;
         _validator = validator;
     }
 
-    [HttpGet("client/{clientId}", Name = "ClientAppointments")]
-    public async Task<IActionResult> GetClientAppointments(int clientId,
-        [FromQuery] PagingParameters pagingParameters)
+    /// <summary>
+    ///     Gets the appointment with the specified ID.
+    /// </summary>
+    /// <param name="appointmentId">The appointment ID.</param>
+    /// <returns>The appointment with the specified ID.</returns>
+    [Authorize(Roles = $"{RoleConstants.Receptionist}, {RoleConstants.Doctor}, {RoleConstants.Supervisor}, {RoleConstants.MasterSupervisor}")]
+    [HttpGet("{appointmentId:int}")]
+    public async Task<IActionResult> GetAppointment(int appointmentId)
     {
-        //var client = await _clientService.GetAsync(clientId);
-
-        //if (client == null)
+        var result = await _appointmentsService.GetAsync(appointmentId);
+        if (result.IsFailure)
         {
-            _logger.LogInformation($"Client with id: {clientId} doesn't exist in the database.");
-
-            return NotFound($"Client with id: {clientId} doesn't exist");
+            _logger.LogInformation(result.Error.Description);
+            return NotFound(result.Error.Description);
         }
 
-        var clientAppointments = await _appointmentsService.GetByClientIdAsync(clientId);
-
-        var pagedClientAppointments = PagedList<ClientAppointmentDto>
-            .ToPagedList(clientAppointments, pagingParameters.PageNumber, pagingParameters.PageSize);
-        Response.Headers.Add("X-Pagination",
-            JsonConvert.SerializeObject(pagedClientAppointments.MetaData));
-
-        return Ok(pagedClientAppointments);
+        return Ok(result.Value);
     }
 
-    [HttpGet("client/{clientId}/visited")]
-    public async Task<IActionResult> GetVisitedClientAppointments(int clientId,
-        [FromQuery] PagingParameters pagingParameters)
+    /// <summary>
+    ///     Gets the incoming appointments for the specified user ID.
+    /// </summary>
+    /// <param name="paging">The paging parameters.</param>
+    /// <param name="userId">The user ID.</param>
+    /// <returns>The incoming appointments for the specified user ID.</returns>
+    [HttpGet("incoming/{userId:int}")]
+    public async Task<IActionResult> GetIncomingAppointmentsByUserId([FromQuery] PagingParameters paging, int userId)
     {
-        //var client = await _clientService.GetAsync(clientId);
+        if (User.IsInRole(RoleConstants.Client) && User.Claims.Count(c => c.Type == ClaimTypes.Role) < 2)
+            userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
 
-        //if (client == null)
+        var result = await _appointmentsService.GetIncomingByUserIdAsync(paging, userId);
+        if (result.IsFailure)
         {
-            _logger.LogInformation($"Client with id: {clientId} doesn't exist in the database.");
-
-            return NotFound($"Client with id: {clientId} doesn't exist");
+            _logger.LogInformation(result.Error.Description);
+            return NotFound(result.Error.Description);
         }
 
-        var clientAppointmentCards = await _appointmentsService.GetVisitedByClientIdAsync(clientId);
-
-        var pagedClientAppointments = PagedList<ClientAppointmentCardDto>
-            .ToPagedList(clientAppointmentCards, pagingParameters.PageNumber, pagingParameters.PageSize);
-        Response.Headers.Add("X-Pagination",
-            JsonConvert.SerializeObject(pagedClientAppointments.MetaData));
-
-        return Ok(pagedClientAppointments);
+        return Ok(result.Value);
     }
 
-    [HttpGet("doctor/{doctorId}", Name = "DoctorAppointments")]
-    public async Task<IActionResult> GetDoctorAppointments(int doctorId,
-        [FromQuery] PagingParameters pagingParameters)
+    /// <summary>
+    ///     Gets all appointments for the specified user ID.
+    /// </summary>
+    /// <param name="paging">The paging parameters.</param>
+    /// <param name="userId">The user ID.</param>
+    /// <returns>All appointments for the specified user ID.</returns>
+    [HttpGet("all/{userId:int}")]
+    public async Task<IActionResult> GetAllAppointmentsByUserId([FromQuery] PagingParameters paging, int userId)
     {
-        //var doctor = await _doctorService.GetAsync(doctorId);
+        if (User.IsInRole(RoleConstants.Client) && User.Claims.Count(c => c.Type == ClaimTypes.Role) < 2)
+            userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
 
-        //if (doctor == null)
+        var result = await _appointmentsService.GetAllByUserIdAsync(paging, userId);
+        if (result.IsFailure)
         {
-            _logger.LogInformation($"Doctor with id: {doctorId} doesn't exist in the database.");
-
-            return NotFound($"Doctor with id: {doctorId} doesn't exist");
+            _logger.LogInformation(result.Error.Description);
+            return NotFound(result.Error.Description);
         }
 
-        var doctorAppointments = await _appointmentsService.GetByDoctorIdAsync(doctorId);
-
-        var pagedDoctorAppointments = PagedList<DoctorAppointmentDto>
-            .ToPagedList(doctorAppointments, pagingParameters.PageNumber, pagingParameters.PageSize);
-
-        Response.Headers.Add("X-Pagination",
-            JsonConvert.SerializeObject(pagedDoctorAppointments.MetaData));
-
-        return Ok(pagedDoctorAppointments);
+        return Ok(result.Value);
     }
 
+    /// <summary>
+    ///     Gets the missed appointments for the specified user ID.
+    /// </summary>
+    /// <param name="paging">The paging parameters.</param>
+    /// <param name="userId">The user ID.</param>
+    /// <returns>The missed appointments for the specified user ID.</returns>
+    [HttpGet("missed/{userId:int}")]
+    public async Task<IActionResult> GetMissedAppointmentsByUserId([FromQuery] PagingParameters paging, int userId)
+    {
+        if (User.IsInRole(RoleConstants.Client) && User.Claims.Count(c => c.Type == ClaimTypes.Role) < 2)
+            userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+
+        var result = await _appointmentsService.GetMissedByUserIdAsync(paging, userId);
+        if (result.IsFailure)
+        {
+            _logger.LogInformation(result.Error.Description);
+            return NotFound(result.Error.Description);
+        }
+
+        return Ok(result.Value);
+    }
+
+    /// <summary>
+    ///     Gets the visited appointments for the specified user ID.
+    /// </summary>
+    /// <param name="paging">The paging parameters.</param>
+    /// <param name="userId">The user ID.</param>
+    /// <returns>The visited appointments for the specified user ID.</returns>
+    [HttpGet("visited/{userId}")]
+    public async Task<IActionResult> GetVisitedAppointmentsByUserId([FromQuery] PagingParameters paging, int userId)
+    {
+        if (User.IsInRole(RoleConstants.Client) && User.Claims.Count(c => c.Type == ClaimTypes.Role) < 2)
+            userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+
+        var result = await _appointmentsService.GetVisitedByUserIdAsync(paging, userId);
+        if (result.IsFailure)
+        {
+            _logger.LogInformation(result.Error.Description);
+            return NotFound(result.Error.Description);
+        }
+
+        return Ok(result.Value);
+    }
+
+    /// <summary>
+    ///     Creates a new appointment.
+    /// </summary>
+    /// <param name="appointmentDto">The appointment DTO.</param>
+    /// <returns>The created appointment.</returns>
+    [Authorize]
     [HttpPost]
     public async Task<IActionResult> PostAppointment([FromBody] AppointmentForCreationDto appointmentDto)
     {
-        if (appointmentDto == null)
-        {
-            _logger.LogError("AppointmentForCreationDTO object sent from a client is null.");
+        if (User.IsInRole(RoleConstants.Client) && User.Claims.Count(c => c.Type == ClaimTypes.Role) < 2)
+            appointmentDto.ClientId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
 
-            return BadRequest("AppointmentForCreationDTO object is null");
+        var validateResult = await _validator.ValidateAsync(appointmentDto);
+        if (!validateResult.IsValid)
+        {
+            _logger.LogInformation("Invalid model state for the AppointmentForCreationDTO object.");
+
+            return UnprocessableEntity(validateResult.Errors);
         }
 
-        //var client = await _clientService.GetAsync(appointmentDto.ClientId);
-        //var doctor = await _doctorService.GetAsync(appointmentDto.DoctorId);
-
-        //if (client == null || doctor == null)
+        var result = await _appointmentsService.AddNewAsync(appointmentDto);
+        if (result.IsFailure)
         {
-            _logger.LogError("Doctor or Client with given id doesn't exist in the database.");
+            _logger.LogInformation(result.Error.Description);
 
-            return BadRequest("Doctor or Client with given id doesn't exist");
+            return BadRequest(result.Error.Description);
         }
 
-        var result = await _validator.ValidateAsync(appointmentDto);
-
-        if (!result.IsValid)
-        {
-            _logger.LogError("Invalid model state for the AppointmentForCreationDTO object.");
-
-            return UnprocessableEntity(result.Errors);
-        }
-
-        var appointmentEntity = _mapper.Map<Appointment>(appointmentDto);
-
-        await _appointmentsService.AddNewAsync(appointmentEntity);
-
-        return CreatedAtRoute("ClientAppointments", new {clientId = appointmentDto.ClientId},
-            appointmentDto);
+        return Created();
     }
 
-    [HttpPut("{appointmentId}/markAsVisited")]
+    /// <summary>
+    ///     Marks the appointment as visited.
+    /// </summary>
+    /// <param name="appointmentId">The appointment ID.</param>
+    /// <param name="diagnosis">The diagnosis.</param>
+    /// <returns>The result of marking the appointment as visited.</returns>
+    [Authorize(Roles = $"{RoleConstants.Doctor}, {RoleConstants.Supervisor}, {RoleConstants.MasterSupervisor}")]
+    [HttpPut("{appointmentId:int}/markAsVisited")]
     public async Task<IActionResult> PutVisitedAppointment(int appointmentId, [FromQuery] string diagnosis)
     {
-        var appointment = await _appointmentsService.GetAsync(appointmentId);
-
-        if (appointment == null)
+        var result = await _appointmentsService.MarkAsVisitedAsync(appointmentId, diagnosis);
+        if (result.IsFailure)
         {
-            _logger.LogInformation($"Appointment with id: {appointmentId} doesn't exist in the database.");
+            _logger.LogInformation(result.Error.Description);
 
-            return NotFound($"Appointment with id: {appointmentId} doesn't exist");
+            return BadRequest(result.Error.Description);
         }
 
-        var appointmnetDto = await _appointmentsService.MarkAsVisitedAsync(appointmentId, diagnosis);
-
-        return Ok(appointmnetDto);
+        return Ok();
     }
 }

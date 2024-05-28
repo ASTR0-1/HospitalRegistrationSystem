@@ -1,11 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using HospitalRegistrationSystem.Application.DTOs.AppointmentDTOs;
 using HospitalRegistrationSystem.Application.Interfaces.Data;
 using HospitalRegistrationSystem.Application.Interfaces.Services;
+using HospitalRegistrationSystem.Application.Utility.PagedData;
+using HospitalRegistrationSystem.Domain.Constants;
 using HospitalRegistrationSystem.Domain.Entities;
+using HospitalRegistrationSystem.Domain.Errors;
+using HospitalRegistrationSystem.Domain.Shared.ResultPattern;
 
 namespace HospitalRegistrationSystem.Application.Services;
 
@@ -20,47 +25,131 @@ public class AppointmentService : IAppointmentService
         _mapper = mapper;
     }
 
-    public async Task AddNewAsync(Appointment appointment)
+    /// <inheritdoc/>
+    public async Task<Result> AddNewAsync(AppointmentForCreationDto appointmentDto)
     {
+        if (appointmentDto.DoctorId == appointmentDto.ClientId)
+            return Result.Failure(AppointmentError.DoctorAndClientAreSame(appointmentDto.ClientId));
+
+        var appointment = _mapper.Map<Appointment>(appointmentDto);
+
+        var client = await _repository.ApplicationUser.GetApplicationUserAsync(appointmentDto.ClientId);
+        if (client is null)
+            return Result.Failure(ApplicationUserError.UserIdNotFound(appointmentDto.ClientId));
+
+        var doctor = await _repository.ApplicationUser.GetApplicationUserAsync(appointmentDto.DoctorId);
+        if (doctor is null)
+            return Result.Failure(ApplicationUserError.UserIdNotFound(appointmentDto.DoctorId));
+
+        var isDoctorInRole = await _repository.ApplicationUser.CheckUserInRoleAsync(appointmentDto.DoctorId, RoleConstants.Doctor);
+        if (!isDoctorInRole)
+            return Result.Failure(AppointmentError.DoctorNotInRole(appointmentDto.DoctorId));
+
+        if (doctor.DoctorSchedules is null || doctor.DoctorSchedules.Count == 0)
+            return Result.Failure(AppointmentError.DoctorHasNoSchedule(appointmentDto.DoctorId));
+
+        var dateIsFree = doctor.DoctorSchedules.Any(ds => ds.Date == DateOnly.FromDateTime(appointmentDto.VisitTime));
+        var timeIsFree = doctor.DoctorSchedules.Any(ds => DecodeWorkingHours(ds.WorkingHours).Contains(appointmentDto.VisitTime.Hour));
+        if (!dateIsFree || !timeIsFree)
+            return Result.Failure(AppointmentError.AppointmentTimeIsNotAvailable(appointmentDto.DoctorId, appointmentDto.VisitTime));
+
+        appointment.ApplicationUsers.Add(client);
+        appointment.ApplicationUsers.Add(doctor);
+
         _repository.Appointment.CreateAppointment(appointment);
         await _repository.SaveAsync();
+
+        return Result.Success();
     }
 
-    public async Task<IEnumerable<ClientAppointmentDto>> GetAllAsync()
+    /// <inheritdoc/>
+    public async Task<Result<AppointmentDto>> GetAsync(int appointmentId)
     {
-        var appointments = await _repository.Appointment.GetAppointmentsAsync(null, trackChanges: false);
+        var appointment = await _repository.Appointment.GetAppointmentAsync(appointmentId);
+        if (appointment is null)
+            return Result<AppointmentDto>.Failure(AppointmentError.AppointmentNotFound(appointmentId));
 
-        var appointmentsDto = _mapper.Map<IEnumerable<ClientAppointmentDto>>(appointments);
+        var appointmentDto = _mapper.Map<AppointmentDto>(appointment);
 
-        return appointmentsDto;
+        return Result<AppointmentDto>.Success(appointmentDto);
     }
 
-    public async Task<ClientAppointmentDto> GetAsync(int appointmentId)
+    /// <inheritdoc/>
+    public async Task<Result<PagedList<AppointmentDto>>> GetIncomingByUserIdAsync(PagingParameters paging, int userId)
     {
-        var appointment = await _repository.Appointment.GetAppointmentAsync(appointmentId, false);
+        var user = await _repository.ApplicationUser.GetApplicationUserAsync(userId);
+        if (user is null)
+            return Result<PagedList<AppointmentDto>>.Failure(ApplicationUserError.UserIdNotFound(userId));
 
-        var appointmentDto = _mapper.Map<ClientAppointmentDto>(appointment);
+        var appointments = await _repository.Appointment.GetIncomingAppointmentsByUserIdAsync(paging, userId, trackChanges: false);
+        var appointmentsDto = _mapper.Map<PagedList<AppointmentDto>>(appointments);
 
-        return appointmentDto;
+        return Result<PagedList<AppointmentDto>>.Success(appointmentsDto);
     }
 
-    public async Task<IEnumerable<ClientAppointmentDto>> GetByClientIdAsync(int clientId)
+    /// <inheritdoc/>
+    public async Task<Result<PagedList<AppointmentDto>>> GetAllByUserIdAsync(PagingParameters paging, int userId)
     {
-        throw new NotImplementedException();
+        var user = await _repository.ApplicationUser.GetApplicationUserAsync(userId);
+        if (user is null)
+            return Result<PagedList<AppointmentDto>>.Failure(ApplicationUserError.UserIdNotFound(userId));
+
+        var appointments = await _repository.Appointment.GetAppointmentsByUserIdAsync(paging, userId, isVisited: null, trackChanges: false);
+        var appointmentsDto = _mapper.Map<PagedList<AppointmentDto>>(appointments);
+
+        return Result<PagedList<AppointmentDto>>.Success(appointmentsDto);
     }
 
-    public async Task<IEnumerable<DoctorAppointmentDto>> GetByDoctorIdAsync(int doctorId)
+    /// <inheritdoc/>
+    public async Task<Result<PagedList<AppointmentDto>>> GetMissedByUserIdAsync(PagingParameters paging, int userId)
     {
-        throw new NotImplementedException();
+        var user = await _repository.ApplicationUser.GetApplicationUserAsync(userId);
+        if (user is null)
+            return Result<PagedList<AppointmentDto>>.Failure(ApplicationUserError.UserIdNotFound(userId));
+
+        var appointments = await _repository.Appointment.GetAppointmentsByUserIdAsync(paging, userId, isVisited: false, trackChanges: false);
+        var appointmentsDto = _mapper.Map<PagedList<AppointmentDto>>(appointments);
+
+        return Result<PagedList<AppointmentDto>>.Success(appointmentsDto);
     }
 
-    public async Task<IEnumerable<ClientAppointmentCardDto>> GetVisitedByClientIdAsync(int clientId)
+    /// <inheritdoc/>
+    public async Task<Result<PagedList<AppointmentDto>>> GetVisitedByUserIdAsync(PagingParameters paging, int userId)
     {
-        throw new NotImplementedException();
+        var user = await _repository.ApplicationUser.GetApplicationUserAsync(userId);
+        if (user is null)
+            return Result<PagedList<AppointmentDto>>.Failure(ApplicationUserError.UserIdNotFound(userId));
+
+        var appointments = await _repository.Appointment.GetAppointmentsByUserIdAsync(paging, userId, isVisited: true, trackChanges: false);
+        var appointmentsDto = _mapper.Map<PagedList<AppointmentDto>>(appointments);
+
+        return Result<PagedList<AppointmentDto>>.Success(appointmentsDto);
     }
 
-    public async Task<ClientAppointmentCardDto> MarkAsVisitedAsync(int appointmentId, string diagnosis)
+    /// <inheritdoc/>
+    public async Task<Result> MarkAsVisitedAsync(int appointmentId, string diagnosis)
     {
-        throw new NotImplementedException();
+        var appointment = await _repository.Appointment.GetAppointmentAsync(appointmentId, true);
+        if (appointment is null)
+            return Result.Failure(AppointmentError.AppointmentNotFound(appointmentId));
+
+        appointment.Diagnosis = diagnosis;
+        appointment.IsVisited = true;
+        await _repository.SaveAsync();
+
+        return Result.Success();
+    }
+
+    private List<int> DecodeWorkingHours(int workingHours)
+    {
+        var hours = new List<int>();
+
+        for (var hour = 0; hour < 24; hour++)
+        {
+            if ((workingHours & (1 << hour)) != 0)
+                hours.Add(hour);
+        }
+
+        return hours;
     }
 }

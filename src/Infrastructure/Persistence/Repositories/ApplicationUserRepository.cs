@@ -5,6 +5,7 @@ using HospitalRegistrationSystem.Application.Interfaces.Data;
 using HospitalRegistrationSystem.Application.Utility.PagedData;
 using HospitalRegistrationSystem.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace HospitalRegistrationSystem.Infrastructure.Persistence.Repositories;
 
@@ -54,7 +55,27 @@ public class ApplicationUserRepository : IApplicationUserRepository
     }
 
     /// <inheritdoc/>
-    public async Task<ApplicationUser?> GetApplicationUserAsync(int userId) => await _userManager.FindByIdAsync(userId.ToString());
+    public async Task<bool> CheckUserInRoleAsync(int userId, string role)
+    {
+        var user = await _userManager.FindByIdAsync(userId.ToString());
+        if (user is null)
+            return false;
+
+        return await _userManager.IsInRoleAsync(user, role);
+    }
+
+    /// <inheritdoc/>
+    public async Task<ApplicationUser?> GetApplicationUserAsync(int userId)
+    {
+        var user = await _userManager.FindByIdAsync(userId.ToString());
+        if (user is null)
+            return null;
+
+        await _userManager.Users.Include(u => u.DoctorSchedules)
+            .LoadAsync();
+
+        return user;
+    }
 
     /// <inheritdoc/>
     public async Task<IdentityResult> UpdateApplicationUserAsync(ApplicationUser applicationUser) => await _userManager.UpdateAsync(applicationUser);
