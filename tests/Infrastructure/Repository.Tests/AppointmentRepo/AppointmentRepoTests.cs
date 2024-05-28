@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using HospitalRegistrationSystem.Application.Interfaces.Data;
 using HospitalRegistrationSystem.Domain.Entities;
@@ -10,6 +11,9 @@ namespace HospitalRegistrationSystem.Tests.Infrastructure.Repository.Appointment
 [TestFixture]
 public class AppointmentRepoTests
 {
+    private IAppointmentRepository _appointmentRepository;
+    private AppointmentSeedDataFixture _dataFixture;
+
     [SetUp]
     public void SetUpFixture()
     {
@@ -23,92 +27,6 @@ public class AppointmentRepoTests
         _dataFixture.Dispose();
     }
 
-    private IAppointmentRepository _appointmentRepository;
-    private AppointmentSeedDataFixture _dataFixture;
-
-    [Test]
-    public void Create_Null_ThrowArgumentNullException()
-    {
-        // Arrange
-        Appointment nullAppointment = null;
-        var expectedExceptionType = typeof(ArgumentNullException);
-
-        // Act
-        var actualExceptionType =
-            Assert.Catch(() => _appointmentRepository.CreateAppointment(nullAppointment)).GetType();
-
-        // Assert
-        Assert.That(actualExceptionType, Is.EqualTo(expectedExceptionType));
-    }
-
-    [Test]
-    public async Task Create_NotNull_AddValue()
-    {
-        // Arrange
-        var expectedDiagnosis = "D3";
-        var appointment = new Appointment
-        {
-            VisitTime = new DateTime(3033, 3, 3),
-            Diagnosis = "D3"
-        };
-
-        // Act
-        _appointmentRepository.CreateAppointment(appointment);
-        await _dataFixture.ApplicationContext.SaveChangesAsync();
-        var actualDiagnosis = "";
-            //(await _appointmentRepository.GetAppointmentsAsync(false)).Last().Diagnosis;
-
-        // Assert
-        Assert.That(actualDiagnosis, Is.EqualTo(expectedDiagnosis));
-    }
-
-    [Test]
-    public void Delete_Null_ThrowArgumentNullException()
-    {
-        // Arrange
-        Appointment nullAppointment = null;
-        var expectedExceptionType = typeof(ArgumentNullException);
-
-        // Act
-        var actualExceptionType =
-            Assert.Catch(() => _appointmentRepository.DeleteAppointment(nullAppointment)).GetType();
-
-        // Assert
-        Assert.That(actualExceptionType, Is.EqualTo(expectedExceptionType));
-    }
-
-    [Test]
-    public async Task Delete_Existing_DeleteValue()
-    {
-        // Arrange
-        var expectedDiagnosis = "D1";
-        // TODO: Remake guid
-        var appointmentToDelete = await _appointmentRepository.GetAppointmentAsync(0, true);
-
-        // Act
-        _appointmentRepository.DeleteAppointment(appointmentToDelete);
-        await _dataFixture.ApplicationContext.SaveChangesAsync();
-        var actualDiagnosis = "";
-            //(await _appointmentRepository.GetAppointmentsAsync(false)).Last().Diagnosis;
-
-        // Assert
-        Assert.That(actualDiagnosis, Is.EqualTo(expectedDiagnosis));
-    }
-
-    [Test]
-    public async Task GetAppointmentsAsync_GetValue()
-    {
-        // Arrange
-        var expectedCount = 2;
-
-        // Act
-        var actualCount = 0;
-            //(await _appointmentRepository.GetAppointmentsAsync(false)).Count();
-
-        // Assert
-        Assert.That(actualCount, Is.EqualTo(expectedCount));
-    }
-
     [Test]
     public async Task GetAppointmentAsync_NotExistingId_GetNull()
     {
@@ -117,7 +35,7 @@ public class AppointmentRepoTests
         Appointment expectedAppointment = null;
 
         // Act
-        var actualAppointment = await _appointmentRepository.GetAppointmentAsync(notExistingId, false);
+        var actualAppointment = await _appointmentRepository.GetAppointmentAsync(notExistingId);
 
         // Assert
         Assert.That(actualAppointment, Is.EqualTo(expectedAppointment));
@@ -130,10 +48,37 @@ public class AppointmentRepoTests
         var expectedId = 1;
 
         // Act
-        // TODO: Remake guid
-        var actualId = (await _appointmentRepository.GetAppointmentAsync(0, false)).Id;
+        var actualId = (await _appointmentRepository.GetAppointmentAsync(expectedId)).Id;
 
         // Assert
         Assert.That(actualId, Is.EqualTo(expectedId));
+    }
+
+    [Test]
+    public void CreateAppointment_Success()
+    {
+        // Arrange
+        var appointment = new Appointment { Id = 3, VisitTime = DateTime.Now.AddDays(3), IsVisited = false };
+
+        // Act
+        _appointmentRepository.CreateAppointment(appointment);
+        _dataFixture.ApplicationContext.SaveChanges();
+
+        // Assert
+        Assert.That(_dataFixture.ApplicationContext.Appointments.Count(), Is.EqualTo(3));
+    }
+
+    [Test]
+    public void DeleteAppointment_Success()
+    {
+        // Arrange
+        var appointment = _dataFixture.ApplicationContext.Appointments.First();
+
+        // Act
+        _appointmentRepository.DeleteAppointment(appointment);
+        _dataFixture.ApplicationContext.SaveChanges();
+
+        // Assert
+        Assert.That(_dataFixture.ApplicationContext.Appointments.Count(), Is.EqualTo(1));
     }
 }

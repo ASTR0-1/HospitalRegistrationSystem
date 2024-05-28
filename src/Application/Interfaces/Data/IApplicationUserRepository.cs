@@ -28,6 +28,14 @@ public interface IApplicationUserRepository
     Task<ApplicationUser?> GetApplicationUserAsync(int userId);
 
     /// <summary>
+    ///     Check if a user is in a specific role.
+    /// </summary>
+    /// <param name="userId">The user ID.</param>
+    /// <param name="role">The role to check.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains a boolean indicating whether the user is in the role.</returns>
+    Task<bool> CheckUserInRoleAsync(int userId, string role);
+
+    /// <summary>
     ///     Update an application user.
     /// </summary>
     /// <param name="applicationUser">The application user to update.</param>

@@ -54,6 +54,16 @@ public class ApplicationUserRepository : IApplicationUserRepository
     }
 
     /// <inheritdoc/>
+    public async Task<bool> CheckUserInRoleAsync(int userId, string role)
+    {
+        var user = await _userManager.FindByIdAsync(userId.ToString());
+        if (user is null)
+            return false;
+
+        return await _userManager.IsInRoleAsync(user, role);
+    }
+
+    /// <inheritdoc/>
     public async Task<ApplicationUser?> GetApplicationUserAsync(int userId) => await _userManager.FindByIdAsync(userId.ToString());
 
     /// <inheritdoc/>

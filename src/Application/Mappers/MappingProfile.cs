@@ -2,6 +2,7 @@
 using System.Linq;
 using AutoMapper;
 using HospitalRegistrationSystem.Application.DTOs.ApplicationUserDTOs;
+using HospitalRegistrationSystem.Application.DTOs.AppointmentDTOs;
 using HospitalRegistrationSystem.Application.DTOs.AuthenticationDTOs;
 using HospitalRegistrationSystem.Application.DTOs.DoctorScheduleDTOs;
 using HospitalRegistrationSystem.Application.DTOs.FeedbackDTOs;
@@ -16,10 +17,23 @@ public class MappingProfile : Profile
 {
     public MappingProfile()
     {
+        CreateMap(typeof(PagedList<>), typeof(PagedList<>))
+            .ConvertUsing(typeof(PagedListConverter<,>));
+
         CreateMap<UserForRegistrationDto, ApplicationUser>();
 
         CreateMap<ApplicationUser, ApplicationUserDto>()
             .ReverseMap();
+
+        CreateMap<AppointmentForCreationDto, Appointment>();
+
+        CreateMap<Appointment, AppointmentDto>()
+            .ForMember(dest => dest.Doctor,
+                opt => opt.MapFrom(src =>
+                    src.ApplicationUsers.FirstOrDefault(u => u.Specialty != null)))
+            .ForMember(dest => dest.Client,
+                opt => opt.MapFrom(src =>
+                    src.ApplicationUsers.FirstOrDefault(u => u.Specialty == null)));
 
         CreateMap<Country, CountryDto>()
             .ReverseMap();
@@ -27,9 +41,6 @@ public class MappingProfile : Profile
             .ReverseMap();
         CreateMap<City, CityDto>()
             .ReverseMap();
-
-        CreateMap(typeof(PagedList<>), typeof(PagedList<>))
-            .ConvertUsing(typeof(PagedListConverter<,>));
 
         CreateMap<Hospital, HospitalDto>()
             .ForMember(dto => dto.Country, conf => conf.MapFrom(h => h.Address.City!.Region!.Country!.Name))
