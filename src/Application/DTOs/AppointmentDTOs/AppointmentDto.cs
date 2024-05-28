@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using HospitalRegistrationSystem.Application.DTOs.ApplicationUserDTOs;
+using Newtonsoft.Json;
 
 namespace HospitalRegistrationSystem.Application.DTOs.AppointmentDTOs;
 
+[JsonObject(ItemNullValueHandling = NullValueHandling.Ignore)]
 public class AppointmentDto
 {
     public int Id { get; set; }

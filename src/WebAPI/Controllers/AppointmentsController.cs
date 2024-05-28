@@ -1,10 +1,14 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 using FluentValidation;
 using HospitalRegistrationSystem.Application.DTOs.AppointmentDTOs;
 using HospitalRegistrationSystem.Application.Interfaces;
 using HospitalRegistrationSystem.Application.Interfaces.Services;
 using HospitalRegistrationSystem.Application.Utility.PagedData;
+using HospitalRegistrationSystem.Domain.Constants;
 using HospitalRegistrationSystem.Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -40,6 +44,7 @@ public class AppointmentsController : ControllerBase
     /// </summary>
     /// <param name="appointmentId">The appointment ID.</param>
     /// <returns>The appointment with the specified ID.</returns>
+    [Authorize(Roles = $"{RoleConstants.Receptionist}, {RoleConstants.Doctor}, {RoleConstants.Supervisor}, {RoleConstants.MasterSupervisor}")]
     [HttpGet("{appointmentId:int}")]
     public async Task<IActionResult> GetAppointment(int appointmentId)
     {
@@ -60,8 +65,11 @@ public class AppointmentsController : ControllerBase
     /// <param name="userId">The user ID.</param>
     /// <returns>The incoming appointments for the specified user ID.</returns>
     [HttpGet("incoming/{userId:int}")]
-    public async Task<IActionResult> GetIncomingAppointmentsByUserId(PagingParameters paging, int userId)
+    public async Task<IActionResult> GetIncomingAppointmentsByUserId([FromQuery] PagingParameters paging, int userId)
     {
+        if (User.IsInRole(RoleConstants.Client) && User.Claims.Count(c => c.Type == ClaimTypes.Role) < 2)
+            userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+
         var result = await _appointmentsService.GetIncomingByUserIdAsync(paging, userId);
         if (result.IsFailure)
         {
@@ -79,8 +87,11 @@ public class AppointmentsController : ControllerBase
     /// <param name="userId">The user ID.</param>
     /// <returns>All appointments for the specified user ID.</returns>
     [HttpGet("all/{userId:int}")]
-    public async Task<IActionResult> GetAllAppointmentsByUserId(PagingParameters paging, int userId)
+    public async Task<IActionResult> GetAllAppointmentsByUserId([FromQuery] PagingParameters paging, int userId)
     {
+        if (User.IsInRole(RoleConstants.Client) && User.Claims.Count(c => c.Type == ClaimTypes.Role) < 2)
+            userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+
         var result = await _appointmentsService.GetAllByUserIdAsync(paging, userId);
         if (result.IsFailure)
         {
@@ -98,8 +109,11 @@ public class AppointmentsController : ControllerBase
     /// <param name="userId">The user ID.</param>
     /// <returns>The missed appointments for the specified user ID.</returns>
     [HttpGet("missed/{userId:int}")]
-    public async Task<IActionResult> GetMissedAppointmentsByUserId(PagingParameters paging, int userId)
+    public async Task<IActionResult> GetMissedAppointmentsByUserId([FromQuery] PagingParameters paging, int userId)
     {
+        if (User.IsInRole(RoleConstants.Client) && User.Claims.Count(c => c.Type == ClaimTypes.Role) < 2)
+            userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+
         var result = await _appointmentsService.GetMissedByUserIdAsync(paging, userId);
         if (result.IsFailure)
         {
@@ -117,8 +131,11 @@ public class AppointmentsController : ControllerBase
     /// <param name="userId">The user ID.</param>
     /// <returns>The visited appointments for the specified user ID.</returns>
     [HttpGet("visited/{userId}")]
-    public async Task<IActionResult> GetVisitedAppointmentsByUserId(PagingParameters paging, int userId)
+    public async Task<IActionResult> GetVisitedAppointmentsByUserId([FromQuery] PagingParameters paging, int userId)
     {
+        if (User.IsInRole(RoleConstants.Client) && User.Claims.Count(c => c.Type == ClaimTypes.Role) < 2)
+            userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+
         var result = await _appointmentsService.GetVisitedByUserIdAsync(paging, userId);
         if (result.IsFailure)
         {
@@ -134,9 +151,13 @@ public class AppointmentsController : ControllerBase
     /// </summary>
     /// <param name="appointmentDto">The appointment DTO.</param>
     /// <returns>The created appointment.</returns>
+    [Authorize]
     [HttpPost]
     public async Task<IActionResult> PostAppointment([FromBody] AppointmentForCreationDto appointmentDto)
     {
+        if (User.IsInRole(RoleConstants.Client) && User.Claims.Count(c => c.Type == ClaimTypes.Role) < 2)
+            appointmentDto.ClientId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+
         var validateResult = await _validator.ValidateAsync(appointmentDto);
         if (!validateResult.IsValid)
         {
@@ -162,6 +183,7 @@ public class AppointmentsController : ControllerBase
     /// <param name="appointmentId">The appointment ID.</param>
     /// <param name="diagnosis">The diagnosis.</param>
     /// <returns>The result of marking the appointment as visited.</returns>
+    [Authorize(Roles = $"{RoleConstants.Doctor}, {RoleConstants.Supervisor}, {RoleConstants.MasterSupervisor}")]
     [HttpPut("{appointmentId:int}/markAsVisited")]
     public async Task<IActionResult> PutVisitedAppointment(int appointmentId, [FromQuery] string diagnosis)
     {

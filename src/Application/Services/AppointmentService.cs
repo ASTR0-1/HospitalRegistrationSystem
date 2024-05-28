@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using HospitalRegistrationSystem.Application.DTOs.AppointmentDTOs;
@@ -43,6 +44,14 @@ public class AppointmentService : IAppointmentService
         var isDoctorInRole = await _repository.ApplicationUser.CheckUserInRoleAsync(appointmentDto.DoctorId, RoleConstants.Doctor);
         if (!isDoctorInRole)
             return Result.Failure(AppointmentError.DoctorNotInRole(appointmentDto.DoctorId));
+
+        if (doctor.DoctorSchedules is null || doctor.DoctorSchedules.Count == 0)
+            return Result.Failure(AppointmentError.DoctorHasNoSchedule(appointmentDto.DoctorId));
+
+        var dateIsFree = doctor.DoctorSchedules.Any(ds => ds.Date == DateOnly.FromDateTime(appointmentDto.VisitTime));
+        var timeIsFree = doctor.DoctorSchedules.Any(ds => DecodeWorkingHours(ds.WorkingHours).Contains(appointmentDto.VisitTime.Hour));
+        if (!dateIsFree || !timeIsFree)
+            return Result.Failure(AppointmentError.AppointmentTimeIsNotAvailable(appointmentDto.DoctorId, appointmentDto.VisitTime));
 
         appointment.ApplicationUsers.Add(client);
         appointment.ApplicationUsers.Add(doctor);
@@ -129,5 +138,18 @@ public class AppointmentService : IAppointmentService
         await _repository.SaveAsync();
 
         return Result.Success();
+    }
+
+    private List<int> DecodeWorkingHours(int workingHours)
+    {
+        var hours = new List<int>();
+
+        for (var hour = 0; hour < 24; hour++)
+        {
+            if ((workingHours & (1 << hour)) != 0)
+                hours.Add(hour);
+        }
+
+        return hours;
     }
 }
