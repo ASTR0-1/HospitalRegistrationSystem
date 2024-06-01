@@ -29,7 +29,8 @@ public class HospitalRepository : RepositoryBase<Hospital>, IHospitalRepository
             .ToList();
 
         var hospitalsQuery = FindByCondition(
-                    h => searchTerms.Any(term => EF.Functions.Like(h.Address.City!.Region!.Name, term) ||
+                    h => searchTerms.Any(term => EF.Functions.Like(h.Name, term) ||
+                                                 EF.Functions.Like(h.Address.City!.Region!.Name, term) ||
                                                  EF.Functions.Like(h.Address.City.Name, term) ||
                                                  EF.Functions.Like(h.Address.City.Region.Name, term) ||
                                                  EF.Functions.Like(h.Address.City.Region.Country!.Name, term) ||
