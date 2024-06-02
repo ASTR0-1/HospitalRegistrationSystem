@@ -53,6 +53,11 @@ public class AppointmentService : IAppointmentService
         if (!dateIsFree || !timeIsFree)
             return Result.Failure(AppointmentError.AppointmentTimeIsNotAvailable(appointmentDto.DoctorId, appointmentDto.VisitTime));
 
+        var doctorSchedule = doctor.DoctorSchedules.First(ds => ds.Date == DateOnly.FromDateTime(appointmentDto.VisitTime));
+        _repository.DoctorSchedule.UpdateDoctorSchedule(doctorSchedule);
+
+        doctorSchedule.WorkingHours &= ~(1 << appointmentDto.VisitTime.Hour);
+
         appointment.ApplicationUsers.Add(client);
         appointment.ApplicationUsers.Add(doctor);
 
