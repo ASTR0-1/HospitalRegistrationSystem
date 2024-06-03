@@ -90,7 +90,7 @@ public class ApplicationUserController : ControllerBase
     /// <returns>The list of application users.</returns>
     [AllowAnonymous]
     [HttpGet("hospital/{hospitalId:int}/role/{role}")]
-    public async Task<ActionResult<List<ApplicationUserDto>>> GetAllByHospitalAndRole([FromQuery] PagingParameters paging, int hospitalId, string role, string? searchQuery = null)
+    public async Task<ActionResult<PagedList<ApplicationUserDto>>> GetAllByHospitalAndRole([FromQuery] PagingParameters paging, int hospitalId, string role, string? searchQuery = null)
     {
         var result = await _userService.GetAllAsync(paging, searchQuery, role, hospitalId);
 
