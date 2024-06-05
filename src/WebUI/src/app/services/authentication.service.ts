@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { UserForAuthenticationDto } from '../entities/authentication/userForAuthenticationDto';
 import { UserForRegistrationDto } from '../entities/authentication/userForRegistrationDto';
+import { jwtDecode } from 'jwt-decode';
 
 @Injectable({
 	providedIn: 'root',
@@ -18,7 +19,8 @@ export class AuthenticationService {
 	public isInvalidRegister$ = this.isInvalidRegisterSubject.asObservable();
 
 	private isRefreshing = false;
-    private refreshTokenSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
+	private refreshTokenSubject: BehaviorSubject<any> =
+		new BehaviorSubject<any>(null);
 
 	constructor(private http: HttpClient) {}
 
@@ -73,16 +75,18 @@ export class AuthenticationService {
 	public refreshToken(): Observable<any> {
 		const jwt = localStorage.getItem('jwt');
 		const refreshToken = localStorage.getItem('refresh');
-		
-		return this.http.post(this.uri + '/refresh', { accessToken: jwt, refreshToken }).pipe(
-			tap((response: any) => {
-				const userId = <string>localStorage.getItem('userId');
-				const token = response.accessToken;
-				const refreshToken = response.refreshToken;
 
-				this.saveCredsToLocalStorage(token, userId, refreshToken);
-			})
-		);
+		return this.http
+			.post(this.uri + '/refresh', { accessToken: jwt, refreshToken })
+			.pipe(
+				tap((response: any) => {
+					const userId = <string>localStorage.getItem('userId');
+					const token = response.accessToken;
+					const refreshToken = response.refreshToken;
+
+					this.saveCredsToLocalStorage(token, userId, refreshToken);
+				})
+			);
 	}
 
 	public logout() {
@@ -91,12 +95,24 @@ export class AuthenticationService {
 		localStorage.removeItem('userId');
 
 		this.isInvalidLoginSubject.next(false);
-        this.isInvalidRegisterSubject.next(false);
+		this.isInvalidRegisterSubject.next(false);
 	}
 
 	public getAuthToken() {
-        return localStorage.getItem('jwt');
-    }
+		return localStorage.getItem('jwt');
+	}
+
+	public isAuthenticated(): boolean {
+		const token = this.getAuthToken();
+		
+		return token !== null && token !== undefined;
+	}
+
+	public hasRole(role: string): boolean {
+		const roles = this.getRoles();
+		
+		return roles.includes(role);
+	}
 
 	private processSucceedAuth(response: any) {
 		const token = response.token.accessToken;
@@ -106,9 +122,28 @@ export class AuthenticationService {
 		this.saveCredsToLocalStorage(token, userId, refreshToken);
 	}
 
-	private saveCredsToLocalStorage(token: string, userId: string, refreshToken: string) {
+	private saveCredsToLocalStorage(
+		token: string,
+		userId: string,
+		refreshToken: string
+	) {
 		localStorage.setItem('jwt', token);
-		localStorage.setItem('refresh', refreshToken)
+		localStorage.setItem('refresh', refreshToken);
 		localStorage.setItem('userId', userId);
+	}
+
+	private getRoles(): string[] {
+		const token = this.getAuthToken();
+		if (!token) {
+			return [];
+		}
+
+		const decodedToken = jwtDecode(token) as any;
+		const roles =
+			decodedToken[
+				'http://schemas.microsoft.com/ws/2008/06/identity/claims/role'
+			];
+
+		return roles;
 	}
 }

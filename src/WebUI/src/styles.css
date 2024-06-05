@@ -1,3 +1,15 @@
 body {
     background-color: #D3DEDC;
+    height: 100vh;
 }
+
+.bg-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+
+    color: #7C99AC;
+}
+

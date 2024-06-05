@@ -1,13 +1,3 @@
-.login-page {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-
-    color: #7C99AC;
-}
-
 .login-block {
     width: 25%;
     height: 57vh;
