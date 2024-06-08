@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
@@ -21,7 +21,7 @@ export class HospitalService {
 	public getAllHospitals(
 		paging: PagingParameters,
 		searchQuery?: string
-	): Observable<HospitalDto[]> {
+	): Observable<HttpResponse<HospitalDto[]>> {
 		let params = {
 			pageNumber: String(paging.pageNumber),
 			pageSize: String(paging.pageSize),
@@ -35,6 +35,7 @@ export class HospitalService {
 		return this.http.get<HospitalDto[]>(this.uri, {
 			params,
 			headers,
+			observe: 'response'
 		});
 	}
 

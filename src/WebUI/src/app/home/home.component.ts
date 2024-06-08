@@ -31,7 +31,7 @@ export class HomeComponent implements OnInit {
 		};
 
 		this.hospitalService.getAllHospitals(paging).subscribe((result) => {
-			this.hospitals = result;
+			this.hospitals = result.body as HospitalDto[];
 		});
 	}
 
