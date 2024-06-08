@@ -49,6 +49,10 @@ public class HospitalRepository : RepositoryBase<Hospital>, IHospitalRepository
     public async Task<PagedList<Hospital>> GetHospitalsAsync(PagingParameters paging, bool trackChanges = false)
     {
         var hospitalsQuery = FindAll(trackChanges)
+            .Include(h => h.Address)
+            .ThenInclude(a => a.City)
+            .ThenInclude(c => c!.Region)
+            .ThenInclude(r => r.Country)
             .OrderBy(h => h.Id);
 
         return await PagedList<Hospital>.ToPagedListAsync(hospitalsQuery, paging.PageNumber, paging.PageSize);
