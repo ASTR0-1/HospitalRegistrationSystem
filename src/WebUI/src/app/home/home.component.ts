@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from "@angular/router";
+import { Router } from '@angular/router';
+import { HospitalService } from '../services/hospital.service';
+import { HospitalDto } from '../entities/hospital/hospitalDto';
+import { PagingParameters } from '../entities/utility/pagingParameters';
 
 @Component({
 	selector: 'app-home',
@@ -7,19 +10,42 @@ import { Router } from "@angular/router";
 	styleUrls: ['./home.component.css'],
 })
 export class HomeComponent implements OnInit {
-	constructor(private router: Router) {}
+	hospitals: HospitalDto[] = [];
+	currentPage = 1;
+	pageSize = 10;
+	totalPages = 0;
 
-	ngOnInit(): void {}
+	constructor(
+		private router: Router,
+		private hospitalService: HospitalService
+	) {}
 
-    searchClients(searchString: string) {
-        this.router.navigate(['clients'], {
-			queryParams: { SearchString: searchString },
+	ngOnInit(): void {
+		this.loadHospitals();
+	}
+
+	loadHospitals(): void {
+		const paging: PagingParameters = {
+			pageNumber: this.currentPage,
+			pageSize: this.pageSize,
+		};
+
+		this.hospitalService.getAllHospitals(paging).subscribe((result) => {
+			this.hospitals = result;
 		});
-    }
+	}
 
-    searchDoctors(searchString: string) {
-        this.router.navigate(['doctors'], {
-			queryParams: { SearchString: searchString },
-		});
-    }
+	nextPage(): void {
+		if (this.currentPage < this.totalPages) {
+			this.currentPage++;
+			this.loadHospitals();
+		}
+	}
+
+	prevPage(): void {
+		if (this.currentPage > 1) {
+			this.currentPage--;
+			this.loadHospitals();
+		}
+	}
 }

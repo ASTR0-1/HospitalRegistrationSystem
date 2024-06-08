@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { HospitalDto } from '../entities/hospital/hospitalDto';
 import { HospitalForCreationDto } from '../entities/hospital/hospitalForCreationDto';
-import { PagingParameters } from '../entities/pagingParameters';
+import { PagingParameters } from '../entities/utility/pagingParameters';
 
 @Injectable({
 	providedIn: 'root',
@@ -28,7 +28,14 @@ export class HospitalService {
 			searchQuery: searchQuery || '',
 		};
 
-		return this.http.get<HospitalDto[]>(this.uri, { params });
+		const headers = new HttpHeaders({
+			Accept: 'application/json',
+		});
+
+		return this.http.get<HospitalDto[]>(this.uri, {
+			params,
+			headers,
+		});
 	}
 
 	public addNewHospital(
