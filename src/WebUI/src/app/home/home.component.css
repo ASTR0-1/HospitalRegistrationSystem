@@ -18,7 +18,7 @@
     padding: 20px;
     border-radius: 5px;
     width: 70vw;
-    height: 75vh;
+    height: 50vh;
 }
 
 .card-wrapper {
@@ -27,12 +27,24 @@
     gap: 20px;
 }
 
+.card-body {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
 .card {
     width: 200px;
     border: 1px solid #ccc;
     border-radius: 5px;
     background-color: #fff;
     padding: 10px;
+}
+
+.card-footer {
+    display: flex;
+    justify-content: center;
+    margin-top: auto;
 }
 
 .pagination-controls {

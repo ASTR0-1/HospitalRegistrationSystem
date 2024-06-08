@@ -11,9 +11,14 @@ import { PagingParameters } from '../entities/utility/pagingParameters';
 })
 export class HomeComponent implements OnInit {
 	hospitals: HospitalDto[] = [];
-	currentPage = 1;
-	pageSize = 10;
-	totalPages = 0;
+
+	currentPage: number = 1;
+	pageSize: number = 6;
+	totalPages: number = 0;
+	hasNext: boolean = false;
+    hasPrevious: boolean = false;
+
+	searchQuery = '';
 
 	constructor(
 		private router: Router,
@@ -30,8 +35,19 @@ export class HomeComponent implements OnInit {
 			pageSize: this.pageSize,
 		};
 
-		this.hospitalService.getAllHospitals(paging).subscribe((result) => {
+		console.log(this.searchQuery)
+		this.hospitalService.getAllHospitals(paging, this.searchQuery).subscribe((result) => {
 			this.hospitals = result.body as HospitalDto[];
+
+			const paginationData = JSON.parse(
+				result.headers.get('X-Pagination')!
+			);
+
+			this.totalPages = paginationData.totalPages;
+			this.currentPage = paginationData.currentPage;
+			this.pageSize = paginationData.pageSize;
+			this.hasNext = paginationData.hasNext;
+        	this.hasPrevious = paginationData.hasPrevious;
 		});
 	}
 
