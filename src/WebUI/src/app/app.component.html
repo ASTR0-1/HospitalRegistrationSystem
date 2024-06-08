@@ -1,1 +1,42 @@
+<div class="header d-flex justify-content-between align-items-center">
+    <a routerLink="/">
+        <svg viewBox="0 0 804.5714285714286 1024" class="plus-icon">
+            <path
+                d="M804.571 420.571v109.714c0 30.286-24.571 54.857-54.857 54.857h-237.714v237.714c0 30.286-24.571 54.857-54.857 54.857h-109.714c-30.286 0-54.857-24.571-54.857-54.857v-237.714h-237.714c-30.286 0-54.857-24.571-54.857-54.857v-109.714c0-30.286 24.571-54.857 54.857-54.857h237.714v-237.714c0-30.286 24.571-54.857 54.857-54.857h109.714c30.286 0 54.857 24.571 54.857 54.857v237.714h237.714c30.286 0 54.857 24.571 54.857 54.857z">
+            </path>
+        </svg>
+    </a>
+    <div class="d-flex flex-row gap-2">
+        <!-- Master Supervisor buttons -->
+        <button class="btn btn-light" *ngIf="authService.isAuthenticated() && authService.hasRole(roles.MASTER_SUPERVISOR)"
+            routerLink="/master-supervisor-view">
+            Сторінка головного керівника
+        </button>
+
+        <!-- Supervisor buttons -->
+        <button class="btn btn-light" *ngIf="authService.isAuthenticated() && authService.hasRole(roles.SUPERVISOR)"
+            routerLink="/supervisor-view">
+            Сторінка керівника
+        </button>
+
+        <!-- Reciptionist buttons -->
+        <button class="btn btn-light" *ngIf="authService.isAuthenticated() && authService.hasRole(roles.RECEPTIONIST)"
+            routerLink="/reciptionist-page">
+            Сторінка рецепціоніста
+        </button>
+
+        <br>
+
+        <!-- All not logged in user buttons -->
+        <button class="btn btn-light" *ngIf="!authService.isAuthenticated()"
+            routerLink="/register">Зареєструватись</button>
+        <button class="btn btn-light" *ngIf="!authService.isAuthenticated()" routerLink="/login">Увійти</button>
+
+        <!-- All logged in user buttons -->
+        <button class="btn btn-light" *ngIf="authService.isAuthenticated()" routerLink="/personal-page">Особиста
+            сторінка</button>
+        <button class="btn btn-light" *ngIf="authService.isAuthenticated()" (click)="authService.logout()"
+            routerLink="/">Вийти</button>
+    </div>
+</div>
 <router-outlet></router-outlet>

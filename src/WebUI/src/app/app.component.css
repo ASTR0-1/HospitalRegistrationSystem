@@ -2,3 +2,20 @@ p {
     font-family: arial;
 }
 
+.header {
+    background-color: #fff;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.plus-icon {
+    width: 30px;
+    height: 30px;
+    fill: red;
+    cursor: pointer;
+}
+
+.btn {
+    border: 1px solid #7C99AC;
+}

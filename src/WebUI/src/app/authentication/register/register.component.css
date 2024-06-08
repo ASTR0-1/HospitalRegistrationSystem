@@ -2,7 +2,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    height: 85vh;
     margin: 0;
 
     color: #7C99AC;
@@ -10,7 +10,7 @@
 
 .register-block {
     width: 25%;
-    height: 95vh;
+    height: 85vh;
     background: #FFFFFF;
     border-radius: 20px;
     margin: auto;
@@ -19,7 +19,7 @@
 .input-block {
     width: 100%;
     font-weight: 600;
-    font-size: 20px !important;
+    font-size: 14px !important;
 }
 
 .input-block>div {
@@ -29,7 +29,7 @@
 }
 
 input, .form-select {
-    font-size: 18px;
+    font-size: 14px;
     width: 12vw;
     height: 5vh;
     border: 1px solid #7C99AC;
@@ -38,7 +38,7 @@ input, .form-select {
 .btn {
     background-color: #7C99AC;
     color: white;
-    font-size: 18px;
+    font-size: 16px;
 }
 
 .error-container {

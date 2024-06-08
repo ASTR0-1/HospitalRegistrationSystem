@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { map, share, Subscription, timer } from 'rxjs';
+import { AuthenticationService } from './services/authentication.service';
+import { Roles } from './constants/role.constants';
 
 @Component({
 	selector: 'app-root',
@@ -7,25 +8,13 @@ import { map, share, Subscription, timer } from 'rxjs';
 	styleUrls: ['./app.component.css'],
 })
 export class AppComponent implements OnInit {
-	rxTime = new Date();
-	intervalId: any;
-	subscription!: Subscription;
+	readonly roles = Roles;
 
+	constructor(public authService: AuthenticationService) { }
+	
 	ngOnInit() {
-		this.subscription = timer(0, 1000)
-			.pipe(
-				map(() => new Date()),
-				share()
-			)
-			.subscribe((time) => {
-				this.rxTime = time;
-			});
 	}
 
 	ngOnDestroy() {
-		clearInterval(this.intervalId);
-		if (this.subscription) {
-			this.subscription.unsubscribe();
-		}
 	}
 }
