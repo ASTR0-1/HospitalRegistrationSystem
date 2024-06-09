@@ -12,7 +12,10 @@ import { AuthenticationService } from '../services/authentication.service';
 	providedIn: 'root',
 })
 export class RoleGuard {
-	constructor(private router: Router, private authService: AuthenticationService) {}
+	constructor(
+		private router: Router,
+		private authService: AuthenticationService
+	) {}
 
 	canActivate(
 		next: ActivatedRouteSnapshot,
@@ -22,8 +25,12 @@ export class RoleGuard {
 		| Promise<boolean | UrlTree>
 		| boolean
 		| UrlTree {
-		const expectedRole = next.data['expectedRole'];
-		const isInRole = this.authService.hasRole(expectedRole);
+			
+		const expectedRoles: string[] = next.data['expectedRole'];
+
+		const isInRole = expectedRoles.some((role: string) =>
+			this.authService.hasRole(role)
+		);
 
 		if (!isInRole) {
 			this.router.navigate(['/']);

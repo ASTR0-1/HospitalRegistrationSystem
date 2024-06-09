@@ -114,6 +114,18 @@ export class AuthenticationService {
 		return roles.includes(role);
 	}
 
+	public getHospitalId(): string | null {
+		const token = this.getAuthToken();
+		if (!token) {
+			return null;
+		}
+	
+		const decodedToken = jwtDecode(token) as any;
+		const hospitalId = decodedToken['hospitalId'];
+	
+		return hospitalId;
+	}
+
 	private processSucceedAuth(response: any) {
 		const token = response.token.accessToken;
 		const refreshToken = response.token.refreshToken;

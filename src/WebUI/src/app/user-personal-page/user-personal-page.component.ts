@@ -3,6 +3,7 @@ import { ApplicationUserDto } from '../entities/applicationUser/applicationUserD
 import { UserService } from '../services/user.service';
 import { AuthenticationService } from '../services/authentication.service';
 import { Roles } from '../constants/role.constants';
+import { Router } from '@angular/router';
 
 @Component({
 	selector: 'app-user-personal-page',
@@ -21,7 +22,8 @@ export class UserPersonalPageComponent implements OnInit {
 
 	constructor(
 		private userService: UserService,
-		private authenticatonService: AuthenticationService
+		private authenticatonService: AuthenticationService,
+		private router: Router
 	) {}
 
 	ngOnInit(): void {
@@ -81,8 +83,7 @@ export class UserPersonalPageComponent implements OnInit {
 	}
 
 	viewAppointments() {
-		// Navigate to appointments page logic here
-		console.log('Navigating to appointments');
+		this.router.navigate(['/scheduled-appointments']);
 	}
 
 	userIsDoctor(): boolean {

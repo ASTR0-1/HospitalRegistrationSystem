@@ -1,61 +1,79 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { AppointmentForCreation } from '../entities/appointmentForCreation';
+import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
+import { Observable } from 'rxjs';
+import { AppointmentForCreationDto } from '../entities/appointment/appointmentForCreationDto';
+import { AppointmentDto } from '../entities/appointment/appointmentDto';
 
-@Injectable()
+@Injectable({
+	providedIn: 'root',
+})
 export class AppointmentService {
-	readonly uri: string = `${environment.apiUrl}/api/appointments`;
+	readonly url: string = `${environment.apiUrl}/appointments`;
 
 	constructor(private http: HttpClient) {}
 
-	getClientAppointments(pageNumber: number, clientId: number) {
-		const params = new HttpParams().set(
-			'PageNumber',
-			pageNumber.toString()
-		);
+	addNew(appointment: AppointmentForCreationDto): Observable<any> {
+		return this.http.post(`${this.url}/addNew`, appointment);
+	}
 
-		return this.http.get(this.uri + '/client' + `/${clientId}`, {
+	get(appointmentId: number): Observable<any> {
+		return this.http.get(`${this.url}/${appointmentId}`);
+	}
+
+	getIncomingByUserId(
+		paging: any,
+		userId: number
+	): Observable<HttpResponse<AppointmentDto[]>> {
+		let params = new HttpParams()
+			.set('pageNumber', paging.pageNumber.toString())
+			.set('pageSize', paging.pageSize.toString());
+
+		return this.http.get<AppointmentDto[]>(
+			`${this.url}/incoming/${userId}`,
+			{
+				params,
+				observe: 'response',
+			}
+		);
+	}
+
+	getAllByUserId(
+		paging: any,
+		userId: number
+	): Observable<HttpResponse<AppointmentDto[]>> {
+		return this.http.get<AppointmentDto[]>(`${this.url}/all/${userId}`, {
+			params: paging,
 			observe: 'response',
-			params,
 		});
 	}
 
-	getDoctorAppointments(pageNumber: number, doctorId: number) {
-		const params = new HttpParams().set(
-			'PageNumber',
-			pageNumber.toString()
-		);
-
-		return this.http.get(this.uri + '/doctor' + `/${doctorId}`, {
+	getMissedByUserId(
+		paging: any,
+		userId: number
+	): Observable<HttpResponse<AppointmentDto[]>> {
+		return this.http.get<AppointmentDto[]>(`${this.url}/missed/${userId}`, {
+			params: paging,
 			observe: 'response',
-			params,
 		});
 	}
 
-	getClientVisitedAppointments(pageNumber: number, clientId: number) {
-		const params = new HttpParams().set(
-			'PageNumber',
-			pageNumber.toString()
-		);
-
-		return this.http.get(
-			this.uri + '/client' + `/${clientId}` + '/visited',
-			{ observe: 'response', params }
+	getVisitedByUserId(
+		paging: any,
+		userId: number
+	): Observable<HttpResponse<AppointmentDto[]>> {
+		return this.http.get<AppointmentDto[]>(
+			`${this.url}/visited/${userId}`,
+			{
+				params: paging,
+				observe: 'response',
+			}
 		);
 	}
 
-	postAppointment(appointment: AppointmentForCreation) {
-		return this.http.post(this.uri, appointment);
-	}
-
-	putAppointment(appointmentId: number, diagnosis: string) {
-		return this.http.put(
-			this.uri +
-				`/${appointmentId}` +
-				'/markAsVisited' +
-				`?diagnosis=${diagnosis}`,
-			null
-		);
+	markAsVisited(appointmentId: number, diagnosis: string): Observable<any> {
+		return this.http.put(`${this.url}/markAsVisited/${appointmentId}`, {
+			diagnosis,
+		});
 	}
 }

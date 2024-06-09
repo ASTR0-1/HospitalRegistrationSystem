@@ -9,14 +9,14 @@
     <div class="d-flex flex-row gap-2">
         <!-- Master Supervisor buttons -->
         <button class="btn btn-light" *ngIf="authService.isAuthenticated() && authService.hasRole(roles.MASTER_SUPERVISOR)"
-            routerLink="/master-supervisor-view">
-            Сторінка головного керівника
+            routerLink="/hospital-management">
+            Керування лікарнями
         </button>
 
         <!-- Supervisor buttons -->
         <button class="btn btn-light" *ngIf="authService.isAuthenticated() && authService.hasRole(roles.SUPERVISOR)"
-            routerLink="/supervisor-view">
-            Сторінка керівника
+            routerLink="/user-management">
+            Керування лікарнею
         </button>
 
         <!-- Reciptionist buttons -->

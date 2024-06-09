@@ -35,7 +35,6 @@ export class HomeComponent implements OnInit {
 			pageSize: this.pageSize,
 		};
 
-		console.log(this.searchQuery)
 		this.hospitalService.getAllHospitals(paging, this.searchQuery).subscribe((result) => {
 			this.hospitals = result.body as HospitalDto[];
 

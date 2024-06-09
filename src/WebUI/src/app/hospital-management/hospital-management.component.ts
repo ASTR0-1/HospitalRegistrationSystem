@@ -6,6 +6,7 @@ import { HospitalService } from '../services/hospital.service';
 import { HospitalDto } from '../entities/hospital/hospitalDto';
 import { PagingParameters } from '../entities/utility/pagingParameters';
 import { AddHospitalDialogComponent } from './add-hospital-dialog/add-hospital-dialog.component';
+import { Router } from '@angular/router';
 
 @Component({
 	selector: 'app-hospital-management',
@@ -29,7 +30,8 @@ export class HospitalManagementComponent implements OnInit {
 
 	constructor(
 		private hospitalService: HospitalService,
-		public dialog: MatDialog
+		public dialog: MatDialog,
+		private router: Router
 	) {}
 
 	ngOnInit(): void {
@@ -47,6 +49,7 @@ export class HospitalManagementComponent implements OnInit {
 				const paginationData = JSON.parse(
 					response.headers.get('X-Pagination')!
 				);
+				
 				this.paginator!.length = paginationData.totalCount;
 				this.paginator!.pageIndex = paginationData.currentPage - 1;
 				this.paginator!.pageSize = paginationData.pageSize;
@@ -56,6 +59,10 @@ export class HospitalManagementComponent implements OnInit {
 	onPageChange(event: any): void {
 		this.fetchHospitals(event.pageIndex + 1, event.pageSize);
 	}
+
+	navigateToUserManagement(hospitalId: number): void {
+        this.router.navigate(['/user-management'], { queryParams: { hospitalId } });
+    }
 
 	openAddDialog(): void {
 		const dialogRef = this.dialog.open(AddHospitalDialogComponent, {
