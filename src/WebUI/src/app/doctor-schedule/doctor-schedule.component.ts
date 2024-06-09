@@ -90,7 +90,7 @@ export class DoctorScheduleComponent implements OnInit {
   }
 
   isScheduled(day: Date, hour: number): boolean {
-    const dateStr = day.toISOString().split('T')[0];
+    const dateStr = this.toLocalISOString(day).split('T')[0];
     return this.schedule[dateStr]?.includes(hour) || false;
   }
 
@@ -99,7 +99,7 @@ export class DoctorScheduleComponent implements OnInit {
   }
 
   toggleSchedule(day: Date, hour: number): void {
-    const dateStr = day.toISOString().split('T')[0];
+    const dateStr = this.toLocalISOString(day).split('T')[0];
     if (!this.schedule[dateStr]) {
       this.schedule[dateStr] = [];
     }
@@ -131,5 +131,22 @@ export class DoctorScheduleComponent implements OnInit {
         this.doctorScheduleService.createDoctorSchedule(scheduleDto).subscribe();
       }
     }
+  }
+
+  toLocalISOString(date: Date): string {
+    const tzo = -date.getTimezoneOffset(),
+      dif = tzo >= 0 ? '+' : '-',
+      pad = function(num: number) {
+        const norm = Math.floor(Math.abs(num));
+        return (norm < 10 ? '0' : '') + norm;
+      };
+    return date.getFullYear() +
+      '-' + pad(date.getMonth() + 1) +
+      '-' + pad(date.getDate()) +
+      'T' + pad(date.getHours()) +
+      ':' + pad(date.getMinutes()) +
+      ':' + pad(date.getSeconds()) +
+      dif + pad(tzo / 60) +
+      ':' + pad(tzo % 60);
   }
 }
