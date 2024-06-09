@@ -1,0 +1,23 @@
+<div class="bg-wrapper d-flex flex-row align-items-center">
+    <div class="container d-flex flex-column justify-content-center rounded mt-4">
+        <h2>Заплановані прийоми</h2>
+        <hr class="border">
+        <div class="appointments-container row">
+            <div class="appointment-card col-sm-12 col-md-6 col-lg-3" *ngFor="let appointment of appointments">
+                <div class="card mb-1">
+                    <div class="card-body">
+                        <p class="card-text"><strong>Дата:</strong> {{ appointment.visitTime | date:'medium' }}</p>
+                        <p class="card-text"><strong>Доктор:</strong> {{ appointment.doctor.firstName }} {{
+                            appointment.doctor.lastName }}</p>
+                        <p class="card-text"><strong>Спеціальність:</strong> {{ appointment.doctor.specialty }}</p>
+                        <p class="card-text"><strong>Вартість прийому:</strong> {{ appointment.doctor.visitCost | currency:'UAH' }}</p>
+                        <p class="card-text"><strong>ID Лікарні:</strong> {{ appointment.doctor.hospitalId }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <mat-paginator class="border rounded" [length]="totalAppointments" [pageSize]="pageSize" [pageIndex]="pageIndex"
+            (page)="fetchAppointments($event)">
+        </mat-paginator>
+    </div>
+</div>
