@@ -71,10 +71,6 @@ export class UserPersonalPageComponent implements OnInit {
 		}
 	}
 
-	redirectToDoctorSchedule() {
-		this.router.navigate(['/doctor-schedule']);
-	}
-
 	saveUser() {
 		this.userService.updateUser(this.user).subscribe({
 			next: () => {
@@ -84,6 +80,14 @@ export class UserPersonalPageComponent implements OnInit {
 				console.error('Error updating user information', error);
 			},
 		});
+	}
+
+	redirectToDoctorSchedule() {
+		this.router.navigate(['/doctor-schedule']);
+	}
+
+	viewVisitedAppointments() {
+		this.router.navigate(['/visited-appointments']);
 	}
 
 	viewAppointments() {

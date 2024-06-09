@@ -38,6 +38,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { registerLocaleData } from '@angular/common';
 import localeUk from '@angular/common/locales/uk';
+import { VisitedAppointmentsComponent } from './visited-appointments/visited-appointments.component';
 
 registerLocaleData(localeUk);
 
@@ -47,6 +48,7 @@ const appRoutes: Routes = [
 	{ path: 'register', component: RegisterComponent },
 	{ path: 'personal-page', component: UserPersonalPageComponent, canActivate: [AuthGuard] },
 	{ path: 'scheduled-appointments', component: ScheduledAppointmentsComponent, canActivate: [AuthGuard] },
+	{ path: 'visited-appointments', component: VisitedAppointmentsComponent, canActivate: [AuthGuard] },
 	{ path: 'hospital-management', component: HospitalManagementComponent, canActivate: [AuthGuard, RoleGuard], data: { expectedRole: [Roles.MASTER_SUPERVISOR] } },
 	{ path: 'user-management', component: UserManagementComponent, canActivate: [AuthGuard, RoleGuard], data: { expectedRole: [Roles.MASTER_SUPERVISOR, Roles.SUPERVISOR] } },
 	{ path: 'doctor-schedule', component: DoctorScheduleComponent},
@@ -85,6 +87,7 @@ const appRoutes: Routes = [
 		DoctorScheduleComponent,
 
 		ScheduledAppointmentsComponent,
+		VisitedAppointmentsComponent,
 		
 		HospitalManagementComponent,
 		AddHospitalDialogComponent,

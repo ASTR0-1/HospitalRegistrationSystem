@@ -6,11 +6,11 @@ import { AuthenticationService } from '../services/authentication.service';
 import { Roles } from '../constants/role.constants';
 
 @Component({
-	selector: 'app-scheduled-appointments',
-	templateUrl: './scheduled-appointments.component.html',
-	styleUrls: ['./scheduled-appointments.component.css'],
+	selector: 'app-visited-appointments',
+	templateUrl: './visited-appointments.component.html',
+	styleUrls: ['./visited-appointments.component.css'],
 })
-export class ScheduledAppointmentsComponent implements OnInit {
+export class VisitedAppointmentsComponent implements OnInit {
 	appointments: AppointmentDto[] = [];
 	totalAppointments = 0;
 	pageSize = 8;
@@ -46,9 +46,13 @@ export class ScheduledAppointmentsComponent implements OnInit {
 		};
 
 		this.appointmentService
-			.getIncomingByUserId(pagingParameters, +this.userId)
+			.getVisitedByUserId(pagingParameters, +this.userId)
 			.subscribe((response) => {
 				this.appointments = response.body!;
+        for (let i = 0; i < 7; i++) {
+              this.appointments.push(this.appointments[0]);
+        }
+        
 				const paginationData = JSON.parse(
 					response.headers.get('X-Pagination')!
 				);
