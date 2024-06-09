@@ -25,7 +25,8 @@ public class AppointmentRepository : RepositoryBase<Appointment>, IAppointmentRe
     /// <inheritdoc/>
     public Task<PagedList<Appointment>> GetIncomingAppointmentsByUserIdAsync(PagingParameters paging, int userId, bool trackChanges = false)
     {
-        var appointments = FindByCondition(a => a.ApplicationUsers.Any(u => u.Id == userId)
+        var appointments = FindByCondition(a => a.ApplicationUsers.FirstOrDefault() != null
+                                                && a.ApplicationUsers.FirstOrDefault()!.Id == userId
                                                 && a.VisitTime > DateTime.Now
                 , trackChanges
                 , a => a.ApplicationUsers)
