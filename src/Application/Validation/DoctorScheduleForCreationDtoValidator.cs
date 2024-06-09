@@ -16,9 +16,5 @@ public class DoctorScheduleForCreationDtoValidator : AbstractValidator<DoctorSch
             .NotEmpty()
             .GreaterThanOrEqualTo(DateOnly.FromDateTime(DateTime.Now.Date))
             .WithMessage("Date is required and must be greater than or equal to today");
-
-        RuleFor(x => x.WorkingHoursList)
-            .NotEmpty()
-            .WithMessage("WorkingHoursList is required");
     }
 }
