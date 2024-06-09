@@ -33,8 +33,8 @@
             <div>
                 <p class="px-3 m-1">Стать</p>
                 <select class="form-select" name="gender" [(ngModel)]="user.gender" required #gender="ngModel">
-                    <option value="Male">Чоловіча</option>
-                    <option value="Female">Жіноча</option>
+                    <option value="Чоловіча">Чоловіча</option>
+                    <option value="Жіноча">Жіноча</option>
                 </select>
                 <div class="error-container">
                     <p class="alert-danger p-1 rounded" *ngIf="gender.invalid && gender.touched">
