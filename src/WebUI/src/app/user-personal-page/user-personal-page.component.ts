@@ -71,6 +71,10 @@ export class UserPersonalPageComponent implements OnInit {
 		}
 	}
 
+	redirectToDoctorSchedule() {
+		this.router.navigate(['/doctor-schedule']);
+	}
+
 	saveUser() {
 		this.userService.updateUser(this.user).subscribe({
 			next: () => {

@@ -1,4 +1,4 @@
-import { NgModule, inject } from '@angular/core';
+import { NgModule, LOCALE_ID } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { Routes, RouterModule } from '@angular/router';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
@@ -18,6 +18,11 @@ import { RegisterComponent } from './authentication/register/register.component'
 import { UserPersonalPageComponent } from './user-personal-page/user-personal-page.component';
 import { HospitalManagementComponent } from './hospital-management/hospital-management.component';
 import { AddHospitalDialogComponent } from './hospital-management/add-hospital-dialog/add-hospital-dialog.component';
+import { UserManagementComponent } from './user-management/user-management.component';
+import { UpdateUserDialogComponent } from './user-management/update-user-dialog/update-user-dialog.component';
+import { AssignEmployeeDialogComponent } from './user-management/assign-employee-dialog/assign-employee-dialog.component';
+import { ScheduledAppointmentsComponent } from './scheduled-appointments/scheduled-appointments.component';
+import { DoctorScheduleComponent } from './doctor-schedule/doctor-schedule.component';
 
 import { AuthInterceptor } from './interceptors/auth.interceptor';
 import { AuthGuard } from './guards/auth.guard';
@@ -27,10 +32,14 @@ import { RoleGuard } from './guards/role.guard';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSortModule } from '@angular/material/sort';
 import { MatSelectModule } from '@angular/material/select';
-import { UserManagementComponent } from './user-management/user-management.component';
-import { UpdateUserDialogComponent } from './user-management/update-user-dialog/update-user-dialog.component';
-import { AssignEmployeeDialogComponent } from './user-management/assign-employee-dialog/assign-employee-dialog.component';
-import { ScheduledAppointmentsComponent } from './scheduled-appointments/scheduled-appointments.component';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+
+import { registerLocaleData } from '@angular/common';
+import localeUk from '@angular/common/locales/uk';
+
+registerLocaleData(localeUk);
 
 const appRoutes: Routes = [
 	{ path: '', component: HomeComponent },
@@ -40,6 +49,7 @@ const appRoutes: Routes = [
 	{ path: 'scheduled-appointments', component: ScheduledAppointmentsComponent, canActivate: [AuthGuard] },
 	{ path: 'hospital-management', component: HospitalManagementComponent, canActivate: [AuthGuard, RoleGuard], data: { expectedRole: [Roles.MASTER_SUPERVISOR] } },
 	{ path: 'user-management', component: UserManagementComponent, canActivate: [AuthGuard, RoleGuard], data: { expectedRole: [Roles.MASTER_SUPERVISOR, Roles.SUPERVISOR] } },
+	{ path: 'doctor-schedule', component: DoctorScheduleComponent},
 	{ path: '**', component: NotFoundComponent },
 ];
 
@@ -52,6 +62,9 @@ const appRoutes: Routes = [
 		HttpClientModule,
 		MatTableModule,
 		MatDialogModule,
+		MatDatepickerModule,
+		MatNativeDateModule,
+		MatSnackBarModule,
 		MatInputModule,
 		MatPaginatorModule,
 		MatSortModule,
@@ -69,6 +82,8 @@ const appRoutes: Routes = [
 		
 		UserPersonalPageComponent,
 
+		DoctorScheduleComponent,
+
 		ScheduledAppointmentsComponent,
 		
 		HospitalManagementComponent,
@@ -81,6 +96,7 @@ const appRoutes: Routes = [
 	bootstrap: [AppComponent],
 	providers: [
 		{ provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+		{ provide: LOCALE_ID, useValue: 'uk' }
 	],
 })
 export class AppModule {}

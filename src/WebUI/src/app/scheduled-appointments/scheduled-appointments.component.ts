@@ -16,6 +16,7 @@ export class ScheduledAppointmentsComponent implements OnInit {
 	pageSize = 8;
 	pageIndex = 0;
 	userId!: string;
+	currentUserId: number = +localStorage.getItem('userId')!;
 
 	constructor(
 		private appointmentService: AppointmentService,
@@ -27,9 +28,9 @@ export class ScheduledAppointmentsComponent implements OnInit {
 			const queryParams = new URLSearchParams(window.location.search);
 			this.userId = queryParams.get('userId') || localStorage.getItem('userId') || '';
 		}
-    else {
-      this.userId = localStorage.getItem('userId') || '';
-    }
+		else {
+		this.userId = localStorage.getItem('userId') || '';
+		}
 
 		this.fetchAppointments();
 	}

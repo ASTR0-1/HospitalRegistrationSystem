@@ -1,0 +1,18 @@
+<div class="calendar-container">
+    <div class="header d-flex flex-row gap-2">
+        <button class="btn btn-sm btn-secondary" [disabled]="isInitialWeek()" (click)="previousWeek()">Попередній тиждень</button>
+        <h4>Розклад. Дата: {{ currentDate | date: 'fullDate' }}</h4>
+        <button class="btn btn-sm btn-secondary" (click)="nextWeek()">Наступний тиждень</button>
+    </div>
+    <div class="calendar">
+        <div class="day" *ngFor="let day of weekDays">
+            <h4>{{ day | date: 'EEEE, MMM d' }}</h4>
+            <div class="hour" *ngFor="let hour of hours" [class.selected]="isScheduled(day, hour)"
+            (click)="isDoctor() ? toggleSchedule(day, hour) : null">
+                {{ hour }}:00
+            </div>
+        </div>
+    </div>
+    <br/>
+    <button class="btn btn-success" *ngIf="isDoctor()" (click)="saveSchedule()">Зберегти зміни</button>
+</div>
