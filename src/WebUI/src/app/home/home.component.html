@@ -1,10 +1,10 @@
 <div class="home-container d-flex justify-content-center align-items-center">
-	<div class="card-container gap-3 d-flex flex-column justify-content-center">
+	<div class="card-container gap-3 d-flex flex-column">
 		<div class="search-bar d-flex justify-content-center align-items-center">
 			<input type="text" class="form-control" placeholder="Пошук лікарень" [(ngModel)]="searchQuery" (keyup.enter)="loadHospitals()">
 		</div>
 		<div class="d-flex justify-content-between align-items-center gap-1">
-			<button class="btn btn-arrow carousel-button" (click)="prevPage()" [disabled]="!hasPrevious">&#10094;</button>
+			<button class="btn btn-arrow carousel-button carousel-button-left" (click)="prevPage()" [disabled]="!hasPrevious">&#10094;</button>
 			<div class="card-wrapper d-flex justify-content-center">
 				<div class="card" *ngFor="let hospital of hospitals">
 					<div class="card-body">
@@ -14,11 +14,11 @@
 						<p class="card-text">Адреса: {{hospital.street}}</p>
 					</div>
 					<div class="card-footer">
-						<button class="btn btn-outline-primary">Переглянути</button>
+						<button class="btn btn-outline-primary" (click)="viewDoctors(hospital.id)">Переглянути</button>
 					</div>
 				</div>
 			</div>
-			<button class="btn btn-arrow carousel-button" (click)="nextPage()" [disabled]="!hasNext">&#10095;</button>
+			<button class="btn btn-arrow carousel-button carousel-button-right" (click)="nextPage()" [disabled]="!hasNext">&#10095;</button>
 		</div>
 	</div>
 </div>

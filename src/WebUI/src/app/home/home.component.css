@@ -1,6 +1,9 @@
 .home-container {
     padding: 20px;
     height: 90%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .search-bar {
@@ -8,7 +11,7 @@
 }
 
 .search-bar input {
-    width: 50%;
+    width: 20vw;
     padding: 10px;
     font-size: 16px;
 }
@@ -17,14 +20,21 @@
     background-color: #f8f9fa;
     padding: 20px;
     border-radius: 5px;
-    width: 70vw;
-    height: 50vh;
+    width: 60vw;
+    height: 45vh;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .card-wrapper {
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
+    position: relative;
+    width: 100%;
 }
 
 .card-body {
@@ -55,4 +65,16 @@
     font-size: 34px;
     background: none;
     cursor: pointer;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1;
+}
+
+.carousel-button-left {
+    left: 10px;
+}
+
+.carousel-button-right {
+    right: 10px;
 }

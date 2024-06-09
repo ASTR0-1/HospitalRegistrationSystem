@@ -16,7 +16,7 @@ export class HomeComponent implements OnInit {
 	pageSize: number = 6;
 	totalPages: number = 0;
 	hasNext: boolean = false;
-    hasPrevious: boolean = false;
+	hasPrevious: boolean = false;
 
 	searchQuery = '';
 
@@ -29,25 +29,31 @@ export class HomeComponent implements OnInit {
 		this.loadHospitals();
 	}
 
+	viewDoctors(hospitalId: number): void {
+		this.router.navigate(['/doctors-by-hospital', hospitalId]);
+	}
+
 	loadHospitals(): void {
 		const paging: PagingParameters = {
 			pageNumber: this.currentPage,
 			pageSize: this.pageSize,
 		};
 
-		this.hospitalService.getAllHospitals(paging, this.searchQuery).subscribe((result) => {
-			this.hospitals = result.body as HospitalDto[];
+		this.hospitalService
+			.getAllHospitals(paging, this.searchQuery)
+			.subscribe((result) => {
+				this.hospitals = result.body as HospitalDto[];
 
-			const paginationData = JSON.parse(
-				result.headers.get('X-Pagination')!
-			);
+				const paginationData = JSON.parse(
+					result.headers.get('X-Pagination')!
+				);
 
-			this.totalPages = paginationData.totalPages;
-			this.currentPage = paginationData.currentPage;
-			this.pageSize = paginationData.pageSize;
-			this.hasNext = paginationData.hasNext;
-        	this.hasPrevious = paginationData.hasPrevious;
-		});
+				this.totalPages = paginationData.totalPages;
+				this.currentPage = paginationData.currentPage;
+				this.pageSize = paginationData.pageSize;
+				this.hasNext = paginationData.hasNext;
+				this.hasPrevious = paginationData.hasPrevious;
+			});
 	}
 
 	nextPage(): void {
