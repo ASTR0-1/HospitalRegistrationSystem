@@ -27,7 +27,7 @@ public class CurrentUserService : ICurrentUserService
     public int? GetApplicationUserHospitalId()
     {
         var canParse = int.TryParse(_user.FindFirstValue("HospitalId")!, out var hospitalId);
-        if (canParse)
+        if (!canParse)
             return null;
 
         return hospitalId;
