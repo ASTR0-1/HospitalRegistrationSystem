@@ -49,10 +49,6 @@ export class VisitedAppointmentsComponent implements OnInit {
 			.getVisitedByUserId(pagingParameters, +this.userId)
 			.subscribe((response) => {
 				this.appointments = response.body!;
-        for (let i = 0; i < 7; i++) {
-              this.appointments.push(this.appointments[0]);
-        }
-        
 				const paginationData = JSON.parse(
 					response.headers.get('X-Pagination')!
 				);

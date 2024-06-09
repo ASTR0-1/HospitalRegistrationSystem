@@ -119,9 +119,9 @@ export class AuthenticationService {
 		if (!token) {
 			return null;
 		}
-	
+		
 		const decodedToken = jwtDecode(token) as any;
-		const hospitalId = decodedToken['hospitalId'];
+		const hospitalId = decodedToken['HospitalId'];
 	
 		return hospitalId;
 	}

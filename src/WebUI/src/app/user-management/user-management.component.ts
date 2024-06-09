@@ -64,6 +64,10 @@ export class UserManagementComponent implements OnInit {
 			hospitalId = parseInt(id);
 		}
 
+		if (this.selectedRole === Roles.CLIENT) {
+			hospitalId = undefined;
+		}
+
 		this.userService
 			.getAllByRole(
 				pagingParameters,
@@ -99,27 +103,31 @@ export class UserManagementComponent implements OnInit {
 
 	openAssignDialog(user?: ApplicationUserDto): void {
 		const dialogRef = this.dialog.open(AssignEmployeeDialogComponent, {
-		  width: '400px',
-		  data: user
+			width: '400px',
+			data: user,
 		});
 
-		dialogRef.afterClosed().subscribe(result => {
-		  if (result) {
-		    this.fetchUsers(this.paginator!.pageIndex, this.paginator!.pageSize);
-		  }
+		dialogRef.afterClosed().subscribe((result) => {
+			if (result) {
+				this.fetchUsers(
+					this.paginator!.pageIndex,
+					this.paginator!.pageSize
+				);
+			}
 		});
 	}
 
 	openUpdateDialog(user: ApplicationUserDto): void {
 		const dialogRef = this.dialog.open(UpdateUserDialogComponent, {
-		  width: '275px',
-		  data: user
+			width: '275px',
+			data: user,
 		});
 
-		dialogRef.afterClosed().subscribe(result => {
-		  if (result) {
-		    this.fetchUsers(this.paginator!.pageIndex, this.paginator!.pageSize);
-		  }
+		dialogRef.afterClosed().subscribe(() => {
+			this.fetchUsers(
+				this.paginator!.pageIndex,
+				this.paginator!.pageSize
+			);
 		});
 	}
 }

@@ -39,6 +39,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { registerLocaleData } from '@angular/common';
 import localeUk from '@angular/common/locales/uk';
 import { VisitedAppointmentsComponent } from './visited-appointments/visited-appointments.component';
+import { DoctorsByHospitalComponent } from './doctors-by-hospital/doctors-by-hospital.component';
 
 registerLocaleData(localeUk);
 
@@ -51,6 +52,7 @@ const appRoutes: Routes = [
 	{ path: 'visited-appointments', component: VisitedAppointmentsComponent, canActivate: [AuthGuard] },
 	{ path: 'hospital-management', component: HospitalManagementComponent, canActivate: [AuthGuard, RoleGuard], data: { expectedRole: [Roles.MASTER_SUPERVISOR] } },
 	{ path: 'user-management', component: UserManagementComponent, canActivate: [AuthGuard, RoleGuard], data: { expectedRole: [Roles.MASTER_SUPERVISOR, Roles.SUPERVISOR] } },
+	{ path: 'doctors-by-hospital/:id', component: DoctorsByHospitalComponent },
 	{ path: 'doctor-schedule', component: DoctorScheduleComponent},
 	{ path: '**', component: NotFoundComponent },
 ];
@@ -78,6 +80,8 @@ const appRoutes: Routes = [
 		AppComponent,
 		HomeComponent,
 		NotFoundComponent,
+
+		DoctorsByHospitalComponent,
 
 		LoginComponent,
 		RegisterComponent,

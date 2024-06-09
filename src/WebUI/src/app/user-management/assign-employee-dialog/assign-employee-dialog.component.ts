@@ -1,5 +1,10 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
+import {
+	FormBuilder,
+	FormGroup,
+	ValidationErrors,
+	Validators,
+} from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { UserService } from 'src/app/services/user.service';
 import { HospitalService } from 'src/app/services/hospital.service';
@@ -43,18 +48,24 @@ export class AssignEmployeeDialogComponent implements OnInit {
 	}
 
 	loadHospitals(): void {
-		const pagingParameters = { pageNumber: 1, pageSize: 50 };
+		const pagingParameters = { pageNumber: 1, pageSize: 100 };
 		this.hospitalService
 			.getAllHospitals(pagingParameters)
 			.subscribe((response) => {
 				this.hospitals = response.body!;
+
+				if (!this.authService.hasRole(Roles.MASTER_SUPERVISOR)) {
+					const hospitalId = +this.authService.getHospitalId()!;
+					this.assignForm.get('hospitalId')!.setValue(hospitalId);
+					this.assignForm.get('hospitalId')!.disable();
+				}
 			});
 	}
 
 	onSubmit(): void {
 		if (this.assignForm.valid) {
 			const { hospitalId, role, specialty, doctorPrice } =
-				this.assignForm.value;
+				this.assignForm.getRawValue();
 			this.userService
 				.assignEmployee(
 					this.data.id,
