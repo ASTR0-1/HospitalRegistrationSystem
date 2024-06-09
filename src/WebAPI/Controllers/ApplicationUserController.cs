@@ -157,16 +157,13 @@ public class ApplicationUserController : ControllerBase
     /// </summary>
     /// <param name="userId">The ID of the user to assign.</param>
     /// <param name="role">The role to assign.</param>
-    /// <param name="hospitalId">The ID of the hospital.</param>
-    /// <param name="specialty">The specialty of the employee (optional).</param>
-    /// <param name="doctorPrice">The doctor price for the Doctor role.</param>
+    /// <param name="assignEmployeeDto">The assign employee DTO with additional parameters.</param>
     /// <returns>The result of the assignment operation.</returns>
     [Authorize(Roles = $"{RoleConstants.MasterSupervisor},{RoleConstants.Supervisor}")]
     [HttpPost("{userId:int}/role/{role}")]
-    public async Task<IActionResult> AssignEmployee(int userId, string role, 
-        [Required] int hospitalId, string specialty, decimal doctorPrice)
+    public async Task<IActionResult> AssignEmployee(int userId, string role, AssignEmployeeDto assignEmployeeDto)
     {
-        var result = await _userService.AssignEmployeeAsync(userId, role, hospitalId, specialty, doctorPrice);
+        var result = await _userService.AssignEmployeeAsync(userId, role, assignEmployeeDto.HospitalId, assignEmployeeDto.Specialty, assignEmployeeDto.DoctorPrice);
 
         if (!result.IsSuccess)
         {
