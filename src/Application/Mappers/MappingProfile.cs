@@ -27,13 +27,7 @@ public class MappingProfile : Profile
 
         CreateMap<AppointmentForCreationDto, Appointment>();
 
-        CreateMap<Appointment, AppointmentDto>()
-            .ForMember(dest => dest.Doctor,
-                opt => opt.MapFrom(src =>
-                    src.ApplicationUsers.FirstOrDefault(u => u.Specialty != null)))
-            .ForMember(dest => dest.Client,
-                opt => opt.MapFrom(src =>
-                    src.ApplicationUsers.FirstOrDefault(u => u.Specialty == null)));
+        CreateMap<Appointment, AppointmentDto>();
 
         CreateMap<Country, CountryDto>()
             .ReverseMap();
