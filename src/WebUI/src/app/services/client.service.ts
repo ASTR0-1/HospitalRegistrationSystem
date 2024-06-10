@@ -5,27 +5,28 @@ import { ClientForCreation } from 'src/app/entities/clientForCreation';
 
 @Injectable()
 export class ClientService {
-    readonly uri: string = 'https://localhost:7247/api/clients';
+	readonly uri: string = 'https://localhost:7247/api/clients';
 
-    constructor(private http: HttpClient) { }
+	constructor(private http: HttpClient) {}
 
-    getClients(pageNumber: number) {
-        const params = new HttpParams()
-            .set("PageNumber", pageNumber.toString());
+	getClients(pageNumber: number) {
+		const params = new HttpParams().set(
+			'PageNumber',
+			pageNumber.toString(),
+		);
 
-        return this.http.get(this.uri, {observe: 'response', params});
-    }
+		return this.http.get(this.uri, { observe: 'response', params });
+	}
 
-    searchClients(pageNumber: number, searchString: string) {
-        const params = new HttpParams()
-            .set("PageNumber", pageNumber.toString())
-            .set("SearchString", searchString);
+	searchClients(pageNumber: number, searchString: string) {
+		const params = new HttpParams()
+			.set('PageNumber', pageNumber.toString())
+			.set('SearchString', searchString);
 
-         return this.http.get(this.uri, {observe: 'response', params});
-    }
+		return this.http.get(this.uri, { observe: 'response', params });
+	}
 
-    postClient(client: ClientForCreation) {
-        
-        return this.http.post(this.uri, client);        
-    }
+	postClient(client: ClientForCreation) {
+		return this.http.post(this.uri, client);
+	}
 }

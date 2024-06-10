@@ -1,28 +1,28 @@
 .mat-column-id {
-    max-width: 50px;
-    min-width: 50px;
-    width: 50px !important
+	max-width: 50px;
+	min-width: 50px;
+	width: 50px !important;
 }
 
 .mat-column-profilePhotoUrl {
-    max-width: 150px;
-    min-width: 150px;
-    width: 150px;
-    word-break: break-all;
+	max-width: 150px;
+	min-width: 150px;
+	width: 150px;
+	word-break: break-all;
 }
 
 .mat-column-actions {
-    max-width: 200px;
-    min-width: 200px;
-    width: 200px;
+	max-width: 200px;
+	min-width: 200px;
+	width: 200px;
 }
 
 .table-container {
-    width: 100%;
-    overflow: auto;
+	width: 100%;
+	overflow: auto;
 }
 
 mat-form-field {
-    width: 200px;
-    margin-right: 16px;
+	width: 200px;
+	margin-right: 16px;
 }

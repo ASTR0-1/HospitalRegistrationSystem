@@ -23,7 +23,7 @@ export class RegisterComponent {
 
 	constructor(
 		private router: Router,
-		private authenticationService: AuthenticationService
+		private authenticationService: AuthenticationService,
 	) {
 		this.isInvalidRegister$ = this.authenticationService.isInvalidRegister$;
 	}

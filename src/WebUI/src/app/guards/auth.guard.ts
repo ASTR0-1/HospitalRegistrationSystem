@@ -14,12 +14,12 @@ import { AuthenticationService } from '../services/authentication.service';
 export class AuthGuard {
 	constructor(
 		private authService: AuthenticationService,
-		private router: Router
+		private router: Router,
 	) {}
 
 	canActivate(
 		route: ActivatedRouteSnapshot,
-		state: RouterStateSnapshot
+		state: RouterStateSnapshot,
 	):
 		| Observable<boolean | UrlTree>
 		| Promise<boolean | UrlTree>

@@ -16,7 +16,7 @@ export class FeedbackService {
 
 	getAll(
 		parameters: PagingParameters,
-		userId: number
+		userId: number,
 	): Observable<FeedbackDto[]> {
 		let params = new HttpParams()
 			.set('pageNumber', parameters.pageNumber.toString())

@@ -13,133 +13,149 @@ import { UpdateUserDialogComponent } from './update-user-dialog/update-user-dial
 import { AssignEmployeeDialogComponent } from './assign-employee-dialog/assign-employee-dialog.component';
 
 @Component({
-  selector: 'app-user-management',
-  templateUrl: './user-management.component.html',
-  styleUrls: ['./user-management.component.css'],
+	selector: 'app-user-management',
+	templateUrl: './user-management.component.html',
+	styleUrls: ['./user-management.component.css'],
 })
 export class UserManagementComponent implements OnInit {
-  displayedColumns: string[] = [
-    'id',
-    'firstName',
-    'middleName',
-    'lastName',
-    'gender',
-    'specialty',
-    'hospitalId',
-    'actions',
-  ];
-  dataSource: MatTableDataSource<ApplicationUserDto> = new MatTableDataSource<ApplicationUserDto>();
-  totalUsers = 0;
-  pageSize = 25;
-  selectedRole = Roles.CLIENT;
-  searchQuery = '';
-  roles = Object.values(Roles);
+	displayedColumns: string[] = [
+		'id',
+		'firstName',
+		'middleName',
+		'lastName',
+		'gender',
+		'specialty',
+		'hospitalId',
+		'actions',
+	];
+	dataSource: MatTableDataSource<ApplicationUserDto> =
+		new MatTableDataSource<ApplicationUserDto>();
+	totalUsers = 0;
+	pageSize = 25;
+	selectedRole = Roles.CLIENT;
+	searchQuery = '';
+	roles = Object.values(Roles);
 
-  @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
+	@ViewChild(MatPaginator) paginator: MatPaginator | undefined;
 
-  constructor(
-    private userService: UserService,
-    private authService: AuthenticationService,
-    public dialog: MatDialog,
-    private route: ActivatedRoute
-  ) {}
+	constructor(
+		private userService: UserService,
+		private authService: AuthenticationService,
+		public dialog: MatDialog,
+		private route: ActivatedRoute,
+	) {}
 
-  ngOnInit(): void {
-    this.updateDisplayedColumns();
-    this.fetchUsers();
-  }
+	ngOnInit(): void {
+		this.updateDisplayedColumns();
+		this.fetchUsers();
+	}
 
-  updateDisplayedColumns(): void {
-    if (this.selectedRole === Roles.DOCTOR) {
-      this.displayedColumns = [
-        'id',
-        'firstName',
-        'middleName',
-        'lastName',
-        'gender',
-        'specialty',
-        'visitCost',
-        'totalServiceCost',
-        'hospitalId',
-        'actions',
-      ];
-    } else {
-      this.displayedColumns = [
-        'id',
-        'firstName',
-        'middleName',
-        'lastName',
-        'gender',
-        'specialty',
-        'hospitalId',
-        'actions',
-      ];
-    }
-  }
+	updateDisplayedColumns(): void {
+		if (this.selectedRole === Roles.DOCTOR) {
+			this.displayedColumns = [
+				'id',
+				'firstName',
+				'middleName',
+				'lastName',
+				'gender',
+				'specialty',
+				'visitCost',
+				'totalServiceCost',
+				'hospitalId',
+				'actions',
+			];
+		} else {
+			this.displayedColumns = [
+				'id',
+				'firstName',
+				'middleName',
+				'lastName',
+				'gender',
+				'specialty',
+				'hospitalId',
+				'actions',
+			];
+		}
+	}
 
-  fetchUsers(pageNumber: number = 1, pageSize: number = this.pageSize): void {
-    this.updateDisplayedColumns();
-    const pagingParameters: PagingParameters = { pageNumber, pageSize };
-    let hospitalId: number | undefined = this.getHospitalIdFromUrl();
+	fetchUsers(pageNumber: number = 1, pageSize: number = this.pageSize): void {
+		this.updateDisplayedColumns();
+		const pagingParameters: PagingParameters = { pageNumber, pageSize };
+		let hospitalId: number | undefined = this.getHospitalIdFromUrl();
 
-    if (!this.authService.hasRole(Roles.MASTER_SUPERVISOR)) {
-      let id = this.authService.getHospitalId();
-      if (id === null) {
-        throw new Error('Hospital ID is null');
-      }
+		if (!this.authService.hasRole(Roles.MASTER_SUPERVISOR)) {
+			let id = this.authService.getHospitalId();
+			if (id === null) {
+				throw new Error('Hospital ID is null');
+			}
 
-      hospitalId = parseInt(id);
-    }
+			hospitalId = parseInt(id);
+		}
 
-    if (this.selectedRole === Roles.CLIENT) {
-      hospitalId = undefined;
-    }
+		if (this.selectedRole === Roles.CLIENT) {
+			hospitalId = undefined;
+		}
 
-    this.userService.getAllByRole(pagingParameters, this.selectedRole, hospitalId, this.searchQuery).subscribe({
-      next: (response: HttpResponse<ApplicationUserDto[]>) => {
-        this.dataSource.data = response.body!;
-        const paginationData = JSON.parse(response.headers.get('X-Pagination')!);
-        this.totalUsers = paginationData.totalCount;
-        this.paginator!.length = paginationData.totalCount;
-        this.paginator!.pageIndex = paginationData.currentPage - 1;
-        this.paginator!.pageSize = paginationData.pageSize;
-      },
-    });
-  }
+		this.userService
+			.getAllByRole(
+				pagingParameters,
+				this.selectedRole,
+				hospitalId,
+				this.searchQuery,
+			)
+			.subscribe({
+				next: (response: HttpResponse<ApplicationUserDto[]>) => {
+					this.dataSource.data = response.body!;
+					const paginationData = JSON.parse(
+						response.headers.get('X-Pagination')!,
+					);
+					this.totalUsers = paginationData.totalCount;
+					this.paginator!.length = paginationData.totalCount;
+					this.paginator!.pageIndex = paginationData.currentPage - 1;
+					this.paginator!.pageSize = paginationData.pageSize;
+				},
+			});
+	}
 
-  private getHospitalIdFromUrl(): number | undefined {
-    if (!this.route.snapshot.queryParamMap.has('hospitalId')) {
-      return undefined;
-    }
+	private getHospitalIdFromUrl(): number | undefined {
+		if (!this.route.snapshot.queryParamMap.has('hospitalId')) {
+			return undefined;
+		}
 
-    return parseInt(this.route.snapshot.queryParamMap.get('hospitalId')!);
-  }
+		return parseInt(this.route.snapshot.queryParamMap.get('hospitalId')!);
+	}
 
-  onPageChange(event: any): void {
-    this.fetchUsers(event.pageIndex + 1, event.pageSize);
-  }
+	onPageChange(event: any): void {
+		this.fetchUsers(event.pageIndex + 1, event.pageSize);
+	}
 
-  openAssignDialog(user?: ApplicationUserDto): void {
-    const dialogRef = this.dialog.open(AssignEmployeeDialogComponent, {
-      width: '400px',
-      data: user,
-    });
+	openAssignDialog(user?: ApplicationUserDto): void {
+		const dialogRef = this.dialog.open(AssignEmployeeDialogComponent, {
+			width: '400px',
+			data: user,
+		});
 
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        this.fetchUsers(this.paginator!.pageIndex, this.paginator!.pageSize);
-      }
-    });
-  }
+		dialogRef.afterClosed().subscribe((result) => {
+			if (result) {
+				this.fetchUsers(
+					this.paginator!.pageIndex,
+					this.paginator!.pageSize,
+				);
+			}
+		});
+	}
 
-  openUpdateDialog(user: ApplicationUserDto): void {
-    const dialogRef = this.dialog.open(UpdateUserDialogComponent, {
-      width: '275px',
-      data: user,
-    });
+	openUpdateDialog(user: ApplicationUserDto): void {
+		const dialogRef = this.dialog.open(UpdateUserDialogComponent, {
+			width: '275px',
+			data: user,
+		});
 
-    dialogRef.afterClosed().subscribe(() => {
-      this.fetchUsers(this.paginator!.pageIndex, this.paginator!.pageSize);
-    });
-  }
+		dialogRef.afterClosed().subscribe(() => {
+			this.fetchUsers(
+				this.paginator!.pageIndex,
+				this.paginator!.pageSize,
+			);
+		});
+	}
 }

@@ -31,7 +31,7 @@ export class HospitalManagementComponent implements OnInit {
 	constructor(
 		private hospitalService: HospitalService,
 		public dialog: MatDialog,
-		private router: Router
+		private router: Router,
 	) {}
 
 	ngOnInit(): void {
@@ -47,9 +47,9 @@ export class HospitalManagementComponent implements OnInit {
 			.subscribe((response) => {
 				this.dataSource.data = response.body!;
 				const paginationData = JSON.parse(
-					response.headers.get('X-Pagination')!
+					response.headers.get('X-Pagination')!,
 				);
-				
+
 				this.paginator!.length = paginationData.totalCount;
 				this.paginator!.pageIndex = paginationData.currentPage - 1;
 				this.paginator!.pageSize = paginationData.pageSize;
@@ -61,8 +61,10 @@ export class HospitalManagementComponent implements OnInit {
 	}
 
 	navigateToUserManagement(hospitalId: number): void {
-        this.router.navigate(['/user-management'], { queryParams: { hospitalId } });
-    }
+		this.router.navigate(['/user-management'], {
+			queryParams: { hospitalId },
+		});
+	}
 
 	openAddDialog(): void {
 		const dialogRef = this.dialog.open(AddHospitalDialogComponent, {
@@ -74,7 +76,7 @@ export class HospitalManagementComponent implements OnInit {
 			if (result) {
 				this.fetchHospitals(
 					this.paginator!.getNumberOfPages(),
-					this.paginator!.pageSize
+					this.paginator!.pageSize,
 				);
 			}
 		});
@@ -84,7 +86,7 @@ export class HospitalManagementComponent implements OnInit {
 		this.hospitalService.deleteHospital(hospitalId).subscribe(() => {
 			this.fetchHospitals(
 				this.paginator!.getNumberOfPages(),
-				this.paginator!.pageSize
+				this.paginator!.pageSize,
 			);
 		});
 	}

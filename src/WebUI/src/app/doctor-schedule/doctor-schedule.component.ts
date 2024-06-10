@@ -29,7 +29,7 @@ export class DoctorScheduleComponent implements OnInit {
 		private authService: AuthenticationService,
 		private route: ActivatedRoute,
 		private dialog: MatDialog,
-		private appointmentService: AppointmentService
+		private appointmentService: AppointmentService,
 	) {}
 
 	ngOnInit(): void {
@@ -88,7 +88,7 @@ export class DoctorScheduleComponent implements OnInit {
 		startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay());
 		const startOfInitialWeek = new Date(this.initialDate);
 		startOfInitialWeek.setDate(
-			startOfInitialWeek.getDate() - startOfInitialWeek.getDay()
+			startOfInitialWeek.getDate() - startOfInitialWeek.getDay(),
 		);
 		return startOfWeek <= startOfInitialWeek;
 	}
@@ -131,19 +131,23 @@ export class DoctorScheduleComponent implements OnInit {
 				CreateAppointmentDialogComponent,
 				{
 					data: { day, hour },
-				}
+				},
 			);
 
 			dialogRef.afterClosed().subscribe((result) => {
 				if (result) {
 					const dateStr = this.toLocalISOString(day).split('T')[0];
-					const doctorId = this.route.snapshot.queryParams['doctorId'];
+					const doctorId =
+						this.route.snapshot.queryParams['doctorId'];
 					const clientId = +localStorage.getItem('userId')!;
 
 					const visitTime = new Date(dateStr);
-          			visitTime.setHours(hour, 0, 0, 0);
+					visitTime.setHours(hour, 0, 0, 0);
 
-					const localVisitTime = new Date(visitTime.getTime() - visitTime.getTimezoneOffset() * 60000);
+					const localVisitTime = new Date(
+						visitTime.getTime() -
+							visitTime.getTimezoneOffset() * 60000,
+					);
 
 					const appointment: AppointmentForCreationDto = {
 						visitTime: localVisitTime,
@@ -151,9 +155,11 @@ export class DoctorScheduleComponent implements OnInit {
 						clientId: clientId,
 					};
 
-					this.appointmentService.addNew(appointment).subscribe(() => {
-						this.loadSchedule();
-					});
+					this.appointmentService
+						.addNew(appointment)
+						.subscribe(() => {
+							this.loadSchedule();
+						});
 				}
 			});
 		}

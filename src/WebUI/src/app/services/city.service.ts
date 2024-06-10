@@ -6,28 +6,26 @@ import { CityDto } from '../entities/location/city/cityDto';
 import { PagingParameters } from '../entities/utility/pagingParameters';
 
 @Injectable({
-  providedIn: 'root',
+	providedIn: 'root',
 })
 export class CityService {
-  private readonly uri: string = `${environment.apiUrl}/cities`;
+	private readonly uri: string = `${environment.apiUrl}/cities`;
 
-  constructor(private http: HttpClient) {}
+	constructor(private http: HttpClient) {}
 
-  public getAllCities(
-    paging: PagingParameters,
-  ): Observable<CityDto[]> {
-    let params = {
-      pageNumber: String(paging.pageNumber),
-      pageSize: String(paging.pageSize),
-    };
+	public getAllCities(paging: PagingParameters): Observable<CityDto[]> {
+		let params = {
+			pageNumber: String(paging.pageNumber),
+			pageSize: String(paging.pageSize),
+		};
 
-    const headers = new HttpHeaders({
-      Accept: 'application/json',
-    });
+		const headers = new HttpHeaders({
+			Accept: 'application/json',
+		});
 
-    return this.http.get<CityDto[]>(this.uri, {
-      params,
-      headers,
-    });
-  }
+		return this.http.get<CityDto[]>(this.uri, {
+			params,
+			headers,
+		});
+	}
 }

@@ -23,7 +23,7 @@ export class AppointmentService {
 
 	getIncomingByUserId(
 		paging: any,
-		userId: number
+		userId: number,
 	): Observable<HttpResponse<AppointmentDto[]>> {
 		let params = new HttpParams()
 			.set('pageNumber', paging.pageNumber.toString())
@@ -34,13 +34,13 @@ export class AppointmentService {
 			{
 				params,
 				observe: 'response',
-			}
+			},
 		);
 	}
 
 	getAllByUserId(
 		paging: any,
-		userId: number
+		userId: number,
 	): Observable<HttpResponse<AppointmentDto[]>> {
 		return this.http.get<AppointmentDto[]>(`${this.url}/all/${userId}`, {
 			params: paging,
@@ -50,7 +50,7 @@ export class AppointmentService {
 
 	getMissedByUserId(
 		paging: any,
-		userId: number
+		userId: number,
 	): Observable<HttpResponse<AppointmentDto[]>> {
 		return this.http.get<AppointmentDto[]>(`${this.url}/missed/${userId}`, {
 			params: paging,
@@ -60,21 +60,25 @@ export class AppointmentService {
 
 	getVisitedByUserId(
 		paging: any,
-		userId: number
+		userId: number,
 	): Observable<HttpResponse<AppointmentDto[]>> {
 		return this.http.get<AppointmentDto[]>(
 			`${this.url}/visited/${userId}`,
 			{
 				params: paging,
 				observe: 'response',
-			}
+			},
 		);
 	}
 
 	markAsVisited(appointmentId: number, diagnosis: string): Observable<any> {
 		let params = new HttpParams().set('diagnosis', diagnosis);
-		return this.http.put(`${this.url}/${appointmentId}/markAsVisited`, null, {
-			params,
-		});
+		return this.http.put(
+			`${this.url}/${appointmentId}/markAsVisited`,
+			null,
+			{
+				params,
+			},
+		);
 	}
 }

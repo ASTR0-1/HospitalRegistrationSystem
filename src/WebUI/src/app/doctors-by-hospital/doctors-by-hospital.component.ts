@@ -35,7 +35,7 @@ export class DoctorsByHospitalComponent implements OnInit {
 		private hospitalService: HospitalService,
 		private authService: AuthenticationService,
 		private feedbackService: FeedbackService,
-		private dialog: MatDialog
+		private dialog: MatDialog,
 	) {}
 
 	ngOnInit(): void {
@@ -55,7 +55,7 @@ export class DoctorsByHospitalComponent implements OnInit {
 				this.doctors = response.body!;
 				console.log(response.body);
 				const paginationData = JSON.parse(
-					response.headers.get('X-Pagination')!
+					response.headers.get('X-Pagination')!,
 				);
 
 				this.totalPages = paginationData.totalPages;

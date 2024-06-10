@@ -26,7 +26,7 @@ export class AuthInterceptor implements HttpInterceptor {
 
 	intercept(
 		request: HttpRequest<any>,
-		next: HttpHandler
+		next: HttpHandler,
 	): Observable<HttpEvent<any>> {
 		let authToken = this.authenticationService.getAuthToken();
 		if (authToken) {
@@ -43,7 +43,7 @@ export class AuthInterceptor implements HttpInterceptor {
 				}
 
 				return throwError(() => new Error(error));
-			})
+			}),
 		);
 	}
 
@@ -66,7 +66,7 @@ export class AuthInterceptor implements HttpInterceptor {
 					this.refreshTokenSubject.next(token.accessToken);
 
 					return next.handle(
-						this.addToken(request, token.accessToken)
+						this.addToken(request, token.accessToken),
 					);
 				}),
 				catchError((err) => {
@@ -74,16 +74,15 @@ export class AuthInterceptor implements HttpInterceptor {
 					this.authenticationService.logout();
 
 					return throwError(() => new Error(err));
-				})
+				}),
 			);
-		} 
-        else {
+		} else {
 			return this.refreshTokenSubject.pipe(
 				filter((token) => token != null),
 				take(1),
 				switchMap((jwt) => {
 					return next.handle(this.addToken(request, jwt));
-				})
+				}),
 			);
 		}
 	}

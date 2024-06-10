@@ -11,13 +11,14 @@ import { Router } from '@angular/router';
 export class AppComponent implements OnInit {
 	readonly roles = Roles;
 
-	constructor(public authService: AuthenticationService, public router: Router) { }
-	
-	ngOnInit() {
-	}
+	constructor(
+		public authService: AuthenticationService,
+		public router: Router,
+	) {}
 
-	ngOnDestroy() {
-	}
+	ngOnInit() {}
+
+	ngOnDestroy() {}
 
 	viewHospital() {
 		const hospitalId = this.authService.getHospitalId();

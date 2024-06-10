@@ -1,21 +1,21 @@
 p {
-    font-family: arial;
+	font-family: arial;
 }
 
 .header {
-    background-color: #fff;
-    padding: 10px;
-    border-radius: 5px;
-    margin-bottom: 20px;
+	background-color: #fff;
+	padding: 10px;
+	border-radius: 5px;
+	margin-bottom: 20px;
 }
 
 .plus-icon {
-    width: 30px;
-    height: 30px;
-    fill: red;
-    cursor: pointer;
+	width: 30px;
+	height: 30px;
+	fill: red;
+	cursor: pointer;
 }
 
 .btn {
-    border: 1px solid #7C99AC;
+	border: 1px solid #7c99ac;
 }

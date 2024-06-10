@@ -29,7 +29,7 @@ export class AssignEmployeeDialogComponent implements OnInit {
 		private hospitalService: HospitalService,
 		private authService: AuthenticationService,
 		public dialogRef: MatDialogRef<AssignEmployeeDialogComponent>,
-		@Inject(MAT_DIALOG_DATA) public data: ApplicationUserDto
+		@Inject(MAT_DIALOG_DATA) public data: ApplicationUserDto,
 	) {
 		this.assignForm = this.fb.group({
 			hospitalId: [null, Validators.required],
@@ -72,7 +72,7 @@ export class AssignEmployeeDialogComponent implements OnInit {
 					role,
 					hospitalId,
 					specialty,
-					doctorPrice
+					doctorPrice,
 				)
 				.subscribe(() => {
 					this.dialogRef.close();

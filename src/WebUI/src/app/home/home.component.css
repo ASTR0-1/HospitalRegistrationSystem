@@ -1,80 +1,80 @@
 .home-container {
-    padding: 20px;
-    height: 90%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+	padding: 20px;
+	height: 90%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
 .search-bar {
-    margin-bottom: 20px;
+	margin-bottom: 20px;
 }
 
 .search-bar input {
-    width: 20vw;
-    padding: 10px;
-    font-size: 16px;
+	width: 20vw;
+	padding: 10px;
+	font-size: 16px;
 }
 
 .card-container {
-    background-color: #f8f9fa;
-    padding: 20px;
-    border-radius: 5px;
-    width: 60vw;
-    height: 45vh;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+	background-color: #f8f9fa;
+	padding: 20px;
+	border-radius: 5px;
+	width: 60vw;
+	height: 45vh;
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
 }
 
 .card-wrapper {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    position: relative;
-    width: 100%;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 20px;
+	position: relative;
+	width: 100%;
 }
 
 .card-body {
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
 }
 
 .card {
-    width: 200px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background-color: #fff;
-    padding: 10px;
+	width: 200px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	background-color: #fff;
+	padding: 10px;
 }
 
 .card-footer {
-    display: flex;
-    justify-content: center;
-    margin-top: auto;
+	display: flex;
+	justify-content: center;
+	margin-top: auto;
 }
 
 .pagination-controls {
-    margin-top: 20px;
+	margin-top: 20px;
 }
 
 .carousel-button {
-    font-size: 34px;
-    background: none;
-    cursor: pointer;
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 1;
+	font-size: 34px;
+	background: none;
+	cursor: pointer;
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	z-index: 1;
 }
 
 .carousel-button-left {
-    left: 10px;
+	left: 10px;
 }
 
 .carousel-button-right {
-    right: 10px;
+	right: 10px;
 }

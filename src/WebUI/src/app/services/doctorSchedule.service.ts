@@ -1,4 +1,9 @@
-import { HttpClient, HttpHeaders, HttpParams, HttpResponse } from '@angular/common/http';
+import {
+	HttpClient,
+	HttpHeaders,
+	HttpParams,
+	HttpResponse,
+} from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
@@ -15,37 +20,37 @@ export class DoctorScheduleService {
 	constructor(private http: HttpClient) {}
 
 	public getDoctorSchedule(
-		doctorScheduleId: number
+		doctorScheduleId: number,
 	): Observable<DoctorScheduleDto> {
 		return this.http.get<DoctorScheduleDto>(
-			`${this.uri}/${doctorScheduleId}`
+			`${this.uri}/${doctorScheduleId}`,
 		);
 	}
 
 	public getDoctorSchedules(
 		paging: DoctorScheduleParameters,
-		doctorId: number
-	  ): Observable<HttpResponse<DoctorScheduleDto[]>> {
+		doctorId: number,
+	): Observable<HttpResponse<DoctorScheduleDto[]>> {
 		let params = new HttpParams()
-		  .set('pageNumber', paging.pageNumber.toString())
-		  .set('pageSize', paging.pageSize.toString())
-		  .set('doctorId', doctorId.toString())
-		  .set('from', paging.from)
-		  .set('to', paging.to);
-	  
+			.set('pageNumber', paging.pageNumber.toString())
+			.set('pageSize', paging.pageSize.toString())
+			.set('doctorId', doctorId.toString())
+			.set('from', paging.from)
+			.set('to', paging.to);
+
 		const headers = new HttpHeaders({
-		  'Accept': 'application/json',
+			Accept: 'application/json',
 		});
-	  
+
 		return this.http.get<DoctorScheduleDto[]>(this.uri, {
-		  params: params,
-		  headers: headers,
-		  observe: 'response',
+			params: params,
+			headers: headers,
+			observe: 'response',
 		});
-	  }
+	}
 
 	public createDoctorSchedule(
-		doctorScheduleDto: DoctorScheduleForManipulationDto
+		doctorScheduleDto: DoctorScheduleForManipulationDto,
 	): Observable<void> {
 		return this.http.post<void>(this.uri, doctorScheduleDto, {
 			headers: new HttpHeaders({
@@ -55,17 +60,13 @@ export class DoctorScheduleService {
 	}
 
 	public updateDoctorSchedule(
-		doctorScheduleDto: DoctorScheduleForManipulationDto
+		doctorScheduleDto: DoctorScheduleForManipulationDto,
 	): Observable<void> {
-		return this.http.put<void>(
-			`${this.uri}`,
-			doctorScheduleDto,
-			{
-				headers: new HttpHeaders({
-					'Content-Type': 'application/json',
-				}),
-			}
-		);
+		return this.http.put<void>(`${this.uri}`, doctorScheduleDto, {
+			headers: new HttpHeaders({
+				'Content-Type': 'application/json',
+			}),
+		});
 	}
 
 	public deleteDoctorSchedule(doctorScheduleId: number): Observable<void> {

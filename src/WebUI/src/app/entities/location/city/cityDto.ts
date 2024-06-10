@@ -1,5 +1,5 @@
 export interface CityDto {
-    id: number;
-    name: string;
-    regionId: number;    
+	id: number;
+	name: string;
+	regionId: number;
 }

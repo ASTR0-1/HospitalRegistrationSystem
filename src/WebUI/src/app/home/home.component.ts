@@ -22,7 +22,7 @@ export class HomeComponent implements OnInit {
 
 	constructor(
 		private router: Router,
-		private hospitalService: HospitalService
+		private hospitalService: HospitalService,
 	) {}
 
 	ngOnInit(): void {
@@ -45,7 +45,7 @@ export class HomeComponent implements OnInit {
 				this.hospitals = result.body as HospitalDto[];
 
 				const paginationData = JSON.parse(
-					result.headers.get('X-Pagination')!
+					result.headers.get('X-Pagination')!,
 				);
 
 				this.totalPages = paginationData.totalPages;

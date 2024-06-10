@@ -1,6 +1,6 @@
-import { PagingParameters } from "../utility/pagingParameters";
+import { PagingParameters } from '../utility/pagingParameters';
 
 export interface DoctorScheduleParameters extends PagingParameters {
-	from: string; // DateOnly in C# 
+	from: string; // DateOnly in C#
 	to: string; // DateOnly in C#
 }

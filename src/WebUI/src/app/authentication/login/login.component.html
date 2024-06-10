@@ -1,27 +1,67 @@
 <div class="bg-wrapper h-75 d-flex justify-content-center">
-    <form class="login-block shadow d-flex flex-column align-items-center p-5 gap-2" (ngSubmit)="login()">
-        <h1 class="header">Авторизація</h1>
-        <div class="input-block d-flex flex-column align-items-center justify-content-center h-100 m-2">
-            <p class="invalid-login-error alert-danger p-1 m-0 h-25 rounded" *ngIf="isInvalidLogin$ | async">
-                Помилка входу. <br/>Некорректний номер телефону або пароль
-            </p>
-            <div>
-                <p class="px-3 m-1">Номер телефону</p>
-                <input matInput class="form-control w-100" type="text" name="phoneNumber" [(ngModel)]="user.phoneNumber" placeholder="+380"
-                    required autofocus #phoneNumber="ngModel">
-                <div class="error-container">
-                    <p class="alert-danger p-1 rounded" *ngIf="phoneNumber.invalid && phoneNumber.touched">Номер телефону обов'язковий</p>
-                </div>
-            </div>
-            <div>
-                <p class="px-3 m-1">Пароль</p>
-                <input matInput class="form-control w-100" type="password" name="password" [(ngModel)]="user.password" required
-                    #password="ngModel">
-                <div class="error-container">
-                    <p class="alert-danger p-1 rounded" *ngIf="password.invalid && password.touched">Пароль обов'язковий</p>
-                </div>
-            </div>
-        </div>
-        <button class="btn w-50" type="submit" [disabled]="phoneNumber.invalid || password.invalid">Увійти</button>
-    </form>
+	<form
+		class="login-block shadow d-flex flex-column align-items-center p-5 gap-2"
+		(ngSubmit)="login()"
+	>
+		<h1 class="header">Авторизація</h1>
+		<div
+			class="input-block d-flex flex-column align-items-center justify-content-center h-100 m-2"
+		>
+			<p
+				class="invalid-login-error alert-danger p-1 m-0 h-25 rounded"
+				*ngIf="isInvalidLogin$ | async"
+			>
+				Помилка входу. <br />Некорректний номер телефону або пароль
+			</p>
+			<div>
+				<p class="px-3 m-1">Номер телефону</p>
+				<input
+					matInput
+					class="form-control w-100"
+					type="text"
+					name="phoneNumber"
+					[(ngModel)]="user.phoneNumber"
+					placeholder="+380"
+					required
+					autofocus
+					#phoneNumber="ngModel"
+				/>
+				<div class="error-container">
+					<p
+						class="alert-danger p-1 rounded"
+						*ngIf="phoneNumber.invalid && phoneNumber.touched"
+					>
+						Номер телефону обов'язковий
+					</p>
+				</div>
+			</div>
+			<div>
+				<p class="px-3 m-1">Пароль</p>
+				<input
+					matInput
+					class="form-control w-100"
+					type="password"
+					name="password"
+					[(ngModel)]="user.password"
+					required
+					#password="ngModel"
+				/>
+				<div class="error-container">
+					<p
+						class="alert-danger p-1 rounded"
+						*ngIf="password.invalid && password.touched"
+					>
+						Пароль обов'язковий
+					</p>
+				</div>
+			</div>
+		</div>
+		<button
+			class="btn w-50"
+			type="submit"
+			[disabled]="phoneNumber.invalid || password.invalid"
+		>
+			Увійти
+		</button>
+	</form>
 </div>

@@ -23,7 +23,7 @@ export class MissedAppointmentsComponent implements OnInit {
 	constructor(
 		private appointmentService: AppointmentService,
 		private authService: AuthenticationService,
-		private dialog: MatDialog
+		private dialog: MatDialog,
 	) {}
 
 	ngOnInit(): void {
@@ -53,7 +53,7 @@ export class MissedAppointmentsComponent implements OnInit {
 			.subscribe((response) => {
 				this.appointments = response.body!;
 				const paginationData = JSON.parse(
-					response.headers.get('X-Pagination')!
+					response.headers.get('X-Pagination')!,
 				);
 				this.totalAppointments = paginationData.totalCount;
 				this.pageSize = paginationData.pageSize;
@@ -66,8 +66,8 @@ export class MissedAppointmentsComponent implements OnInit {
 			MarkAppointmentAsVisitedDialogComponent,
 			{
 				data: { appointmentId },
-				width: '500px'
-			}
+				width: '500px',
+			},
 		);
 
 		dialogRef.afterClosed().subscribe((result) => {

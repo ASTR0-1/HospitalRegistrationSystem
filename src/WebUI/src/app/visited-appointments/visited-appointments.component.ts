@@ -23,7 +23,7 @@ export class VisitedAppointmentsComponent implements OnInit {
 	constructor(
 		private appointmentService: AppointmentService,
 		private authService: AuthenticationService,
-		private dialog: MatDialog
+		private dialog: MatDialog,
 	) {}
 
 	ngOnInit(): void {
@@ -53,7 +53,7 @@ export class VisitedAppointmentsComponent implements OnInit {
 			.subscribe((response) => {
 				this.appointments = response.body!;
 				const paginationData = JSON.parse(
-					response.headers.get('X-Pagination')!
+					response.headers.get('X-Pagination')!,
 				);
 
 				this.totalAppointments = paginationData.totalCount;

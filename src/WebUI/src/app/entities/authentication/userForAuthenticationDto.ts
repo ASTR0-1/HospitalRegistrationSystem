@@ -1,4 +1,4 @@
 export class UserForAuthenticationDto {
-    public phoneNumber?: string;
-    public password?: string;
+	public phoneNumber?: string;
+	public password?: string;
 }

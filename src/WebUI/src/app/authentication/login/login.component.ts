@@ -16,7 +16,7 @@ export class LoginComponent {
 
 	constructor(
 		private router: Router,
-		private authenticationService: AuthenticationService
+		private authenticationService: AuthenticationService,
 	) {
 		this.isInvalidLogin$ = this.authenticationService.isInvalidLogin$;
 	}

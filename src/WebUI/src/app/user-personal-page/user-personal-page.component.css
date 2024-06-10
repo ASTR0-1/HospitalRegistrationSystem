@@ -1,60 +1,60 @@
 .personal-page {
-    width: 40vw;
-    background: #FFFFFF;
-    border-radius: 20px;
-    margin: auto;
+	width: 40vw;
+	background: #ffffff;
+	border-radius: 20px;
+	margin: auto;
 }
 
 .btn {
-    background-color: #7C99AC;
-    color: white;
-    font-size: 15px;
-    border: none;
-    padding: 10px;
-    cursor: pointer;
+	background-color: #7c99ac;
+	color: white;
+	font-size: 15px;
+	border: none;
+	padding: 10px;
+	cursor: pointer;
 }
 
 .btn:hover {
-    background-color: #5a768a;
+	background-color: #5a768a;
 }
 
 input {
-    font-size: 20px;
-    padding: 10px;
-    height: 3vh;
-    border: 1px solid #7C99AC;
-    width: 100%;
-    box-sizing: border-box;
+	font-size: 20px;
+	padding: 10px;
+	height: 3vh;
+	border: 1px solid #7c99ac;
+	width: 100%;
+	box-sizing: border-box;
 }
 
 .image-container {
-    aspect-ratio: 1/1;
-    width: 12vw;
-    height: 20vh;
-    border-radius: 10px;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+	aspect-ratio: 1/1;
+	width: 12vw;
+	height: 20vh;
+	border-radius: 10px;
+	overflow: hidden;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 .image-container img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
+	width: 100%;
+	height: 100%;
+	object-fit: contain;
 }
 
 .image-block {
-    text-align: center;
-    margin-right: 20px;
+	text-align: center;
+	margin-right: 20px;
 }
 
 .info-block label {
-    font-size: 18px;
-    width: 100%;
-    display: block;
+	font-size: 18px;
+	width: 100%;
+	display: block;
 }
 
 .info-block input {
-    margin-top: 5px;
+	margin-top: 5px;
 }

@@ -23,7 +23,7 @@ export class UserPersonalPageComponent implements OnInit {
 	constructor(
 		private userService: UserService,
 		private authenticatonService: AuthenticationService,
-		private router: Router
+		private router: Router,
 	) {}
 
 	ngOnInit(): void {

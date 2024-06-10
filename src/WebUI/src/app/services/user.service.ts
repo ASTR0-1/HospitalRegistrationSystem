@@ -33,7 +33,7 @@ export class UserService {
 		paging: PagingParameters,
 		role: string,
 		hospitalId?: number,
-		searchQuery?: string
+		searchQuery?: string,
 	): Observable<HttpResponse<ApplicationUserDto[]>> {
 		let params = new HttpParams()
 			.set('pageNumber', paging.pageNumber.toString())
@@ -51,7 +51,7 @@ export class UserService {
 					params,
 					headers: this.headers,
 					observe: 'response',
-				}
+				},
 			);
 		}
 
@@ -61,7 +61,7 @@ export class UserService {
 				params,
 				headers: this.headers,
 				observe: 'response',
-			}
+			},
 		);
 	}
 
@@ -81,12 +81,12 @@ export class UserService {
 		role: string,
 		hospitalId: number,
 		specialty: string,
-		doctorPrice: number
+		doctorPrice: number,
 	): Observable<any> {
 		const body = {
 			hospitalId: hospitalId,
 			specialty: specialty,
-			doctorPrice: doctorPrice
+			doctorPrice: doctorPrice,
 		};
 
 		return this.http.post(`${this.apiUrl}/${userId}/role/${role}`, body);

@@ -1,67 +1,133 @@
 <div class="container-fluid">
-  <h2>Управління користувачами</h2>
-  <hr>
-  <div class="d-flex justify-content-between align-items-center">
-    <mat-form-field appearance="fill">
-      <mat-label>Роль</mat-label>
-      <mat-select [(value)]="selectedRole" (selectionChange)="fetchUsers()">
-        <mat-option *ngFor="let role of roles" [value]="role">{{ role }}</mat-option>
-      </mat-select>
-    </mat-form-field>
-    <mat-form-field appearance="fill">
-      <mat-label>Пошук</mat-label>
-      <input matInput (keyup)="fetchUsers()" [(ngModel)]="searchQuery">
-    </mat-form-field>
-  </div>
-  <div class="table-container">
-    <mat-table [dataSource]="dataSource" matSort>
-      <ng-container matColumnDef="id">
-        <mat-header-cell *matHeaderCellDef mat-sort-header class="id-column">Id</mat-header-cell>
-        <mat-cell *matCellDef="let user" class="id-column">{{ user.id }}</mat-cell>
-      </ng-container>
-      <ng-container matColumnDef="firstName">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>Ім'я</mat-header-cell>
-        <mat-cell *matCellDef="let user">{{ user.firstName }}</mat-cell>
-      </ng-container>
-      <ng-container matColumnDef="middleName">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>По-батькові</mat-header-cell>
-        <mat-cell *matCellDef="let user">{{ user.middleName }}</mat-cell>
-      </ng-container>
-      <ng-container matColumnDef="lastName">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>Прізвище</mat-header-cell>
-        <mat-cell *matCellDef="let user">{{ user.lastName }}</mat-cell>
-      </ng-container>
-      <ng-container matColumnDef="gender">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>Стать</mat-header-cell>
-        <mat-cell *matCellDef="let user">{{ user.gender }}</mat-cell>
-      </ng-container>
-      <ng-container matColumnDef="specialty">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>Спеціальність</mat-header-cell>
-        <mat-cell *matCellDef="let user">{{ user.specialty }}</mat-cell>
-      </ng-container>
-      <ng-container *ngIf="displayedColumns.includes('visitCost')" matColumnDef="visitCost">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>Вартість послуг лікаря</mat-header-cell>
-        <mat-cell *matCellDef="let user">{{ user.visitCost }}</mat-cell>
-      </ng-container>
-      <ng-container *ngIf="displayedColumns.includes('totalServiceCost')" matColumnDef="totalServiceCost">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>Загальна вартість послуг</mat-header-cell>
-        <mat-cell *matCellDef="let user">{{ user.totalServiceCost }}</mat-cell>
-      </ng-container>
-      <ng-container matColumnDef="hospitalId">
-        <mat-header-cell *matHeaderCellDef mat-sort-header class="id-column">ID лікарні</mat-header-cell>
-        <mat-cell *matCellDef="let user" class="id-column">{{ user.hospitalId }}</mat-cell>
-      </ng-container>
-      <ng-container matColumnDef="actions">
-        <mat-header-cell *matHeaderCellDef class="actions-column">Дії</mat-header-cell>
-        <mat-cell class="d-flex flex-row gap-2 actions-column" *matCellDef="let user">
-          <button class="btn btn-sm btn-info" mat-button (click)="openUpdateDialog(user)">Оновити</button>
-          <button class="btn btn-sm btn-warning" mat-button (click)="openAssignDialog(user)">Призначити</button>
-        </mat-cell>
-      </ng-container>
+	<h2>Управління користувачами</h2>
+	<hr />
+	<div class="d-flex justify-content-between align-items-center">
+		<mat-form-field appearance="fill">
+			<mat-label>Роль</mat-label>
+			<mat-select
+				[(value)]="selectedRole"
+				(selectionChange)="fetchUsers()"
+			>
+				<mat-option *ngFor="let role of roles" [value]="role">{{
+					role
+				}}</mat-option>
+			</mat-select>
+		</mat-form-field>
+		<mat-form-field appearance="fill">
+			<mat-label>Пошук</mat-label>
+			<input matInput (keyup)="fetchUsers()" [(ngModel)]="searchQuery" />
+		</mat-form-field>
+	</div>
+	<div class="table-container">
+		<mat-table [dataSource]="dataSource" matSort>
+			<ng-container matColumnDef="id">
+				<mat-header-cell
+					*matHeaderCellDef
+					mat-sort-header
+					class="id-column"
+					>Id</mat-header-cell
+				>
+				<mat-cell *matCellDef="let user" class="id-column">{{
+					user.id
+				}}</mat-cell>
+			</ng-container>
+			<ng-container matColumnDef="firstName">
+				<mat-header-cell *matHeaderCellDef mat-sort-header
+					>Ім'я</mat-header-cell
+				>
+				<mat-cell *matCellDef="let user">{{ user.firstName }}</mat-cell>
+			</ng-container>
+			<ng-container matColumnDef="middleName">
+				<mat-header-cell *matHeaderCellDef mat-sort-header
+					>По-батькові</mat-header-cell
+				>
+				<mat-cell *matCellDef="let user">{{
+					user.middleName
+				}}</mat-cell>
+			</ng-container>
+			<ng-container matColumnDef="lastName">
+				<mat-header-cell *matHeaderCellDef mat-sort-header
+					>Прізвище</mat-header-cell
+				>
+				<mat-cell *matCellDef="let user">{{ user.lastName }}</mat-cell>
+			</ng-container>
+			<ng-container matColumnDef="gender">
+				<mat-header-cell *matHeaderCellDef mat-sort-header
+					>Стать</mat-header-cell
+				>
+				<mat-cell *matCellDef="let user">{{ user.gender }}</mat-cell>
+			</ng-container>
+			<ng-container matColumnDef="specialty">
+				<mat-header-cell *matHeaderCellDef mat-sort-header
+					>Спеціальність</mat-header-cell
+				>
+				<mat-cell *matCellDef="let user">{{ user.specialty }}</mat-cell>
+			</ng-container>
+			<ng-container
+				*ngIf="displayedColumns.includes('visitCost')"
+				matColumnDef="visitCost"
+			>
+				<mat-header-cell *matHeaderCellDef mat-sort-header
+					>Вартість послуг лікаря</mat-header-cell
+				>
+				<mat-cell *matCellDef="let user">{{ user.visitCost }}</mat-cell>
+			</ng-container>
+			<ng-container
+				*ngIf="displayedColumns.includes('totalServiceCost')"
+				matColumnDef="totalServiceCost"
+			>
+				<mat-header-cell *matHeaderCellDef mat-sort-header
+					>Загальна вартість послуг</mat-header-cell
+				>
+				<mat-cell *matCellDef="let user">{{
+					user.totalServiceCost
+				}}</mat-cell>
+			</ng-container>
+			<ng-container matColumnDef="hospitalId">
+				<mat-header-cell
+					*matHeaderCellDef
+					mat-sort-header
+					class="id-column"
+					>ID лікарні</mat-header-cell
+				>
+				<mat-cell *matCellDef="let user" class="id-column">{{
+					user.hospitalId
+				}}</mat-cell>
+			</ng-container>
+			<ng-container matColumnDef="actions">
+				<mat-header-cell *matHeaderCellDef class="actions-column"
+					>Дії</mat-header-cell
+				>
+				<mat-cell
+					class="d-flex flex-row gap-2 actions-column"
+					*matCellDef="let user"
+				>
+					<button
+						class="btn btn-sm btn-info"
+						mat-button
+						(click)="openUpdateDialog(user)"
+					>
+						Оновити
+					</button>
+					<button
+						class="btn btn-sm btn-warning"
+						mat-button
+						(click)="openAssignDialog(user)"
+					>
+						Призначити
+					</button>
+				</mat-cell>
+			</ng-container>
 
-      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-    </mat-table>
-    <mat-paginator [length]="totalUsers" [pageSize]="pageSize" (page)="onPageChange($event)"></mat-paginator>
-  </div>
+			<mat-header-row
+				*matHeaderRowDef="displayedColumns"
+			></mat-header-row>
+			<mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+		</mat-table>
+		<mat-paginator
+			[length]="totalUsers"
+			[pageSize]="pageSize"
+			(page)="onPageChange($event)"
+		></mat-paginator>
+	</div>
 </div>

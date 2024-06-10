@@ -13,7 +13,7 @@ export class FeedbackListDialogComponent {
 	constructor(
 		public dialogRef: MatDialogRef<FeedbackListDialogComponent>,
 		@Inject(MAT_DIALOG_DATA) public data: { doctorId: number },
-		private feedbackService: FeedbackService
+		private feedbackService: FeedbackService,
 	) {}
 
 	ngOnInit(): void {
@@ -37,11 +37,11 @@ export class FeedbackListDialogComponent {
 		const fullStars = Math.floor(rating);
 		const halfStar = rating % 1 >= 0.5 ? 1 : 0;
 		const emptyStars = 5 - fullStars - halfStar;
-	
+
 		return [
-		  ...Array(fullStars).fill('full'),
-		  ...Array(halfStar).fill('half'),
-		  ...Array(emptyStars).fill('empty')
+			...Array(fullStars).fill('full'),
+			...Array(halfStar).fill('half'),
+			...Array(emptyStars).fill('empty'),
 		];
-	  }
+	}
 }

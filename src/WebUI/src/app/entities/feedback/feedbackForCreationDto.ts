@@ -1,6 +1,6 @@
 export interface FeedbackForCreationDto {
-    rating: number;
-    text: string;
-    appointmentId: number;
-    applicationUserId: number;
-  }
+	rating: number;
+	text: string;
+	appointmentId: number;
+	applicationUserId: number;
+}

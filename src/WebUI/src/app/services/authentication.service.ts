@@ -44,7 +44,7 @@ export class AuthenticationService {
 						}
 						this.isInvalidLoginSubject.next(true);
 					},
-				})
+				}),
 			);
 	}
 
@@ -68,7 +68,7 @@ export class AuthenticationService {
 						}
 						this.isInvalidRegisterSubject.next(true);
 					},
-				})
+				}),
 			);
 	}
 
@@ -85,7 +85,7 @@ export class AuthenticationService {
 					const refreshToken = response.refreshToken;
 
 					this.saveCredsToLocalStorage(token, userId, refreshToken);
-				})
+				}),
 			);
 	}
 
@@ -104,13 +104,13 @@ export class AuthenticationService {
 
 	public isAuthenticated(): boolean {
 		const token = this.getAuthToken();
-		
+
 		return token !== null && token !== undefined;
 	}
 
 	public hasRole(role: string): boolean {
 		const roles = this.getRoles();
-		
+
 		return roles.includes(role);
 	}
 
@@ -119,10 +119,10 @@ export class AuthenticationService {
 		if (!token) {
 			return null;
 		}
-		
+
 		const decodedToken = jwtDecode(token) as any;
 		const hospitalId = decodedToken['HospitalId'];
-	
+
 		return hospitalId;
 	}
 
@@ -137,7 +137,7 @@ export class AuthenticationService {
 	private saveCredsToLocalStorage(
 		token: string,
 		userId: string,
-		refreshToken: string
+		refreshToken: string,
 	) {
 		localStorage.setItem('jwt', token);
 		localStorage.setItem('refresh', refreshToken);

@@ -20,7 +20,7 @@ export class HospitalService {
 
 	public getAllHospitals(
 		paging: PagingParameters,
-		searchQuery?: string
+		searchQuery?: string,
 	): Observable<HttpResponse<HospitalDto[]>> {
 		let params = {
 			pageNumber: String(paging.pageNumber),
@@ -35,12 +35,12 @@ export class HospitalService {
 		return this.http.get<HospitalDto[]>(this.uri, {
 			params,
 			headers,
-			observe: 'response'
+			observe: 'response',
 		});
 	}
 
 	public addNewHospital(
-		hospitalCreationDto: HospitalForCreationDto
+		hospitalCreationDto: HospitalForCreationDto,
 	): Observable<void> {
 		return this.http.post<void>(this.uri, hospitalCreationDto, {
 			headers: new HttpHeaders({

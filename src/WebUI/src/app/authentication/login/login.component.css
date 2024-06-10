@@ -1,37 +1,37 @@
 .login-block {
-    width: 25%;
-    height: 57vh;
-    background: #FFFFFF;
-    border-radius: 20px;
-    margin: auto;
+	width: 25%;
+	height: 57vh;
+	background: #ffffff;
+	border-radius: 20px;
+	margin: auto;
 }
 
 .input-block {
-    width: 100%;
-    font-weight: 600;
-    font-size: 24px !important;
+	width: 100%;
+	font-weight: 600;
+	font-size: 24px !important;
 }
 
 input {
-    font-size: 20px;
-    width: 12vw;
-    height: 5vh;
-    border: 1px solid #7C99AC;
+	font-size: 20px;
+	width: 12vw;
+	height: 5vh;
+	border: 1px solid #7c99ac;
 }
 
 .btn {
-    background-color: #7C99AC;
-    color: white;
-    font-size: 20px;
+	background-color: #7c99ac;
+	color: white;
+	font-size: 20px;
 }
 
 .error-container {
-    font-size: 14px;
-    height: 2vh;
-    margin: 0.5vh;
+	font-size: 14px;
+	height: 2vh;
+	margin: 0.5vh;
 }
 
 .invalid-login-error {
-    height: 4vh;
-    font-size: 14px;
+	height: 4vh;
+	font-size: 14px;
 }

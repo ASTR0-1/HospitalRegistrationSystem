@@ -33,7 +33,7 @@ export class AddHospitalDialogComponent implements OnInit {
 		private fb: FormBuilder,
 		private hospitalService: HospitalService,
 		private cityService: CityService,
-		private dialogRef: MatDialogRef<AddHospitalDialogComponent>
+		private dialogRef: MatDialogRef<AddHospitalDialogComponent>,
 	) {}
 
 	ngOnInit(): void {
