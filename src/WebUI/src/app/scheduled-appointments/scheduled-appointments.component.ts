@@ -17,6 +17,7 @@ export class ScheduledAppointmentsComponent implements OnInit {
 	pageIndex = 0;
 	userId!: string;
 	currentUserId: number = +localStorage.getItem('userId')!;
+	isReceptionist: boolean = false;
 
 	constructor(
 		private appointmentService: AppointmentService,
@@ -24,15 +25,20 @@ export class ScheduledAppointmentsComponent implements OnInit {
 	) {}
 
 	ngOnInit(): void {
-		if (this.authService.hasRole(Roles.RECEPTIONIST)) {
-			const queryParams = new URLSearchParams(window.location.search);
+		const queryParams = new URLSearchParams(window.location.search);
+		this.isReceptionist = this.authService.hasRole(Roles.RECEPTIONIST) && queryParams.has('userId');
+		
+		if (this.isReceptionist) {
 			this.userId =
 				queryParams.get('userId') ||
 				localStorage.getItem('userId') ||
 				'';
+			this.pageSize = 4;
 		} else {
 			this.userId = localStorage.getItem('userId') || '';
 		}
+
+		console.log(this.userId)
 
 		this.fetchAppointments();
 	}
@@ -49,10 +55,10 @@ export class ScheduledAppointmentsComponent implements OnInit {
 			.getIncomingByUserId(pagingParameters, +this.userId)
 			.subscribe((response) => {
 				this.appointments = response.body!;
+				console.log(response.body)
 				const paginationData = JSON.parse(
 					response.headers.get('X-Pagination')!
 				);
-
 				this.totalAppointments = paginationData.totalCount;
 				this.pageSize = paginationData.pageSize;
 				this.pageIndex = paginationData.currentPage - 1;

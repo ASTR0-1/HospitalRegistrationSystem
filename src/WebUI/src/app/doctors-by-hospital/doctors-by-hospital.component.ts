@@ -6,6 +6,7 @@ import { UserService } from '../services/user.service';
 import { Roles } from '../constants/role.constants';
 import { HospitalDto } from '../entities/hospital/hospitalDto';
 import { HospitalService } from '../services/hospital.service';
+import { AuthenticationService } from '../services/authentication.service';
 
 @Component({
 	selector: 'app-doctors-by-hospital',
@@ -28,7 +29,8 @@ export class DoctorsByHospitalComponent implements OnInit {
         private router: Router,
 		private route: ActivatedRoute,
 		private userService: UserService,
-		private hospitalService: HospitalService
+		private hospitalService: HospitalService,
+		private authService: AuthenticationService
 	) {}
 
 	ngOnInit(): void {
@@ -62,6 +64,14 @@ export class DoctorsByHospitalComponent implements OnInit {
 	redirectToDoctorSchedule(doctorId: number) {
         this.router.navigate(['/doctor-schedule'], { queryParams: { doctorId: doctorId } });
     }
+
+	redirectToDoctorAppointments(doctorId: number) {
+        this.router.navigate(['/scheduled-appointments'], { queryParams: { userId: doctorId } });
+    }
+
+	isReceptionist(): boolean {
+		return this.authService.hasRole(Roles.RECEPTIONIST);
+	}
 
 	nextPage(): void {
 		if (this.paging.pageNumber < this.totalPages) {

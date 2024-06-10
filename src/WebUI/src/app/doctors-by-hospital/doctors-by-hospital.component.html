@@ -22,6 +22,7 @@
                             <h5 class="card-title">Ціна за послуги: {{ doctor.totalServiceCost | currency:'UAH' }}</h5>
                             <hr>
                             <button class="btn btn-outline-success" (click)="redirectToDoctorSchedule(doctor.id)">Розклад</button>
+                            <button *ngIf="isReceptionist()" class="btn btn-outline-success mt-1" (click)="redirectToDoctorAppointments(doctor.id)">Прийоми</button>
                         </div>
                     </div>
                     <div class="card" *ngIf="doctors.length === 0" style="visibility: hidden;">

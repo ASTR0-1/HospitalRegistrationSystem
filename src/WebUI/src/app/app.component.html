@@ -21,7 +21,7 @@
 
         <!-- Reciptionist buttons -->
         <button class="btn btn-outline-success" *ngIf="authService.isAuthenticated() && authService.hasRole(roles.RECEPTIONIST)"
-            routerLink="/reciptionist-page">
+            (click)="viewHospital()">
             Сторінка рецепціоніста
         </button>
 
