@@ -14,7 +14,7 @@ export class AppointmentService {
 	constructor(private http: HttpClient) {}
 
 	addNew(appointment: AppointmentForCreationDto): Observable<any> {
-		return this.http.post(`${this.url}/addNew`, appointment);
+		return this.http.post(`${this.url}`, appointment);
 	}
 
 	get(appointmentId: number): Observable<any> {

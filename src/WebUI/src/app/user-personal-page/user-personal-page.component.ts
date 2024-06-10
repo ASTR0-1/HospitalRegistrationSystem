@@ -83,7 +83,7 @@ export class UserPersonalPageComponent implements OnInit {
 	}
 
 	redirectToDoctorSchedule() {
-		this.router.navigate(['/doctor-schedule']);
+		this.router.navigate(['/doctor-schedule'], { queryParams: { doctorId: this.user.id } });
 	}
 
 	viewVisitedAppointments() {

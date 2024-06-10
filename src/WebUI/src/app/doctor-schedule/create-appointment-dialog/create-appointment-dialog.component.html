@@ -1,0 +1,8 @@
+<h2 mat-dialog-title>Записатися на прийом</h2>
+<mat-dialog-content>
+  <p>Ви впевнені, що хочете записатися на прийом на {{ data.day | date: 'fullDate' }} о {{ data.hour }}:00?</p>
+  <div class="d-flex flex-row gap-2" mat-dialog-actions>
+    <button class="btn btn-sm btn-outline-danger" mat-button (click)="onCancel()">Скасувати</button>
+    <button class="btn btn-sm btn-outline-success" mat-button color="primary" (click)="confirm()">Записатися</button>
+  </div>
+</mat-dialog-content>

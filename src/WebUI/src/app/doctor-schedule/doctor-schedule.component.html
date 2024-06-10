@@ -8,7 +8,7 @@
         <div class="day" *ngFor="let day of weekDays">
             <h4>{{ day | date: 'EEEE, MMM d' }}</h4>
             <div class="hour" *ngFor="let hour of hours" [class.selected]="isScheduled(day, hour)"
-            (click)="isDoctor() ? toggleSchedule(day, hour) : null">
+                (click)="isDoctor() ? toggleSchedule(day, hour) : (isScheduled(day, hour) ? openAppointmentDialog(day, hour) : null)">
                 {{ hour }}:00
             </div>
         </div>

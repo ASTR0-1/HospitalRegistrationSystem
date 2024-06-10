@@ -40,6 +40,7 @@ import { registerLocaleData } from '@angular/common';
 import localeUk from '@angular/common/locales/uk';
 import { VisitedAppointmentsComponent } from './visited-appointments/visited-appointments.component';
 import { DoctorsByHospitalComponent } from './doctors-by-hospital/doctors-by-hospital.component';
+import { CreateAppointmentDialogComponent } from './doctor-schedule/create-appointment-dialog/create-appointment-dialog.component';
 
 registerLocaleData(localeUk);
 
@@ -89,6 +90,7 @@ const appRoutes: Routes = [
 		UserPersonalPageComponent,
 
 		DoctorScheduleComponent,
+		CreateAppointmentDialogComponent,
 
 		ScheduledAppointmentsComponent,
 		VisitedAppointmentsComponent,
