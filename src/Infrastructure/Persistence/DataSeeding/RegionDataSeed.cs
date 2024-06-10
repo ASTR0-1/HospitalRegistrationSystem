@@ -20,37 +20,37 @@ public class RegionDataSeed : IEntityTypeConfiguration<Region>
             new()
             {
                 Id = 2,
-                Name = "Харківська область",
+                Name = "Харківська",
                 CountryId = 1
             },
             new()
             {
                 Id = 3,
-                Name = "Львівська область",
+                Name = "Львівська",
                 CountryId = 1
             },
             new()
             {
                 Id = 4,
-                Name = "Одеська область",
+                Name = "Одеська",
                 CountryId = 1
             },
             new()
             {
                 Id = 5,
-                Name = "Дніпропетровська область",
+                Name = "Дніпропетровська",
                 CountryId = 1
             },
             new()
             {
                 Id = 6,
-                Name = "Запорізька область",
+                Name = "Запорізька",
                 CountryId = 1
             },
             new()
             {
                 Id = 7,
-                Name = "Херсонська область",
+                Name = "Херсонська",
                 CountryId = 1
             }
         };

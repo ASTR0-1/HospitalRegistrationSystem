@@ -72,8 +72,9 @@ export class AppointmentService {
 	}
 
 	markAsVisited(appointmentId: number, diagnosis: string): Observable<any> {
-		return this.http.put(`${this.url}/markAsVisited/${appointmentId}`, {
-			diagnosis,
+		let params = new HttpParams().set('diagnosis', diagnosis);
+		return this.http.put(`${this.url}/${appointmentId}/markAsVisited`, null, {
+			params,
 		});
 	}
 }

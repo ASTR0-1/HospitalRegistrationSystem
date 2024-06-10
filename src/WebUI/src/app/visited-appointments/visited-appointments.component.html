@@ -1,5 +1,5 @@
 <div class="bg-wrapper d-flex flex-row align-items-center">
-    <div class="container d-flex flex-column justify-content-center rounded mt-4">
+    <div class="container d-flex flex-column justify-content-center rounded shadow mt-4">
         <h2>Відвідані прийоми</h2>
         <hr class="border">
         <div class="appointments-container row">
@@ -17,7 +17,11 @@
                             <p class="card-text"><strong>Вартість прийому:</strong> {{ appointment.doctor.visitCost | currency:'UAH' }}</p>
                             <p class="card-text"><strong>ID Лікарні:</strong> {{ appointment.doctor.hospitalId }}</p>
                         </ng-template>
-                        <p class="card-text"><strong>Висновки по прийому:</strong> {{ appointment.diagnosis}}</p>
+                        <div class="diagnosis-container">
+                            <p class="card-text">
+                                <strong>Висновки по прийому:</strong> {{ appointment.diagnosis }}
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>

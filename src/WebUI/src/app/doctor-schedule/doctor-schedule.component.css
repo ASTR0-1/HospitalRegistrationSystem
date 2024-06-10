@@ -1,8 +1,5 @@
 /* doctor-schedule.component.css */
 .calendar-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
     user-select: none;
     /* Prevent text selection */
 }
@@ -10,9 +7,10 @@
 .header {
     display: flex;
     justify-content: space-between;
-    padding: 5px;
+    padding: 8px;
     user-select: none;
     /* Prevent text selection */
+    background-color: #f9f9f9;
 }
 
 .calendar {
@@ -46,6 +44,6 @@
 }
 
 .hour.selected {
-    background-color: #007bff;
+    background-color: #7C99AC;
     color: white;
 }

@@ -25,7 +25,4 @@
 
 .card-body {
     padding: 15px;
-    height: 310px;
-    max-height: 310px;
-    overflow-y: auto;
 }

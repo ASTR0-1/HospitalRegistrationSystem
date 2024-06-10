@@ -41,6 +41,8 @@ import localeUk from '@angular/common/locales/uk';
 import { VisitedAppointmentsComponent } from './visited-appointments/visited-appointments.component';
 import { DoctorsByHospitalComponent } from './doctors-by-hospital/doctors-by-hospital.component';
 import { CreateAppointmentDialogComponent } from './doctor-schedule/create-appointment-dialog/create-appointment-dialog.component';
+import { MissedAppointmentsComponent } from './missed-appointments/missed-appointments.component';
+import { MarkAppointmentAsVisitedDialogComponent } from './missed-appointments/mark-appointment-as-visited-dialog/mark-appointment-as-visited-dialog.component';
 
 registerLocaleData(localeUk);
 
@@ -48,13 +50,40 @@ const appRoutes: Routes = [
 	{ path: '', component: HomeComponent },
 	{ path: 'login', component: LoginComponent },
 	{ path: 'register', component: RegisterComponent },
-	{ path: 'personal-page', component: UserPersonalPageComponent, canActivate: [AuthGuard] },
-	{ path: 'scheduled-appointments', component: ScheduledAppointmentsComponent, canActivate: [AuthGuard] },
-	{ path: 'visited-appointments', component: VisitedAppointmentsComponent, canActivate: [AuthGuard] },
-	{ path: 'hospital-management', component: HospitalManagementComponent, canActivate: [AuthGuard, RoleGuard], data: { expectedRole: [Roles.MASTER_SUPERVISOR] } },
-	{ path: 'user-management', component: UserManagementComponent, canActivate: [AuthGuard, RoleGuard], data: { expectedRole: [Roles.MASTER_SUPERVISOR, Roles.SUPERVISOR] } },
+	{
+		path: 'personal-page',
+		component: UserPersonalPageComponent,
+		canActivate: [AuthGuard],
+	},
+	{
+		path: 'scheduled-appointments',
+		component: ScheduledAppointmentsComponent,
+		canActivate: [AuthGuard],
+	},
+	{
+		path: 'visited-appointments',
+		component: VisitedAppointmentsComponent,
+		canActivate: [AuthGuard],
+	},
+	{
+		path: 'missed-appointments',
+		component: MissedAppointmentsComponent,
+		canActivate: [AuthGuard],
+	},
+	{
+		path: 'hospital-management',
+		component: HospitalManagementComponent,
+		canActivate: [AuthGuard, RoleGuard],
+		data: { expectedRole: [Roles.MASTER_SUPERVISOR] },
+	},
+	{
+		path: 'user-management',
+		component: UserManagementComponent,
+		canActivate: [AuthGuard, RoleGuard],
+		data: { expectedRole: [Roles.MASTER_SUPERVISOR, Roles.SUPERVISOR] },
+	},
 	{ path: 'doctors-by-hospital/:id', component: DoctorsByHospitalComponent },
-	{ path: 'doctor-schedule', component: DoctorScheduleComponent},
+	{ path: 'doctor-schedule', component: DoctorScheduleComponent },
 	{ path: '**', component: NotFoundComponent },
 ];
 
@@ -86,7 +115,7 @@ const appRoutes: Routes = [
 
 		LoginComponent,
 		RegisterComponent,
-		
+
 		UserPersonalPageComponent,
 
 		DoctorScheduleComponent,
@@ -94,18 +123,20 @@ const appRoutes: Routes = [
 
 		ScheduledAppointmentsComponent,
 		VisitedAppointmentsComponent,
-		
+		MarkAppointmentAsVisitedDialogComponent,
+		MissedAppointmentsComponent,
+
 		HospitalManagementComponent,
 		AddHospitalDialogComponent,
-		
+
 		UserManagementComponent,
 		UpdateUserDialogComponent,
-		AssignEmployeeDialogComponent
+		AssignEmployeeDialogComponent,
 	],
 	bootstrap: [AppComponent],
 	providers: [
 		{ provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
-		{ provide: LOCALE_ID, useValue: 'uk' }
+		{ provide: LOCALE_ID, useValue: 'uk' },
 	],
 })
 export class AppModule {}
