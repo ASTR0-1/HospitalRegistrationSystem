@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthenticationService } from './services/authentication.service';
 import { Roles } from './constants/role.constants';
+import { Router } from '@angular/router';
 
 @Component({
 	selector: 'app-root',
@@ -10,11 +11,16 @@ import { Roles } from './constants/role.constants';
 export class AppComponent implements OnInit {
 	readonly roles = Roles;
 
-	constructor(public authService: AuthenticationService) { }
+	constructor(public authService: AuthenticationService, public router: Router) { }
 	
 	ngOnInit() {
 	}
 
 	ngOnDestroy() {
+	}
+
+	viewHospital() {
+		const hospitalId = this.authService.getHospitalId();
+		this.router.navigate(['/doctors-by-hospital', hospitalId]);
 	}
 }

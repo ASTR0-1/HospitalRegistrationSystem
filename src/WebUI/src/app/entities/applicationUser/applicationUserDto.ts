@@ -8,5 +8,5 @@ export interface ApplicationUserDto {
 	visitCost?: number;
 	totalServiceCost?: number;
 	hospitalId?: number;
-	profilePhotoUrl?: string;
+	profilePhotoUrl?: string | null;
 }

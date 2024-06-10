@@ -14,7 +14,7 @@
                         <ng-template #patientInfo>
                             <p class="card-text"><strong>Спеціаліст:</strong> {{ appointment.doctor.firstName }} {{ appointment.doctor.lastName }}</p>
                             <p class="card-text"><strong>Спеціальність:</strong> {{ appointment.doctor.specialty }}</p>
-                            <p class="card-text"><strong>Вартість прийому:</strong> {{ appointment.doctor.visitCost | currency:'UAH' }}</p>
+                            <p class="card-text"><strong>Вартість прийому:</strong> {{ appointment.doctor.totalServiceCost | currency:'UAH' }}</p>
                             <p class="card-text"><strong>ID Лікарні:</strong> {{ appointment.doctor.hospitalId }}</p>
                         </ng-template>
                     </div>

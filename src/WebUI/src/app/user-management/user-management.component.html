@@ -39,11 +39,11 @@
         <mat-header-cell *matHeaderCellDef mat-sort-header>Спеціальність</mat-header-cell>
         <mat-cell *matCellDef="let user">{{ user.specialty }}</mat-cell>
       </ng-container>
-      <ng-container matColumnDef="visitCost">
+      <ng-container *ngIf="displayedColumns.includes('visitCost')" matColumnDef="visitCost">
         <mat-header-cell *matHeaderCellDef mat-sort-header>Вартість послуг лікаря</mat-header-cell>
         <mat-cell *matCellDef="let user">{{ user.visitCost }}</mat-cell>
       </ng-container>
-      <ng-container matColumnDef="totalServiceCost">
+      <ng-container *ngIf="displayedColumns.includes('totalServiceCost')" matColumnDef="totalServiceCost">
         <mat-header-cell *matHeaderCellDef mat-sort-header>Загальна вартість послуг</mat-header-cell>
         <mat-cell *matCellDef="let user">{{ user.totalServiceCost }}</mat-cell>
       </ng-container>

@@ -18,6 +18,9 @@
                             <h5 class="card-title">{{ doctor.firstName }}</h5>
                             <h5 class="card-title">{{ doctor.middleName }}</h5>
                             <h5 class="card-title">{{ doctor.lastName }}</h5>
+                            <hr>
+                            <h5 class="card-title">Ціна за послуги: {{ doctor.totalServiceCost | currency:'UAH' }}</h5>
+                            <hr>
                             <button class="btn btn-outline-success" (click)="redirectToDoctorSchedule(doctor.id)">Розклад</button>
                         </div>
                     </div>

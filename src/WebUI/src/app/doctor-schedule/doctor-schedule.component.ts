@@ -98,6 +98,10 @@ export class DoctorScheduleComponent implements OnInit {
 		return this.schedule[dateStr]?.includes(hour) || false;
 	}
 
+	isAuthenticated(): boolean {
+		return this.authService.getAuthToken() !== null;
+	}
+
 	isDoctor(): boolean {
 		let doctorIdFromStorage = localStorage.getItem('userId');
 		let doctorId = this.route.snapshot.queryParams['doctorId'];

@@ -33,7 +33,7 @@ export class UpdateUserDialogComponent implements OnInit {
   onSubmit(): void {
     if (this.updateUserForm.valid) {
       const updatedUser: ApplicationUserDto = {
-        id: this.data.id,
+        ...this.data,
         ...this.updateUserForm.value,
       };
       

@@ -38,6 +38,7 @@ export class UserPersonalPageComponent implements OnInit {
 				this.imageUrl = data.profilePhotoUrl
 					? data.profilePhotoUrl
 					: null;
+				this.user.profilePhotoUrl = this.imageUrl;
 			},
 			error: (error) => {
 				console.error('Error fetching user data', error);
