@@ -9,19 +9,18 @@
                         <p class="card-text"><strong>Дата:</strong> {{ appointment.visitTime | date:'medium' }}</p>
                         <ng-container *ngIf="appointment.doctor.id === currentUserId; else patientInfo">
                             <p class="card-text"><strong>Пацієнт:</strong> {{ appointment.client.firstName }} {{ appointment.client.lastName }}</p>
-                            <p class="card-text"><strong>ID Пацієнта:</strong> {{ appointment.client.id }}</p>
                         </ng-container>
                         <ng-template #patientInfo>
                             <p class="card-text"><strong>Спеціаліст:</strong> {{ appointment.doctor.firstName }} {{ appointment.doctor.lastName }}</p>
                             <p class="card-text"><strong>Спеціальність:</strong> {{ appointment.doctor.specialty }}</p>
                             <p class="card-text"><strong>Вартість прийому:</strong> {{ appointment.doctor.visitCost | currency:'UAH' }}</p>
-                            <p class="card-text"><strong>ID Лікарні:</strong> {{ appointment.doctor.hospitalId }}</p>
                         </ng-template>
                         <div class="diagnosis-container">
                             <p class="card-text">
                                 <strong>Висновки по прийому:</strong> {{ appointment.diagnosis }}
                             </p>
                         </div>
+                        <button class="btn btn-sm btn-outline-success mt-2" *ngIf="appointment.doctor.id !== currentUserId;" mat-button color="primary" (click)="openFeedbackDialog(appointment.id)">Залишити відгук</button>
                     </div>
                 </div>
             </div>

@@ -1,6 +1,6 @@
 .home-container {
     padding: 20px;
-    height: 70vh;
+    height: 90vh;
     position: relative;
 }
 
@@ -17,7 +17,7 @@
     padding: 20px;
     border-radius: 5px;
     width: 70vw;
-    height: 65vh;
+    height: 120vh;
     display: flex;
     flex-direction: column;
     justify-content: center;

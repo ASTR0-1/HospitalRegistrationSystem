@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using AutoMapper;
 using HospitalRegistrationSystem.Application.DTOs.FeedbackDTOs;
 using HospitalRegistrationSystem.Application.Interfaces.Data;
@@ -55,12 +56,15 @@ public class FeedbackService : IFeedbackService
     {
         var feedback = _mapper.Map<Feedback>(feedbackDto);
 
-        var appointment = await _repository.Appointment.GetAppointmentAsync(feedback.AppointmentId);
+        var appointment = await _repository.Appointment.GetAppointmentAsync(feedback.AppointmentId, true);
         if (appointment is null)
             return Result.Failure(AppointmentError.AppointmentNotFound(feedback.AppointmentId));
 
         if (!appointment.IsVisited)
             return Result.Failure(FeedbackError.FeedbackOnNotVisitedAppointmentError(feedback.AppointmentId));
+
+        feedback.FeedbackDate = DateTime.Now;
+        appointment.Feedback = feedback;
 
         _repository.Feedback.CreateFeedback(feedback);
         await _repository.SaveAsync();

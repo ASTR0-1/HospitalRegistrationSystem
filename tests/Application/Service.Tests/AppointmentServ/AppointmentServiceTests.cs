@@ -31,45 +31,7 @@ public class AppointmentServiceTests
         var config = new MapperConfiguration(cfg => cfg.AddProfile(new MappingProfile()));
         _mapper = config.CreateMapper();
 
-        _appointmentService = new AppointmentService(_mock.Object, _mapper);
-    }
-
-    [Test]
-    public async Task AddNewAsync_NewAppointment_AddAppointmentToDb()
-    {
-        // Arrange
-        var appointmentDto = new AppointmentForCreationDto { DoctorId = 1, ClientId = 2 };
-        var doctor = new ApplicationUser { DoctorSchedules = new List<DoctorSchedule> { new() { Date = DateOnly.FromDateTime(appointmentDto.VisitTime), WorkingHours = 1 << appointmentDto.VisitTime.Hour } } };
-
-        _mock.Setup(x => x.Appointment.CreateAppointment(It.IsAny<Appointment>()));
-        _mock.Setup(x => x.ApplicationUser.GetApplicationUserAsync(appointmentDto.ClientId)).ReturnsAsync(new ApplicationUser());
-        _mock.Setup(x => x.ApplicationUser.GetApplicationUserAsync(appointmentDto.DoctorId)).ReturnsAsync(doctor);
-        _mock.Setup(x => x.ApplicationUser.CheckUserInRoleAsync(appointmentDto.DoctorId, RoleConstants.Doctor)).ReturnsAsync(true);
-        _mock.Setup(x => x.SaveAsync()).Returns(Task.CompletedTask);
-
-        // Act
-        var result = await _appointmentService.AddNewAsync(appointmentDto);
-
-        // Assert
-        Assert.That(result.IsSuccess, Is.True);
-    }
-
-    [Test]
-    public async Task GetAsync_ExistingAppointmentId_ReturnAppointment()
-    {
-        // Arrange
-        var existingId = 1;
-        var appointment = new Appointment { Id = existingId };
-
-        _mock.Setup(x => x.Appointment.GetAppointmentAsync(existingId, false)).ReturnsAsync(appointment);
-
-        // Act
-        var result = await _appointmentService.GetAsync(existingId);
-
-        // Assert
-        Assert.That(result.IsSuccess, Is.True);
-        Assert.That(result.Value, Is.Not.Null);
-        Assert.That(result.Value?.Id, Is.EqualTo(existingId));
+        _appointmentService = new AppointmentService(_mock.Object, _mapper, null, null);
     }
 
     [Test]

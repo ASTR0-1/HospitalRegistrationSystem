@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { AppointmentService } from '../services/appointment.service';
 import { AppointmentDto } from '../entities/appointment/appointmentDto';
 import { PageEvent } from '@angular/material/paginator';
 import { AuthenticationService } from '../services/authentication.service';
 import { Roles } from '../constants/role.constants';
+import { FeedbackDialogComponent } from './feedback-dialog/feedback-dialog.component';
 
 @Component({
 	selector: 'app-visited-appointments',
@@ -20,7 +22,8 @@ export class VisitedAppointmentsComponent implements OnInit {
 
 	constructor(
 		private appointmentService: AppointmentService,
-		private authService: AuthenticationService
+		private authService: AuthenticationService,
+		private dialog: MatDialog
 	) {}
 
 	ngOnInit(): void {
@@ -57,5 +60,18 @@ export class VisitedAppointmentsComponent implements OnInit {
 				this.pageSize = paginationData.pageSize;
 				this.pageIndex = paginationData.currentPage - 1;
 			});
+	}
+
+	openFeedbackDialog(appointmentId: number): void {
+		const dialogRef = this.dialog.open(FeedbackDialogComponent, {
+			width: '400px',
+			data: { appointmentId },
+		});
+
+		dialogRef.afterClosed().subscribe((result) => {
+			if (result) {
+				this.fetchAppointments(); // Refresh appointments list after feedback submission
+			}
+		});
 	}
 }

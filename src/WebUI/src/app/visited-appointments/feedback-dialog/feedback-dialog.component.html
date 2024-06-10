@@ -1,0 +1,21 @@
+<h2 mat-dialog-title>Залишити відгук</h2>
+<mat-dialog-content>
+  <form [formGroup]="feedbackForm" (ngSubmit)="onSubmit()">
+    <mat-form-field appearance="fill">
+      <mat-label>Рейтинг</mat-label>
+      <mat-select formControlName="rating">
+        <mat-option *ngFor="let rating of ratings" [value]="rating">{{ rating }}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="feedbackForm.get('rating')?.hasError('required')">Рейтинг обов'язковий</mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Текст відгуку</mat-label>
+      <textarea matInput formControlName="text"></textarea>
+      <mat-error *ngIf="feedbackForm.get('text')?.hasError('required')">Текст відгуку обов'язковий</mat-error>
+    </mat-form-field>
+    <div class="d-flex flex-row gap-2" mat-dialog-actions>
+      <button class="btn btn-sm btn-outline-danger" mat-button (click)="onCancel()">Скасувати</button>
+      <button class="btn btn-sm btn-outline-success" mat-button type="submit" [disabled]="!feedbackForm.valid">Залишити відгук</button>
+    </div>
+  </form>
+</mat-dialog-content>

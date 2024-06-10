@@ -7,6 +7,9 @@ import { Roles } from '../constants/role.constants';
 import { HospitalDto } from '../entities/hospital/hospitalDto';
 import { HospitalService } from '../services/hospital.service';
 import { AuthenticationService } from '../services/authentication.service';
+import { FeedbackService } from '../services/feedback.service';
+import { MatDialog } from '@angular/material/dialog';
+import { FeedbackListDialogComponent } from './feedbacks-list-dialog/feedback-list-dialog.component';
 
 @Component({
 	selector: 'app-doctors-by-hospital',
@@ -26,11 +29,13 @@ export class DoctorsByHospitalComponent implements OnInit {
 	hasPrevious: boolean = false;
 
 	constructor(
-        private router: Router,
+		private router: Router,
 		private route: ActivatedRoute,
 		private userService: UserService,
 		private hospitalService: HospitalService,
-		private authService: AuthenticationService
+		private authService: AuthenticationService,
+		private feedbackService: FeedbackService,
+		private dialog: MatDialog
 	) {}
 
 	ngOnInit(): void {
@@ -58,16 +63,35 @@ export class DoctorsByHospitalComponent implements OnInit {
 				this.paging.pageSize = paginationData.pageSize;
 				this.hasNext = paginationData.hasNext;
 				this.hasPrevious = paginationData.hasPrevious;
+
+				this.doctors.forEach((doctor) => {
+					this.feedbackService
+						.getAverageRating(doctor.id)
+						.subscribe((averageRating) => {
+							doctor.averageRating = averageRating;
+						});
+				});
 			});
 	}
 
+	openFeedbackDialog(doctorId: number): void {
+		this.dialog.open(FeedbackListDialogComponent, {
+			width: '400px',
+			data: { doctorId },
+		});
+	}
+
 	redirectToDoctorSchedule(doctorId: number) {
-        this.router.navigate(['/doctor-schedule'], { queryParams: { doctorId: doctorId } });
-    }
+		this.router.navigate(['/doctor-schedule'], {
+			queryParams: { doctorId: doctorId },
+		});
+	}
 
 	redirectToDoctorAppointments(doctorId: number) {
-        this.router.navigate(['/scheduled-appointments'], { queryParams: { userId: doctorId } });
-    }
+		this.router.navigate(['/scheduled-appointments'], {
+			queryParams: { userId: doctorId },
+		});
+	}
 
 	isReceptionist(): boolean {
 		return this.authService.hasRole(Roles.RECEPTIONIST);

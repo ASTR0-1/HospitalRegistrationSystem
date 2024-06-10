@@ -9,4 +9,7 @@ export interface ApplicationUserDto {
 	totalServiceCost?: number;
 	hospitalId?: number;
 	profilePhotoUrl?: string | null;
+
+	// Additional not from DTO field
+	averageRating?: number;
 }

@@ -17,7 +17,7 @@ public class FeedbackConfiguration : IEntityTypeConfiguration<Feedback>
             .IsRequired(false);
 
         builder.Property(b => b.Rating)
-            .HasPrecision(2)
+            .HasPrecision(6)
             .IsRequired();
 
         builder.Property(b => b.FeedbackDate)
