@@ -15,10 +15,6 @@ namespace HospitalRegistrationSystem.Tests.Application.Service.CountryServ;
 [TestFixture]
 public class CountryServiceTests
 {
-    private Mock<IRepositoryManager> _mock;
-    private CountryService _countryService;
-    private IMapper _mapper;
-
     [SetUp]
     public void SetUp()
     {
@@ -35,6 +31,10 @@ public class CountryServiceTests
 
         _countryService = new CountryService(_mapper, _mock.Object);
     }
+
+    private Mock<IRepositoryManager> _mock;
+    private CountryService _countryService;
+    private IMapper _mapper;
 
     [Test]
     public async Task GetAllAsync_ValidParameters_ReturnsCountries()

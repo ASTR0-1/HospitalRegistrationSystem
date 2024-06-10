@@ -17,7 +17,8 @@ public interface IAppointmentRepository
     /// <param name="isVisited">Indicates whether the appointments have been visited. (Optional, if not passed - retrieves all)</param>
     /// <param name="trackChanges">Indicates whether to track changes in the appointments.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains the paged list of appointments.</returns>
-    Task<PagedList<Appointment>> GetAppointmentsByUserIdAsync(PagingParameters paging, int userId, bool? isVisited = null, bool trackChanges = false);
+    Task<PagedList<Appointment>> GetAppointmentsByUserIdAsync(PagingParameters paging, int userId,
+        bool? isVisited = null, bool trackChanges = false);
 
     /// <summary>
     ///     Retrieves a paged list of incoming appointments by user ID.
@@ -25,15 +26,22 @@ public interface IAppointmentRepository
     /// <param name="paging">The paging parameters.</param>
     /// <param name="userId">The ID of the user.</param>
     /// <param name="trackChanges">Indicates whether to track changes in the appointments.</param>
-    /// <returns>A task that represents the asynchronous operation. The task result contains the paged list of incoming appointments.</returns>
-    Task<PagedList<Appointment>> GetIncomingAppointmentsByUserIdAsync(PagingParameters paging, int userId, bool trackChanges = false);
+    /// <returns>
+    ///     A task that represents the asynchronous operation. The task result contains the paged list of incoming
+    ///     appointments.
+    /// </returns>
+    Task<PagedList<Appointment>> GetIncomingAppointmentsByUserIdAsync(PagingParameters paging, int userId,
+        bool trackChanges = false);
 
     /// <summary>
     ///     Retrieves an appointment by its ID.
     /// </summary>
     /// <param name="id">The ID of the appointment.</param>
     /// <param name="trackChanges">Indicates whether to track changes in the appointment.</param>
-    /// <returns>A task that represents the asynchronous operation. The task result contains the appointment, or null if not found.</returns>
+    /// <returns>
+    ///     A task that represents the asynchronous operation. The task result contains the appointment, or null if not
+    ///     found.
+    /// </returns>
     Task<Appointment?> GetAppointmentAsync(int id, bool trackChanges = false);
 
     /// <summary>

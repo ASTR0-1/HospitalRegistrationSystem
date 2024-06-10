@@ -1,8 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using HospitalRegistrationSystem.Application.DTOs.AppointmentDTOs;
 using HospitalRegistrationSystem.Application.Utility.PagedData;
-using HospitalRegistrationSystem.Domain.Entities;
 using HospitalRegistrationSystem.Domain.Shared.ResultPattern;
 
 namespace HospitalRegistrationSystem.Application.Interfaces.Services;

@@ -5,14 +5,14 @@ using Microsoft.AspNetCore.Http;
 namespace HospitalRegistrationSystem.WebAPI.Services;
 
 /// <summary>
-/// Represents the application user service.
+///     Represents the application user service.
 /// </summary>
 public class CurrentUserService : ICurrentUserService
 {
     private readonly ClaimsPrincipal _user;
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="CurrentUserService"/> class.
+    ///     Initializes a new instance of the <see cref="CurrentUserService" /> class.
     /// </summary>
     /// <param name="httpContextAccessor">The HTTP context accessor.</param>
     public CurrentUserService(IHttpContextAccessor httpContextAccessor)
@@ -21,9 +21,12 @@ public class CurrentUserService : ICurrentUserService
     }
 
     /// <inheritdoc />
-    public int GetApplicationUserId() => int.Parse(_user.FindFirstValue(ClaimTypes.NameIdentifier)!);
+    public int GetApplicationUserId()
+    {
+        return int.Parse(_user.FindFirstValue(ClaimTypes.NameIdentifier)!);
+    }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public int? GetApplicationUserHospitalId()
     {
         var canParse = int.TryParse(_user.FindFirstValue("HospitalId")!, out var hospitalId);
@@ -31,8 +34,11 @@ public class CurrentUserService : ICurrentUserService
             return null;
 
         return hospitalId;
-    } 
+    }
 
     /// <inheritdoc />
-    public bool IsInRole(string role) => _user.IsInRole(role);
+    public bool IsInRole(string role)
+    {
+        return _user.IsInRole(role);
+    }
 }

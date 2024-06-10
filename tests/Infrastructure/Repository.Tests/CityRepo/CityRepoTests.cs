@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 using HospitalRegistrationSystem.Application.Interfaces.Data;
@@ -12,9 +11,6 @@ namespace HospitalRegistrationSystem.Tests.Infrastructure.Repository.CityRepo;
 [TestFixture]
 public class CityRepoTests
 {
-    private ICityRepository _cityRepository;
-    private CitySeedDataFixture _dataFixture;
-
     [SetUp]
     public void SetUpFixture()
     {
@@ -27,6 +23,9 @@ public class CityRepoTests
     {
         _dataFixture.Dispose();
     }
+
+    private ICityRepository _cityRepository;
+    private CitySeedDataFixture _dataFixture;
 
     [Test]
     public async Task GetCitiesAsync_GetValue()
@@ -72,7 +71,7 @@ public class CityRepoTests
     public void CreateCity_Success()
     {
         // Arrange
-        var city = new City { Id = 3, Name = "City3" };
+        var city = new City {Id = 3, Name = "City3"};
 
         // Act
         _cityRepository.CreateCity(city);

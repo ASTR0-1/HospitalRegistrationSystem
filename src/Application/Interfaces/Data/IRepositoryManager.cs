@@ -18,12 +18,12 @@ public interface IRepositoryManager
     IApplicationUserRepository ApplicationUser { get; }
 
     /// <summary>
-    ///    Gets the country repository.
+    ///     Gets the country repository.
     /// </summary>
     ICountryRepository Country { get; }
 
     /// <summary>
-    ///    Gets the region repository.
+    ///     Gets the region repository.
     /// </summary>
     IRegionRepository Region { get; }
 
@@ -43,7 +43,7 @@ public interface IRepositoryManager
     IDoctorScheduleRepository DoctorSchedule { get; }
 
     /// <summary>
-    ///    Gets the feedback repository.
+    ///     Gets the feedback repository.
     /// </summary>
     IFeedbackRepository Feedback { get; }
 

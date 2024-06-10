@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -6,24 +5,22 @@ using HospitalRegistrationSystem.Application.Interfaces.Data;
 using HospitalRegistrationSystem.Application.Utility.PagedData;
 using HospitalRegistrationSystem.Domain.Entities;
 using HospitalRegistrationSystem.Infrastructure.Persistence.Repositories;
-using NUnit.Framework;
-using Moq;
 using Microsoft.AspNetCore.Identity;
+using Moq;
+using NUnit.Framework;
 
 namespace HospitalRegistrationSystem.Tests.Infrastructure.Repository.ApplicationUserRepo;
 
 [TestFixture]
 public class ApplicationUserRepoTests
 {
-    private Mock<UserManager<ApplicationUser>> _userManager;
-    private IApplicationUserRepository _applicationUserRepository;
-    private List<ApplicationUser> _users;
-
     [SetUp]
     public void SetUpFixture()
     {
         var userStoreMock = new Mock<IUserStore<ApplicationUser>>();
-        _userManager = new Mock<UserManager<ApplicationUser>>(userStoreMock.Object, null, null, null, null, null, null, null, null);
+        _userManager =
+            new Mock<UserManager<ApplicationUser>>(userStoreMock.Object, null, null, null, null, null, null, null,
+                null);
         _applicationUserRepository = new ApplicationUserRepository(_userManager.Object);
 
         _users =
@@ -42,6 +39,10 @@ public class ApplicationUserRepoTests
             .ReturnsAsync(IdentityResult.Success);
     }
 
+    private Mock<UserManager<ApplicationUser>> _userManager;
+    private IApplicationUserRepository _applicationUserRepository;
+    private List<ApplicationUser> _users;
+
     [Test]
     public async Task GetApplicationUsersAsync_GetValue()
     {
@@ -49,7 +50,8 @@ public class ApplicationUserRepoTests
         var expectedCount = 2;
 
         // Act
-        var actualCount = (await _applicationUserRepository.GetApplicationUsersAsync(new PagingParameters(), null, "Role")).Count;
+        var actualCount =
+            (await _applicationUserRepository.GetApplicationUsersAsync(new PagingParameters(), null, "Role")).Count;
 
         // Assert
         Assert.That(actualCount, Is.EqualTo(expectedCount));
@@ -86,7 +88,7 @@ public class ApplicationUserRepoTests
     public async Task UpdateApplicationUserAsync_Success()
     {
         // Arrange
-        var user = new ApplicationUser { Id = 1, UserName = "User1" };
+        var user = new ApplicationUser {Id = 1, UserName = "User1"};
 
         // Act
         var result = await _applicationUserRepository.UpdateApplicationUserAsync(user);

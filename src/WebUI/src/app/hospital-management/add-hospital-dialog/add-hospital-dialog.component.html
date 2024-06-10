@@ -3,7 +3,7 @@
 	<form [formGroup]="hospitalForm" (ngSubmit)="onSubmit()">
 		<mat-form-field appearance="fill" class="full-width">
 			<mat-label>Ім'я</mat-label>
-			<input matInput formControlName="name" required />
+			<input matInput formControlName="name" required/>
 		</mat-form-field>
 		<mat-form-field appearance="fill" class="full-width">
 			<mat-label>Відсоток за надання послуг лікарнею</mat-label>
@@ -11,45 +11,42 @@
 				matInput
 				type="text"
 				formControlName="hospitalFeePercent"
-				required
-			/>
+				required/>
 		</mat-form-field>
 		<mat-form-field appearance="fill" class="full-width">
 			<mat-label>Місто</mat-label>
 			<mat-select
 				formControlName="cityId"
-				(openedChange)="onOpenedChange($event)"
-			>
+				(openedChange)="onOpenedChange($event)">
 				<mat-option
 					*ngFor="let city of cities; let i = index"
-					[value]="city.id"
-					>{{ city.name }}</mat-option
+					[value]="city.id">
+					{{ city.name }}
+				</mat-option
 				>
 			</mat-select>
 			<mat-progress-spinner
 				*ngIf="isLoading"
-				diameter="30"
-			></mat-progress-spinner>
+				diameter="30">
+			</mat-progress-spinner>
 		</mat-form-field>
 		<mat-form-field appearance="fill" class="full-width">
 			<mat-label>Вулиця</mat-label>
-			<input matInput formControlName="street" required />
+			<input matInput formControlName="street" required/>
 		</mat-form-field>
 		<div mat-dialog-actions class="d-flex flex-row gap-2">
 			<button
 				class="btn btn-secondary"
 				mat-button
 				type="button"
-				(click)="onCancel()"
-			>
+				(click)="onCancel()">
 				Скасувати
 			</button>
 			<button
 				class="btn btn-primary"
 				mat-button
 				color="primary"
-				type="submit"
-			>
+				type="submit">
 				Додати
 			</button>
 		</div>

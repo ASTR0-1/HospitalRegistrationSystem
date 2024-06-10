@@ -15,10 +15,6 @@ namespace HospitalRegistrationSystem.Tests.Application.Service.HospitalServ;
 [TestFixture]
 public class HospitalServiceTests
 {
-    private Mock<IRepositoryManager> _mock = null!;
-    private HospitalService _hospitalService = null!;
-    private IMapper _mapper = null!;
-
     [SetUp]
     public void SetUp()
     {
@@ -29,6 +25,10 @@ public class HospitalServiceTests
 
         _hospitalService = new HospitalService(_mock.Object, _mapper);
     }
+
+    private Mock<IRepositoryManager> _mock = null!;
+    private HospitalService _hospitalService = null!;
+    private IMapper _mapper = null!;
 
     [Test]
     public async Task GetHospitalsAsync_WhenCalled_ReturnsAllHospitals()
@@ -49,7 +49,7 @@ public class HospitalServiceTests
     {
         // Arrange
         var existingId = 1;
-        var hospital = new Hospital { Id = existingId };
+        var hospital = new Hospital {Id = existingId};
         _mock.Setup(x => x.Hospital.GetHospitalAsync(existingId, false)).ReturnsAsync(hospital);
 
         // Act
@@ -65,8 +65,8 @@ public class HospitalServiceTests
     public async Task CreateHospitalAsync_NewHospital_AddsHospitalToDb()
     {
         // Arrange
-        var hospitalDto = new HospitalForCreationDto { CityId = 1, HospitalFeePercent = 10 };
-        var city = new City { Id = 1 };
+        var hospitalDto = new HospitalForCreationDto {CityId = 1, HospitalFeePercent = 10};
+        var city = new City {Id = 1};
         _mock.Setup(x => x.City.GetCityAsync(It.IsAny<int>(), false)).ReturnsAsync(city);
         _mock.Setup(x => x.Hospital.CreateHospital(It.IsAny<Hospital>()));
         _mock.Setup(x => x.SaveAsync()).Returns(Task.CompletedTask);
@@ -83,7 +83,7 @@ public class HospitalServiceTests
     {
         // Arrange
         var existingId = 1;
-        var hospital = new Hospital { Id = existingId };
+        var hospital = new Hospital {Id = existingId};
         _mock.Setup(x => x.Hospital.GetHospitalAsync(existingId, false)).ReturnsAsync(hospital);
         _mock.Setup(x => x.Hospital.DeleteHospital(It.IsAny<Hospital>()));
         _mock.Setup(x => x.SaveAsync()).Returns(Task.CompletedTask);

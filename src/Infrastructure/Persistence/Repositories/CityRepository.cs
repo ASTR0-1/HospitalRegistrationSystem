@@ -13,7 +13,7 @@ namespace HospitalRegistrationSystem.Infrastructure.Persistence.Repositories;
 public class CityRepository : RepositoryBase<City>, ICityRepository
 {
     /// <summary>
-    ///     Initializes a new instance of the <see cref="CityRepository"/> class.
+    ///     Initializes a new instance of the <see cref="CityRepository" /> class.
     /// </summary>
     /// <param name="applicationContext">The application context.</param>
     public CityRepository(ApplicationContext applicationContext)
@@ -21,7 +21,7 @@ public class CityRepository : RepositoryBase<City>, ICityRepository
     {
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public async Task<City?> GetCityAsync(int id, bool trackChanges = false)
     {
         var city = await FindByCondition(c => c.Id == id, trackChanges)
@@ -30,7 +30,7 @@ public class CityRepository : RepositoryBase<City>, ICityRepository
         return city;
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public async Task<PagedList<City>> GetCitiesAsync(PagingParameters paging, bool trackChanges = false)
     {
         var citiesQuery = FindAll(trackChanges)
@@ -39,9 +39,15 @@ public class CityRepository : RepositoryBase<City>, ICityRepository
         return await PagedList<City>.ToPagedListAsync(citiesQuery, paging.PageNumber, paging.PageSize);
     }
 
-    /// <inheritdoc/>
-    public void CreateCity(City city) => Create(city);
+    /// <inheritdoc />
+    public void CreateCity(City city)
+    {
+        Create(city);
+    }
 
-    /// <inheritdoc/>
-    public void DeleteCity(City city) => Delete(city);
+    /// <inheritdoc />
+    public void DeleteCity(City city)
+    {
+        Delete(city);
+    }
 }

@@ -8,17 +8,15 @@ namespace HospitalRegistrationSystem.Domain.Shared.ResultPattern;
 public class Result
 {
     /// <summary>
-    ///     Initializes a new instance of the <see cref="Result"/> class.
+    ///     Initializes a new instance of the <see cref="Result" /> class.
     /// </summary>
     /// <param name="isSuccess">A boolean indicating whether the result is a success or failure.</param>
-    /// <param name="error">An instance of the <see cref="Error"/> class representing the error if the result is a failure.</param>
+    /// <param name="error">An instance of the <see cref="Error" /> class representing the error if the result is a failure.</param>
     protected Result(bool isSuccess, Error error)
     {
-        if (isSuccess && error != Error.None
-            || !isSuccess && error == Error.None)
-        {
+        if ((isSuccess && error != Error.None)
+            || (!isSuccess && error == Error.None))
             throw new ArgumentException("Invalid error", nameof(error));
-        }
 
         IsSuccess = isSuccess;
         Error = error;
@@ -40,15 +38,21 @@ public class Result
     public Error Error { get; }
 
     /// <summary>
-    ///     Creates a new instance of <see cref="Result"/> representing a successful result.
+    ///     Creates a new instance of <see cref="Result" /> representing a successful result.
     /// </summary>
-    /// <returns>A new instance of <see cref="Result"/> representing a successful result.</returns>
-    public static Result Success() => new(true, Error.None);
+    /// <returns>A new instance of <see cref="Result" /> representing a successful result.</returns>
+    public static Result Success()
+    {
+        return new Result(true, Error.None);
+    }
 
     /// <summary>
-    ///     Creates a new instance of <see cref="Result"/> representing a failure result with the provided error.
+    ///     Creates a new instance of <see cref="Result" /> representing a failure result with the provided error.
     /// </summary>
-    /// <param name="error">An instance of the <see cref="Error"/> class representing the error.</param>
-    /// <returns>A new instance of <see cref="Result"/> representing a failure result.</returns>
-    public static Result Failure(Error error) => new(false, error);
+    /// <param name="error">An instance of the <see cref="Error" /> class representing the error.</param>
+    /// <returns>A new instance of <see cref="Result" /> representing a failure result.</returns>
+    public static Result Failure(Error error)
+    {
+        return new Result(false, error);
+    }
 }

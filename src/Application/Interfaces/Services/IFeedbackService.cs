@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using HospitalRegistrationSystem.Application.DTOs.FeedbackDTOs;
 using HospitalRegistrationSystem.Application.Utility.PagedData;
-using HospitalRegistrationSystem.Domain.Entities;
 using HospitalRegistrationSystem.Domain.Shared.ResultPattern;
 
 namespace HospitalRegistrationSystem.Application.Interfaces.Services;

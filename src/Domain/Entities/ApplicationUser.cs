@@ -46,7 +46,7 @@ public class ApplicationUser : IdentityUser<int>
     public ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
 
     /// <summary>
-    ///    Gets or sets the feedbacks of the user.
+    ///     Gets or sets the feedbacks of the user.
     /// </summary>
     public ICollection<Feedback> Feedbacks { get; set; } = new List<Feedback>();
 

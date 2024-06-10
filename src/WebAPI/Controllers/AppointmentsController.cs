@@ -7,10 +7,8 @@ using HospitalRegistrationSystem.Application.Interfaces;
 using HospitalRegistrationSystem.Application.Interfaces.Services;
 using HospitalRegistrationSystem.Application.Utility.PagedData;
 using HospitalRegistrationSystem.Domain.Constants;
-using HospitalRegistrationSystem.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 
 namespace HospitalRegistrationSystem.WebAPI.Controllers;
 
@@ -27,12 +25,13 @@ public class AppointmentsController : ControllerBase
     private readonly IValidator<AppointmentForCreationDto> _validator;
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="AppointmentsController"/> class.
+    ///     Initializes a new instance of the <see cref="AppointmentsController" /> class.
     /// </summary>
     /// <param name="appointmentService">The appointment service.</param>
     /// <param name="logger">The logger.</param>
     /// <param name="validator">The validator.</param>
-    public AppointmentsController(IAppointmentService appointmentService, ILoggerManager logger, IValidator<AppointmentForCreationDto> validator)
+    public AppointmentsController(IAppointmentService appointmentService, ILoggerManager logger,
+        IValidator<AppointmentForCreationDto> validator)
     {
         _appointmentsService = appointmentService;
         _logger = logger;
@@ -44,7 +43,8 @@ public class AppointmentsController : ControllerBase
     /// </summary>
     /// <param name="appointmentId">The appointment ID.</param>
     /// <returns>The appointment with the specified ID.</returns>
-    [Authorize(Roles = $"{RoleConstants.Receptionist}, {RoleConstants.Doctor}, {RoleConstants.Supervisor}, {RoleConstants.MasterSupervisor}")]
+    [Authorize(Roles =
+        $"{RoleConstants.Receptionist}, {RoleConstants.Doctor}, {RoleConstants.Supervisor}, {RoleConstants.MasterSupervisor}")]
     [HttpGet("{appointmentId:int}")]
     public async Task<IActionResult> GetAppointment(int appointmentId)
     {

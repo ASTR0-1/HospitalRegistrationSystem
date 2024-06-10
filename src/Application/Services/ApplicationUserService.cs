@@ -20,19 +20,20 @@ namespace HospitalRegistrationSystem.Application.Services;
 /// </summary>
 public class ApplicationUserService : IApplicationUserService
 {
+    private readonly IConfiguration _configuration;
+    private readonly ICurrentUserService _currentUserService;
     private readonly IMapper _mapper;
     private readonly IRepositoryManager _repository;
-    private readonly ICurrentUserService _currentUserService;
-    private readonly IConfiguration _configuration;
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="ApplicationUserService"/> class.
+    ///     Initializes a new instance of the <see cref="ApplicationUserService" /> class.
     /// </summary>
     /// <param name="repository">The repository manager.</param>
     /// <param name="mapper">The mapper.</param>
     /// <param name="currentUserService">The current user service.</param>
     /// <param name="configuration">The configuration.</param>
-    public ApplicationUserService(IRepositoryManager repository, IMapper mapper, ICurrentUserService currentUserService, IConfiguration configuration)
+    public ApplicationUserService(IRepositoryManager repository, IMapper mapper, ICurrentUserService currentUserService,
+        IConfiguration configuration)
     {
         _repository = repository;
         _mapper = mapper;
@@ -53,25 +54,24 @@ public class ApplicationUserService : IApplicationUserService
     }
 
     /// <inheritdoc />
-    public async Task<Result<PagedList<ApplicationUserDto>>> GetAllAsync(PagingParameters paging, string? searchQuery, string role, int? hospitalId = null)
+    public async Task<Result<PagedList<ApplicationUserDto>>> GetAllAsync(PagingParameters paging, string? searchQuery,
+        string role, int? hospitalId = null)
     {
-        if (hospitalId is not null && 
+        if (hospitalId is not null &&
             await _repository.Hospital.GetHospitalAsync(hospitalId.Value) is null)
-        {
             return Result<PagedList<ApplicationUserDto>>.Failure(HospitalError.HospitalIdNotFound(hospitalId.Value));
-        }
 
-        var applicationUsers = await _repository.ApplicationUser.GetApplicationUsersAsync(paging, searchQuery, role, hospitalId);
+        var applicationUsers =
+            await _repository.ApplicationUser.GetApplicationUsersAsync(paging, searchQuery, role, hospitalId);
 
         var applicationUserDtos = _mapper.Map<PagedList<ApplicationUserDto>>(applicationUsers);
         if (role.Equals(RoleConstants.Doctor, StringComparison.InvariantCultureIgnoreCase))
-        {
             foreach (var applicationUserDto in applicationUserDtos)
             {
-                var hospital = await _repository.Hospital.GetHospitalAsync((int)applicationUserDto.HospitalId!);
-                applicationUserDto.TotalServiceCost = CalculateTotalServiceCost((decimal) applicationUserDto.VisitCost!, hospital!.HospitalFeePercent);
+                var hospital = await _repository.Hospital.GetHospitalAsync((int) applicationUserDto.HospitalId!);
+                applicationUserDto.TotalServiceCost = CalculateTotalServiceCost((decimal) applicationUserDto.VisitCost!,
+                    hospital!.HospitalFeePercent);
             }
-        }
 
         return Result<PagedList<ApplicationUserDto>>.Success(applicationUserDtos);
     }
@@ -86,9 +86,9 @@ public class ApplicationUserService : IApplicationUserService
         if (!isUserSupervisor
             && !isUserMasterSupervisor
             && applicationUserDto.Id != callerId)
-        {
-            return Result.Failure(ApplicationUserError.UserUpdateFailed($"Caller with id '{callerId}' doesn't have rights to update other users."));
-        }
+            return Result.Failure(
+                ApplicationUserError.UserUpdateFailed(
+                    $"Caller with id '{callerId}' doesn't have rights to update other users."));
 
         var existingUser = await _repository.ApplicationUser.GetApplicationUserAsync(applicationUserDto.Id);
         if (existingUser is null)
@@ -111,7 +111,8 @@ public class ApplicationUserService : IApplicationUserService
     }
 
     /// <inheritdoc />
-    public async Task<Result> AssignEmployeeAsync(int userId, string role, int hospitalId, string? specialty, decimal? doctorPrice)
+    public async Task<Result> AssignEmployeeAsync(int userId, string role, int hospitalId, string? specialty,
+        decimal? doctorPrice)
     {
         var applicationUser = await _repository.ApplicationUser.GetApplicationUserAsync(userId);
         if (applicationUser is null)
@@ -121,7 +122,7 @@ public class ApplicationUserService : IApplicationUserService
         if (!roleExists)
             return Result.Failure(RoleError.RoleNotFound(role));
 
-        if (role.Equals(RoleConstants.Doctor, StringComparison.InvariantCultureIgnoreCase) )
+        if (role.Equals(RoleConstants.Doctor, StringComparison.InvariantCultureIgnoreCase))
         {
             if (string.IsNullOrEmpty(specialty))
                 return Result.Failure(ApplicationUserError.SpecialtyRequiredForDoctor(userId));
@@ -134,7 +135,9 @@ public class ApplicationUserService : IApplicationUserService
             return Result.Failure(HospitalError.HospitalIdNotFound(hospitalId));
 
         if (!CanCallerAssignEmployee(role, hospitalId))
-            return Result.Failure(ApplicationUserError.UnauthorizedEmployeeAssignment(_currentUserService.GetApplicationUserId(), role, hospitalId));
+            return Result.Failure(
+                ApplicationUserError.UnauthorizedEmployeeAssignment(_currentUserService.GetApplicationUserId(), role,
+                    hospitalId));
 
         var result = await _repository.ApplicationUser.AssignUserToRoleAsync(applicationUser, role);
 
@@ -160,7 +163,7 @@ public class ApplicationUserService : IApplicationUserService
         if (_currentUserService.IsInRole(RoleConstants.MasterSupervisor))
             return true;
 
-        if (!_currentUserService.IsInRole(RoleConstants.Supervisor)) 
+        if (!_currentUserService.IsInRole(RoleConstants.Supervisor))
             return false;
 
         var canAssignRole = role switch
@@ -178,10 +181,11 @@ public class ApplicationUserService : IApplicationUserService
     {
         var systemFeeSection = _configuration.GetSection("SystemSettings:SystemFeePercent");
         var systemFeeString = systemFeeSection.Value;
-        if (!decimal.TryParse(systemFeeString, NumberStyles.Float, CultureInfo.InvariantCulture, out var systemFeePercent))
+        if (!decimal.TryParse(systemFeeString, NumberStyles.Float, CultureInfo.InvariantCulture,
+                out var systemFeePercent))
             throw new Exception("Invalid system fee value");
 
-        var totalServiceCost = visitCost + (visitCost * hospitalFeePercent / 100) + (visitCost * systemFeePercent / 100);
+        var totalServiceCost = visitCost + visitCost * hospitalFeePercent / 100 + visitCost * systemFeePercent / 100;
 
         return totalServiceCost;
     }

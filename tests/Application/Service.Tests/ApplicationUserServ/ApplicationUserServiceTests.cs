@@ -18,12 +18,6 @@ namespace HospitalRegistrationSystem.Tests.Application.Service.ApplicationUserSe
 [TestFixture]
 public class ApplicationUserServiceTests
 {
-    private Mock<IRepositoryManager> _mock;
-    private Mock<ICurrentUserService> _mockUserService;
-    private Mock<IConfiguration> _mockConfiguration;
-    private ApplicationUserService _applicationUserService;
-    private IMapper _mapper;
-
     [SetUp]
     public void SetUp()
     {
@@ -40,14 +34,22 @@ public class ApplicationUserServiceTests
 
         _mapper = config.CreateMapper();
 
-        _applicationUserService = new ApplicationUserService(_mock.Object, _mapper, _mockUserService.Object, _mockConfiguration.Object);
+        _applicationUserService =
+            new ApplicationUserService(_mock.Object, _mapper, _mockUserService.Object, _mockConfiguration.Object);
     }
+
+    private Mock<IRepositoryManager> _mock;
+    private Mock<ICurrentUserService> _mockUserService;
+    private Mock<IConfiguration> _mockConfiguration;
+    private ApplicationUserService _applicationUserService;
+    private IMapper _mapper;
 
     [Test]
     public async Task GetAsync_ValidUserId_ReturnsUser()
     {
         // Arrange
-        _mock.Setup(x => x.ApplicationUser.GetApplicationUserAsync(It.IsAny<int>())).ReturnsAsync(new ApplicationUser());
+        _mock.Setup(x => x.ApplicationUser.GetApplicationUserAsync(It.IsAny<int>()))
+            .ReturnsAsync(new ApplicationUser());
 
         // Act
         var result = await _applicationUserService.GetAsync(1);
@@ -61,7 +63,8 @@ public class ApplicationUserServiceTests
     {
         // Arrange
         var applicationUsers = new PagedList<ApplicationUser>(new List<ApplicationUser>(), 1, 1, 1);
-        _mock.Setup(x => x.ApplicationUser.GetApplicationUsersAsync(It.IsAny<PagingParameters>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int?>())).ReturnsAsync(applicationUsers);
+        _mock.Setup(x => x.ApplicationUser.GetApplicationUsersAsync(It.IsAny<PagingParameters>(), It.IsAny<string>(),
+            It.IsAny<string>(), It.IsAny<int?>())).ReturnsAsync(applicationUsers);
 
         // Act
         var result = await _applicationUserService.GetAllAsync(new PagingParameters(), null, "role");
@@ -74,10 +77,12 @@ public class ApplicationUserServiceTests
     public async Task UpdateAsync_ValidUser_UpdatesUser()
     {
         // Arrange
-        var applicationUserDto = new ApplicationUserDto { Id = 1 };
+        var applicationUserDto = new ApplicationUserDto {Id = 1};
         _mockUserService.Setup(x => x.GetApplicationUserId()).Returns(1);
-        _mock.Setup(x => x.ApplicationUser.GetApplicationUserAsync(It.IsAny<int>())).ReturnsAsync(new ApplicationUser());
-        _mock.Setup(x => x.ApplicationUser.UpdateApplicationUserAsync(It.IsAny<ApplicationUser>())).ReturnsAsync(IdentityResult.Success);
+        _mock.Setup(x => x.ApplicationUser.GetApplicationUserAsync(It.IsAny<int>()))
+            .ReturnsAsync(new ApplicationUser());
+        _mock.Setup(x => x.ApplicationUser.UpdateApplicationUserAsync(It.IsAny<ApplicationUser>()))
+            .ReturnsAsync(IdentityResult.Success);
 
         // Act
         var result = await _applicationUserService.UpdateAsync(applicationUserDto);
@@ -92,10 +97,13 @@ public class ApplicationUserServiceTests
         // Arrange
         _mockUserService.Setup(x => x.GetApplicationUserId()).Returns(1);
         _mockUserService.Setup(x => x.IsInRole(It.IsAny<string>())).Returns(true);
-        _mock.Setup(x => x.ApplicationUser.GetApplicationUserAsync(It.IsAny<int>())).ReturnsAsync(new ApplicationUser());
+        _mock.Setup(x => x.ApplicationUser.GetApplicationUserAsync(It.IsAny<int>()))
+            .ReturnsAsync(new ApplicationUser());
         _mock.Setup(x => x.Hospital.GetHospitalAsync(It.IsAny<int>(), false)).ReturnsAsync(new Hospital());
-        _mock.Setup(x => x.ApplicationUser.AssignUserToRoleAsync(It.IsAny<ApplicationUser>(), It.IsAny<string>())).ReturnsAsync(IdentityResult.Success);
-        _mock.Setup(x => x.ApplicationUser.UpdateApplicationUserAsync(It.IsAny<ApplicationUser>())).ReturnsAsync(IdentityResult.Success);
+        _mock.Setup(x => x.ApplicationUser.AssignUserToRoleAsync(It.IsAny<ApplicationUser>(), It.IsAny<string>()))
+            .ReturnsAsync(IdentityResult.Success);
+        _mock.Setup(x => x.ApplicationUser.UpdateApplicationUserAsync(It.IsAny<ApplicationUser>()))
+            .ReturnsAsync(IdentityResult.Success);
 
         // Act
         var result = await _applicationUserService.AssignEmployeeAsync(1, "Doctor", 1, "specialty", 100);

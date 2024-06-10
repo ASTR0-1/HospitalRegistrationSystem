@@ -71,7 +71,7 @@ public class CountryRepoTests
     public void CreateCountry_Success()
     {
         // Arrange
-        var country = new Country { Id = 3, Name = "Country3", ISO2 = "C3", ISO3 = "C3Y"};
+        var country = new Country {Id = 3, Name = "Country3", ISO2 = "C3", ISO3 = "C3Y"};
 
         // Act
         _countryRepository.CreateCountry(country);

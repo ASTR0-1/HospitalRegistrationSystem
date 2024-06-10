@@ -1,22 +1,19 @@
 <div class="bg-wrapper d-flex flex-row align-items-center">
 	<div
-		class="container d-flex flex-column justify-content-center rounded shadow mt-4"
-	>
+		class="container d-flex flex-column justify-content-center rounded shadow mt-4">
 		<h2>Відвідані прийоми</h2>
-		<hr class="border" />
+		<hr class="border"/>
 		<div class="appointments-container row">
 			<div
 				class="appointment-card col-sm-12 col-md-6 col-lg-3"
-				*ngFor="let appointment of appointments"
-			>
+				*ngFor="let appointment of appointments">
 				<div
 					class="card mb-1"
 					[style.border-color]="
 						appointment.doctor.id === currentUserId
 							? 'salmon'
 							: 'initial'
-					"
-				>
+					">
 					<div class="card-body">
 						<p class="card-text">
 							<strong>Дата:</strong>
@@ -26,8 +23,7 @@
 							*ngIf="
 								appointment.doctor.id === currentUserId;
 								else patientInfo
-							"
-						>
+							">
 							<p class="card-text">
 								<strong>Пацієнт:</strong>
 								{{ appointment.client.firstName }}
@@ -47,8 +43,8 @@
 							<p class="card-text">
 								<strong>Вартість прийому:</strong>
 								{{
-									appointment.doctor.visitCost
-										| currency: "UAH"
+								appointment.doctor.visitCost
+								| currency: "UAH"
 								}}
 							</p>
 						</ng-template>
@@ -63,8 +59,7 @@
 							*ngIf="appointment.doctor.id !== currentUserId"
 							mat-button
 							color="primary"
-							(click)="openFeedbackDialog(appointment.id)"
-						>
+							(click)="openFeedbackDialog(appointment.id)">
 							Залишити відгук
 						</button>
 					</div>
@@ -76,8 +71,7 @@
 			[length]="totalAppointments"
 			[pageSize]="pageSize"
 			[pageIndex]="pageIndex"
-			(page)="fetchAppointments($event)"
-		>
+			(page)="fetchAppointments($event)">
 		</mat-paginator>
 	</div>
 </div>

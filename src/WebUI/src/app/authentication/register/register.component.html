@@ -1,16 +1,13 @@
 <div class="register-page">
 	<form
 		class="register-block shadow d-flex flex-column align-items-center p-4 gap-2"
-		(ngSubmit)="register()"
-	>
+		(ngSubmit)="register()">
 		<h2 class="header">Реєстрація</h2>
 		<div
-			class="input-block d-flex flex-column align-items-center justify-content-center h-100 m-2"
-		>
+			class="input-block d-flex flex-column align-items-center justify-content-center h-100 m-2">
 			<p
 				class="invalid-register-error alert-danger p-1 m-0 rounded"
-				*ngIf="isInvalidRegister$ | async"
-			>
+				*ngIf="isInvalidRegister$ | async">
 				Помилка реєстрації.
 			</p>
 			<div>
@@ -22,13 +19,11 @@
 					name="firstName"
 					[(ngModel)]="user.firstName"
 					required
-					#firstName="ngModel"
-				/>
+					#firstName="ngModel"/>
 				<div class="error-container">
 					<p
 						class="alert-danger p-1 rounded"
-						*ngIf="firstName.invalid && firstName.touched"
-					>
+						*ngIf="firstName.invalid && firstName.touched">
 						Ім'я обов'язкове
 					</p>
 				</div>
@@ -40,8 +35,7 @@
 					class="form-control"
 					type="text"
 					name="middleName"
-					[(ngModel)]="user.middleName"
-				/>
+					[(ngModel)]="user.middleName"/>
 				<div class="error-container"></div>
 			</div>
 			<div>
@@ -53,13 +47,11 @@
 					name="lastName"
 					[(ngModel)]="user.lastName"
 					required
-					#lastName="ngModel"
-				/>
+					#lastName="ngModel"/>
 				<div class="error-container">
 					<p
 						class="alert-danger p-1 rounded"
-						*ngIf="lastName.invalid && lastName.touched"
-					>
+						*ngIf="lastName.invalid && lastName.touched">
 						Прізвище обов'язкове
 					</p>
 				</div>
@@ -71,16 +63,14 @@
 					name="gender"
 					[(ngModel)]="user.gender"
 					required
-					#gender="ngModel"
-				>
+					#gender="ngModel">
 					<option value="Чоловіча">Чоловіча</option>
 					<option value="Жіноча">Жіноча</option>
 				</select>
 				<div class="error-container">
 					<p
 						class="alert-danger p-1 rounded"
-						*ngIf="gender.invalid && gender.touched"
-					>
+						*ngIf="gender.invalid && gender.touched">
 						Стать обов'язкова
 					</p>
 				</div>
@@ -96,22 +86,19 @@
 					placeholder="+380"
 					pattern="380[0-9]{9}"
 					required
-					#phoneNumber="ngModel"
-				/>
+					#phoneNumber="ngModel"/>
 				<div class="error-container">
 					<p
 						class="alert-danger p-1 rounded"
 						*ngIf="
 							phoneNumber.errors?.['required'] &&
 							phoneNumber.touched
-						"
-					>
+						">
 						Номер телефону обов'язковий
 					</p>
 					<p
 						class="alert-danger p-1 rounded"
-						*ngIf="phoneNumber.errors?.['pattern']"
-					>
+						*ngIf="phoneNumber.errors?.['pattern']">
 						Номер телефону має починатися з '380' і має бути 12
 						символів
 					</p>
@@ -127,21 +114,18 @@
 					[(ngModel)]="user.password"
 					minlength="5"
 					required
-					#password="ngModel"
-				/>
+					#password="ngModel"/>
 				<div class="error-container">
 					<p
 						class="alert-danger p-1 rounded"
 						*ngIf="
 							password.errors?.['required'] && password.touched
-						"
-					>
+						">
 						Пароль обов'язковий
 					</p>
 					<p
 						class="alert-danger p-1 rounded"
-						*ngIf="password.errors?.['minlength']"
-					>
+						*ngIf="password.errors?.['minlength']">
 						Пароль має бути не менше 5 символів
 					</p>
 				</div>
@@ -155,8 +139,7 @@
 				lastName.invalid ||
 				phoneNumber.invalid ||
 				password.invalid
-			"
-		>
+			">
 			Зареєструватись
 		</button>
 	</form>

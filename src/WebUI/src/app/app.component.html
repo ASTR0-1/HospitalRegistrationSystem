@@ -2,8 +2,8 @@
 	<a routerLink="/">
 		<svg viewBox="0 0 804.5714285714286 1024" class="plus-icon">
 			<path
-				d="M804.571 420.571v109.714c0 30.286-24.571 54.857-54.857 54.857h-237.714v237.714c0 30.286-24.571 54.857-54.857 54.857h-109.714c-30.286 0-54.857-24.571-54.857-54.857v-237.714h-237.714c-30.286 0-54.857-24.571-54.857-54.857v-109.714c0-30.286 24.571-54.857 54.857-54.857h237.714v-237.714c0-30.286 24.571-54.857 54.857-54.857h109.714c30.286 0 54.857 24.571 54.857 54.857v237.714h237.714c30.286 0 54.857 24.571 54.857 54.857z"
-			></path>
+				d="M804.571 420.571v109.714c0 30.286-24.571 54.857-54.857 54.857h-237.714v237.714c0 30.286-24.571 54.857-54.857 54.857h-109.714c-30.286 0-54.857-24.571-54.857-54.857v-237.714h-237.714c-30.286 0-54.857-24.571-54.857-54.857v-109.714c0-30.286 24.571-54.857 54.857-54.857h237.714v-237.714c0-30.286 24.571-54.857 54.857-54.857h109.714c30.286 0 54.857 24.571 54.857 54.857v237.714h237.714c30.286 0 54.857 24.571 54.857 54.857z">
+			</path>
 		</svg>
 	</a>
 	<div class="d-flex flex-row gap-2">
@@ -14,8 +14,7 @@
 				authService.isAuthenticated() &&
 				authService.hasRole(roles.MASTER_SUPERVISOR)
 			"
-			routerLink="/hospital-management"
-		>
+			routerLink="/hospital-management">
 			Керування лікарнями
 		</button>
 
@@ -26,8 +25,7 @@
 				authService.isAuthenticated() &&
 				authService.hasRole(roles.SUPERVISOR)
 			"
-			routerLink="/user-management"
-		>
+			routerLink="/user-management">
 			Керування лікарнею
 		</button>
 
@@ -38,26 +36,23 @@
 				authService.isAuthenticated() &&
 				authService.hasRole(roles.RECEPTIONIST)
 			"
-			(click)="viewHospital()"
-		>
+			(click)="viewHospital()">
 			Сторінка рецепціоніста
 		</button>
 
-		<br />
+		<br/>
 
 		<!-- All not logged in user buttons -->
 		<button
 			class="btn btn-light"
 			*ngIf="!authService.isAuthenticated()"
-			routerLink="/register"
-		>
+			routerLink="/register">
 			Зареєструватись
 		</button>
 		<button
 			class="btn btn-light"
 			*ngIf="!authService.isAuthenticated()"
-			routerLink="/login"
-		>
+			routerLink="/login">
 			Увійти
 		</button>
 
@@ -65,16 +60,14 @@
 		<button
 			class="btn btn-outline-secondary"
 			*ngIf="authService.isAuthenticated()"
-			routerLink="/personal-page"
-		>
+			routerLink="/personal-page">
 			Особиста сторінка
 		</button>
 		<button
 			class="btn btn-outline-danger"
 			*ngIf="authService.isAuthenticated()"
 			(click)="authService.logout()"
-			routerLink="/"
-		>
+			routerLink="/">
 			Вийти
 		</button>
 	</div>

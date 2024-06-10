@@ -8,6 +8,7 @@ using HospitalRegistrationSystem.Infrastructure.Persistence.Repositories;
 using NUnit.Framework;
 
 namespace HospitalRegistrationSystem.Tests.Infrastructure.Repository.FeedbackRepo;
+
 [TestFixture]
 public class FeedbackRepoTests
 {
@@ -62,7 +63,7 @@ public class FeedbackRepoTests
     public void CreateFeedback_Success()
     {
         // Arrange
-        var feedback = new Feedback { Id = 3, AppointmentId = 1, FeedbackDate = new DateTime(2022, 1, 3), Rating = 3 };
+        var feedback = new Feedback {Id = 3, AppointmentId = 1, FeedbackDate = new DateTime(2022, 1, 3), Rating = 3};
 
         // Act
         _feedbackRepository.CreateFeedback(feedback);

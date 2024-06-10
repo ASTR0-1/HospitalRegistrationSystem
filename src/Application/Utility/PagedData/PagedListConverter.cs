@@ -17,10 +17,12 @@ public class PagedListConverter<TSource, TDestination> : ITypeConverter<PagedLis
     /// <param name="destination">The destination PagedList.</param>
     /// <param name="context">The AutoMapper resolution context.</param>
     /// <returns>The converted PagedList of the destination type.</returns>
-    public PagedList<TDestination> Convert(PagedList<TSource> source, PagedList<TDestination> destination, ResolutionContext context)
+    public PagedList<TDestination> Convert(PagedList<TSource> source, PagedList<TDestination> destination,
+        ResolutionContext context)
     {
         var destinationItemType = typeof(TDestination);
-        var mappedItems = (IEnumerable<TDestination>)context.Mapper.Map(source, source.GetType(), typeof(List<>).MakeGenericType(destinationItemType));
+        var mappedItems = (IEnumerable<TDestination>) context.Mapper.Map(source, source.GetType(),
+            typeof(List<>).MakeGenericType(destinationItemType));
 
         return new PagedList<TDestination>(
             mappedItems,

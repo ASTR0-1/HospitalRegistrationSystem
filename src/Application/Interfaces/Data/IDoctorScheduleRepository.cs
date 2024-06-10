@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using HospitalRegistrationSystem.Application.Utility.PagedData;
 using HospitalRegistrationSystem.Domain.Entities;
 

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using HospitalRegistrationSystem.Application.DTOs.LocationDTOs;
@@ -18,10 +15,6 @@ namespace HospitalRegistrationSystem.Tests.Application.Service.CityServ;
 [TestFixture]
 public class CityServiceTests
 {
-    private Mock<IRepositoryManager> _mock;
-    private CityService _cityService;
-    private IMapper _mapper;
-
     [SetUp]
     public void SetUp()
     {
@@ -38,6 +31,10 @@ public class CityServiceTests
 
         _cityService = new CityService(_mapper, _mock.Object);
     }
+
+    private Mock<IRepositoryManager> _mock;
+    private CityService _cityService;
+    private IMapper _mapper;
 
     [Test]
     public async Task GetAllAsync_WhenCalled_ReturnsCities()
@@ -57,7 +54,7 @@ public class CityServiceTests
     public async Task AddNewAsync_ValidCity_CreatesCity()
     {
         // Arrange
-        var cityDto = new CityDto { Name = "Test City" };
+        var cityDto = new CityDto {Name = "Test City"};
         _mock.Setup(x => x.City.CreateCity(It.IsAny<City>()));
         _mock.Setup(x => x.SaveAsync()).Returns(Task.CompletedTask);
 

@@ -15,18 +15,18 @@ public class RepositoryManager : IRepositoryManager
 
     private readonly ApplicationContext _context;
     private readonly UserManager<ApplicationUser> _userManager;
+    private IApplicationUserRepository? _applicationUserRepository;
 
     private IAppointmentRepository? _appointmentRepository;
-    private IApplicationUserRepository? _applicationUserRepository;
-    private ICountryRepository? _countryRepository;
-    private IRegionRepository? _regionRepository;
     private ICityRepository? _cityRepository;
-    private IHospitalRepository? _hospitalRepository;
+    private ICountryRepository? _countryRepository;
     private IDoctorScheduleRepository? _doctorScheduleRepository;
     private IFeedbackRepository? _feedbackRepository;
+    private IHospitalRepository? _hospitalRepository;
+    private IRegionRepository? _regionRepository;
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="RepositoryManager"/> class.
+    ///     Initializes a new instance of the <see cref="RepositoryManager" /> class.
     /// </summary>
     /// <param name="context">The repository context.</param>
     /// <param name="userManager">The user manager.</param>
@@ -149,5 +149,8 @@ public class RepositoryManager : IRepositoryManager
     }
 
     /// <inheritdoc />
-    public Task SaveAsync() => _context.SaveChangesAsync();
+    public Task SaveAsync()
+    {
+        return _context.SaveChangesAsync();
+    }
 }

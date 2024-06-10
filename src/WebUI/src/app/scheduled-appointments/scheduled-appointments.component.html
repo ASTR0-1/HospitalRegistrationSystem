@@ -1,22 +1,19 @@
 <div class="bg-wrapper d-flex flex-row align-items-center">
 	<div
-		class="container d-flex flex-column justify-content-center rounded shadow mt-4"
-	>
+		class="container d-flex flex-column justify-content-center rounded shadow mt-4">
 		<h2>Заплановані прийоми</h2>
-		<hr class="border" />
+		<hr class="border"/>
 		<div class="appointments-container row">
 			<div
 				class="appointment-card col-sm-12 col-md-6 col-lg-3"
-				*ngFor="let appointment of appointments"
-			>
+				*ngFor="let appointment of appointments">
 				<div
 					class="card mb-1"
 					[style.border-color]="
 						appointment?.doctor?.id === currentUserId
 							? 'salmon'
 							: 'initial'
-					"
-				>
+					">
 					<!-- Card Body for non-Receptionist -->
 					<div class="card-body" *ngIf="!isReceptionist">
 						<p class="card-text">
@@ -27,8 +24,7 @@
 							*ngIf="
 								appointment?.doctor?.id === currentUserId;
 								else patientInfoNonReceptionist
-							"
-						>
+							">
 							<p class="card-text">
 								<strong>Пацієнт:</strong>
 								{{ appointment.client.firstName }}
@@ -53,8 +49,8 @@
 							<p class="card-text">
 								<strong>Вартість прийому:</strong>
 								{{
-									appointment.doctor.totalServiceCost
-										| currency: "UAH"
+								appointment.doctor.totalServiceCost
+								| currency: "UAH"
 								}}
 							</p>
 							<p class="card-text">
@@ -80,7 +76,7 @@
 							<strong>ID Пацієнта:</strong>
 							{{ appointment.client.id }}
 						</p>
-						<hr />
+						<hr/>
 						<p class="card-text">
 							<strong>Спеціаліст:</strong>
 							{{ appointment.doctor.firstName }}
@@ -94,8 +90,8 @@
 						<p class="card-text">
 							<strong>Вартість прийому:</strong>
 							{{
-								appointment.doctor.totalServiceCost
-									| currency: "UAH"
+							appointment.doctor.totalServiceCost
+							| currency: "UAH"
 							}}
 						</p>
 						<p class="card-text">
@@ -111,8 +107,7 @@
 			[length]="totalAppointments"
 			[pageSize]="pageSize"
 			[pageIndex]="pageIndex"
-			(page)="fetchAppointments($event)"
-		>
+			(page)="fetchAppointments($event)">
 		</mat-paginator>
 	</div>
 </div>

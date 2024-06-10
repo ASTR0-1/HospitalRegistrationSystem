@@ -9,8 +9,7 @@
 				style="height: 20vh"
 			></textarea>
 			<mat-error
-				*ngIf="markAsVisitedForm.get('diagnosis')!.hasError('required')"
-			>
+				*ngIf="markAsVisitedForm.get('diagnosis')!.hasError('required')">
 				Висновок обов'язковий
 			</mat-error>
 		</mat-form-field>
@@ -18,16 +17,14 @@
 			<button
 				class="btn shadow btn-sm btn-outline-danger"
 				mat-button
-				(click)="onCancel()"
-			>
+				(click)="onCancel()">
 				Скасувати
 			</button>
 			<button
 				class="btn shadow btn-sm btn-outline-success"
 				mat-button
 				type="submit"
-				[disabled]="!markAsVisitedForm.valid"
-			>
+				[disabled]="!markAsVisitedForm.valid">
 				Відмітити
 			</button>
 		</div>

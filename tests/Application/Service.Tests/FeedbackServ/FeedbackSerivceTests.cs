@@ -15,10 +15,6 @@ namespace HospitalRegistrationSystem.Tests.Application.Service.FeedbackServ;
 [TestFixture]
 public class FeedbackServiceTests
 {
-    private Mock<IRepositoryManager> _mock;
-    private FeedbackService _feedbackService;
-    private IMapper _mapper;
-
     [SetUp]
     public void SetUp()
     {
@@ -36,12 +32,17 @@ public class FeedbackServiceTests
         _feedbackService = new FeedbackService(_mock.Object, _mapper);
     }
 
+    private Mock<IRepositoryManager> _mock;
+    private FeedbackService _feedbackService;
+    private IMapper _mapper;
+
     [Test]
     public async Task GetFeedbacksByUserIdAsync_WhenCalled_ReturnsFeedbacks()
     {
         // Arrange
         var feedbacks = new PagedList<Feedback>(new List<Feedback>(), 1, 1, 1);
-        _mock.Setup(x => x.Feedback.GetFeedbacksByUserIdAsync(It.IsAny<PagingParameters>(), It.IsAny<int>())).ReturnsAsync(feedbacks);
+        _mock.Setup(x => x.Feedback.GetFeedbacksByUserIdAsync(It.IsAny<PagingParameters>(), It.IsAny<int>()))
+            .ReturnsAsync(feedbacks);
 
         // Act
         var result = await _feedbackService.GetFeedbacksByUserIdAsync(new PagingParameters(), 1);
@@ -54,8 +55,8 @@ public class FeedbackServiceTests
     public async Task CreateFeedbackAsync_ValidFeedback_CreatesFeedback()
     {
         // Arrange
-        var feedbackDto = new FeedbackForCreationDto { AppointmentId = 1 };
-        var appointment = new Appointment { IsVisited = true };
+        var feedbackDto = new FeedbackForCreationDto {AppointmentId = 1};
+        var appointment = new Appointment {IsVisited = true};
         _mock.Setup(x => x.Appointment.GetAppointmentAsync(It.IsAny<int>(), false)).ReturnsAsync(appointment);
         _mock.Setup(x => x.Feedback.CreateFeedback(It.IsAny<Feedback>()));
         _mock.Setup(x => x.SaveAsync()).Returns(Task.CompletedTask);
@@ -67,4 +68,3 @@ public class FeedbackServiceTests
         Assert.That(result.IsSuccess, Is.True);
     }
 }
-

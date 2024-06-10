@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace HospitalRegistrationSystem.Application.Utility.PagedData;
 
-/// <inheritdoc cref="IPagedList"/>
+/// <inheritdoc cref="IPagedList" />
 /// <typeparam name="T">The type of items in the paged list.</typeparam>
 public class PagedList<T> : List<T>, IPagedList
 {
@@ -25,14 +25,14 @@ public class PagedList<T> : List<T>, IPagedList
             TotalCount = count,
             PageSize = pageSize,
             CurrentPage = pageNumber,
-            TotalPages = (int)Math.Ceiling(count / (double)pageSize)
+            TotalPages = (int) Math.Ceiling(count / (double) pageSize)
         };
 
         AddRange(items);
     }
 
-    /// <inheritdoc/>
-    public MetaData MetaData { get; private set; }
+    /// <inheritdoc />
+    public MetaData MetaData { get; }
 
     /// <summary>
     ///     Creates a paged list from the source collection.

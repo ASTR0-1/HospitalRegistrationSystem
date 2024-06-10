@@ -19,7 +19,7 @@ public class HospitalService : IHospitalService
     private readonly IRepositoryManager _repository;
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="HospitalService"/> class.
+    ///     Initializes a new instance of the <see cref="HospitalService" /> class.
     /// </summary>
     /// <param name="repository">The repository manager.</param>
     /// <param name="mapper">The mapper.</param>
@@ -29,7 +29,7 @@ public class HospitalService : IHospitalService
         _mapper = mapper;
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public async Task<Result<PagedList<HospitalDto>>> GetHospitalsAsync(PagingParameters paging, string? searchQuery)
     {
         var hospitals = string.IsNullOrEmpty(searchQuery)
@@ -41,7 +41,7 @@ public class HospitalService : IHospitalService
         return Result<PagedList<HospitalDto>>.Success(hospitalsDto);
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public async Task<Result<HospitalDto>> GetHospitalAsync(int hospitalId)
     {
         var hospital = await _repository.Hospital.GetHospitalAsync(hospitalId);
@@ -53,7 +53,7 @@ public class HospitalService : IHospitalService
         return Result<HospitalDto>.Success(hospitalDto);
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public async Task<Result> CreateHospitalAsync(HospitalForCreationDto hospitalForCreationDto)
     {
         var city = await _repository.City.GetCityAsync(hospitalForCreationDto.CityId);
@@ -61,7 +61,8 @@ public class HospitalService : IHospitalService
             return Result.Failure(CityError.CityIdNotFound(hospitalForCreationDto.CityId));
 
         if (hospitalForCreationDto.HospitalFeePercent <= 0)
-            return Result.Failure(HospitalError.HospitalFeePercentInvalid(hospitalForCreationDto.Name, hospitalForCreationDto.HospitalFeePercent));
+            return Result.Failure(HospitalError.HospitalFeePercentInvalid(hospitalForCreationDto.Name,
+                hospitalForCreationDto.HospitalFeePercent));
 
         var hospital = _mapper.Map<Hospital>(hospitalForCreationDto);
 
@@ -71,7 +72,7 @@ public class HospitalService : IHospitalService
         return Result.Success();
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public async Task<Result> DeleteHospitalAsync(int hospitalId)
     {
         var hospital = await _repository.Hospital.GetHospitalAsync(hospitalId);

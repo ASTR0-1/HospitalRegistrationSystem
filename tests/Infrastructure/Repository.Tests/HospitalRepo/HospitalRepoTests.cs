@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using HospitalRegistrationSystem.Application.Interfaces.Data;
 using HospitalRegistrationSystem.Application.Utility.PagedData;
@@ -65,16 +62,19 @@ public class HospitalRepoTests
     public void CreateHospital_Success()
     {
         // Arrange
-        var hospital = new Hospital { Id = 3, Name = "Hospital3", Address = new Address()
+        var hospital = new Hospital
         {
-            City = new City()
+            Id = 3, Name = "Hospital3", Address = new Address
             {
-                Id = 100,
-                Name = "City100",
-            },
-            CityId = 100,
-            Street = "New100"
-        } };
+                City = new City
+                {
+                    Id = 100,
+                    Name = "City100"
+                },
+                CityId = 100,
+                Street = "New100"
+            }
+        };
 
         // Act
         _hospitalRepository.CreateHospital(hospital);

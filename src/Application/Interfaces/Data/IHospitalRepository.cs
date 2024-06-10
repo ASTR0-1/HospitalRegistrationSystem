@@ -9,7 +9,6 @@ namespace HospitalRegistrationSystem.Application.Interfaces.Data;
 /// </summary>
 public interface IHospitalRepository
 {
-
     /// <summary>
     ///     Get hospitals asynchronously with paging and search query.
     /// </summary>

@@ -8,7 +8,7 @@ public class CountryDataSeed : IEntityTypeConfiguration<Country>
 {
     public void Configure(EntityTypeBuilder<Country> builder)
     {
-        builder.HasData(new Country()
+        builder.HasData(new Country
         {
             Id = 1,
             Name = "Україна",

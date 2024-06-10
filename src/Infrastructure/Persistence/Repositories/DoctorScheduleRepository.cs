@@ -13,14 +13,14 @@ namespace HospitalRegistrationSystem.Infrastructure.Persistence.Repositories;
 public class DoctorScheduleRepository : RepositoryBase<DoctorSchedule>, IDoctorScheduleRepository
 {
     /// <summary>
-    ///     Initializes a new instance of the <see cref="DoctorScheduleRepository"/> class.
+    ///     Initializes a new instance of the <see cref="DoctorScheduleRepository" /> class.
     /// </summary>
     /// <param name="applicationContext">The application context.</param>
     public DoctorScheduleRepository(ApplicationContext applicationContext) : base(applicationContext)
     {
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public async Task<PagedList<DoctorSchedule>> GetDoctorSchedulesAsync(DoctorScheduleParameters parameters,
         int doctorId, bool trackChanges = false)
     {
@@ -30,10 +30,11 @@ public class DoctorScheduleRepository : RepositoryBase<DoctorSchedule>, IDoctorS
                 trackChanges)
             .OrderByDescending(ds => ds.Date);
 
-        return await PagedList<DoctorSchedule>.ToPagedListAsync(doctorSchedulesQuery, parameters.PageNumber, parameters.PageSize);
+        return await PagedList<DoctorSchedule>.ToPagedListAsync(doctorSchedulesQuery, parameters.PageNumber,
+            parameters.PageSize);
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public Task<DoctorSchedule?> GetDoctorScheduleByIdAsync(int id, bool trackChanges = false)
     {
         var doctorSchedule = FindByCondition(ds => ds.Id == id, trackChanges)
@@ -42,12 +43,21 @@ public class DoctorScheduleRepository : RepositoryBase<DoctorSchedule>, IDoctorS
         return doctorSchedule;
     }
 
-    /// <inheritdoc/>
-    public void CreateDoctorSchedule(DoctorSchedule doctorSchedule) => Create(doctorSchedule);
+    /// <inheritdoc />
+    public void CreateDoctorSchedule(DoctorSchedule doctorSchedule)
+    {
+        Create(doctorSchedule);
+    }
 
-    /// <inheritdoc/>
-    public void UpdateDoctorSchedule(DoctorSchedule doctorSchedule) => Update(doctorSchedule);
+    /// <inheritdoc />
+    public void UpdateDoctorSchedule(DoctorSchedule doctorSchedule)
+    {
+        Update(doctorSchedule);
+    }
 
-    /// <inheritdoc/>
-    public void DeleteDoctorSchedule(DoctorSchedule doctorSchedule) => Delete(doctorSchedule);
+    /// <inheritdoc />
+    public void DeleteDoctorSchedule(DoctorSchedule doctorSchedule)
+    {
+        Delete(doctorSchedule);
+    }
 }

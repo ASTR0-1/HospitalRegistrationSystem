@@ -23,12 +23,10 @@ public class PaginationHeaderFilter : IAsyncResultFilter
         var result = context.Result as ObjectResult;
 
         if (result?.Value is IPagedList pagedList)
-        {
             context.HttpContext
                 .Response
                 .Headers
                 .Append("X-Pagination", JsonConvert.SerializeObject(pagedList.MetaData, Formatting.None));
-        }
 
         await next();
     }

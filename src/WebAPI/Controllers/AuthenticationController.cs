@@ -24,16 +24,18 @@ namespace HospitalRegistrationSystem.WebAPI.Controllers;
 public class AuthenticationController : ControllerBase
 {
     private readonly IAuthenticationManager _authenticationManager;
-    private readonly UserManager<ApplicationUser> _userManager;
     private readonly ILoggerManager _logger;
     private readonly IMapper _mapper;
-
-    private readonly IValidator<UserForRegistrationDto> _userForRegistrationDtoValidator;
     private readonly IValidator<UserForAuthenticationDto> _userForAuthenticationDtoValidator;
 
-    public AuthenticationController(IAuthenticationManager authenticationManager, UserManager<ApplicationUser> userManager,
+    private readonly IValidator<UserForRegistrationDto> _userForRegistrationDtoValidator;
+    private readonly UserManager<ApplicationUser> _userManager;
+
+    public AuthenticationController(IAuthenticationManager authenticationManager,
+        UserManager<ApplicationUser> userManager,
         ILoggerManager logger, IMapper mapper,
-        IValidator<UserForRegistrationDto> userForRegistrationDtoValidator, IValidator<UserForAuthenticationDto> userForAuthenticationDtoValidator)
+        IValidator<UserForRegistrationDto> userForRegistrationDtoValidator,
+        IValidator<UserForAuthenticationDto> userForAuthenticationDtoValidator)
     {
         _authenticationManager = authenticationManager;
         _userManager = userManager;

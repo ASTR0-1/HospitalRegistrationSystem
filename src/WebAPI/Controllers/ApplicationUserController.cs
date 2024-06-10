@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -23,17 +21,18 @@ namespace HospitalRegistrationSystem.WebAPI.Controllers;
 [Route("api/users")]
 public class ApplicationUserController : ControllerBase
 {
+    private readonly IFileStorageManager _fileStorageManager;
     private readonly ILoggerManager _logger;
     private readonly IApplicationUserService _userService;
-    private readonly IFileStorageManager _fileStorageManager;
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="ApplicationUserController"/> class.
+    ///     Initializes a new instance of the <see cref="ApplicationUserController" /> class.
     /// </summary>
     /// <param name="logger">The logger.</param>
     /// <param name="userService">The user service.</param>
     /// <param name="fileStorageManager">The file storage manager.</param>
-    public ApplicationUserController(ILoggerManager logger, IApplicationUserService userService, IFileStorageManager fileStorageManager)
+    public ApplicationUserController(ILoggerManager logger, IApplicationUserService userService,
+        IFileStorageManager fileStorageManager)
     {
         _logger = logger;
         _userService = userService;
@@ -71,7 +70,8 @@ public class ApplicationUserController : ControllerBase
     /// <returns>The list of application users.</returns>
     [AllowAnonymous]
     [HttpGet("role/{role}")]
-    public async Task<ActionResult<PagedList<ApplicationUserDto>>> GetAllByRole([FromQuery] PagingParameters paging, string role, string? searchQuery = null)
+    public async Task<ActionResult<PagedList<ApplicationUserDto>>> GetAllByRole([FromQuery] PagingParameters paging,
+        string role, string? searchQuery = null)
     {
         var result = await _userService.GetAllAsync(paging, searchQuery, role);
 
@@ -90,7 +90,8 @@ public class ApplicationUserController : ControllerBase
     /// <returns>The list of application users.</returns>
     [AllowAnonymous]
     [HttpGet("hospital/{hospitalId:int}/role/{role}")]
-    public async Task<ActionResult<PagedList<ApplicationUserDto>>> GetAllByHospitalAndRole([FromQuery] PagingParameters paging, int hospitalId, string role, string? searchQuery = null)
+    public async Task<ActionResult<PagedList<ApplicationUserDto>>> GetAllByHospitalAndRole(
+        [FromQuery] PagingParameters paging, int hospitalId, string role, string? searchQuery = null)
     {
         var result = await _userService.GetAllAsync(paging, searchQuery, role, hospitalId);
 
@@ -163,7 +164,8 @@ public class ApplicationUserController : ControllerBase
     [HttpPost("{userId:int}/role/{role}")]
     public async Task<IActionResult> AssignEmployee(int userId, string role, AssignEmployeeDto assignEmployeeDto)
     {
-        var result = await _userService.AssignEmployeeAsync(userId, role, assignEmployeeDto.HospitalId, assignEmployeeDto.Specialty, assignEmployeeDto.DoctorPrice);
+        var result = await _userService.AssignEmployeeAsync(userId, role, assignEmployeeDto.HospitalId,
+            assignEmployeeDto.Specialty, assignEmployeeDto.DoctorPrice);
 
         if (!result.IsSuccess)
         {

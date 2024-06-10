@@ -16,8 +16,8 @@ namespace HospitalRegistrationSystem.WebAPI.Controllers;
 [Route("api/countries")]
 public class CountryController : ControllerBase
 {
-    private readonly ILoggerManager _logger;
     private readonly ICountryService _countryService;
+    private readonly ILoggerManager _logger;
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="CountryController" /> class.

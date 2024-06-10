@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using HospitalRegistrationSystem.Domain.Entities;
 using HospitalRegistrationSystem.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
 namespace HospitalRegistrationSystem.Tests.Infrastructure.Repository.RegionRepo;
+
 public class RegionSeedDataFixture : IDisposable
 {
     public RegionSeedDataFixture()

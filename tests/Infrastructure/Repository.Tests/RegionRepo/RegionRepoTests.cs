@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using HospitalRegistrationSystem.Application.Interfaces.Data;
 using HospitalRegistrationSystem.Application.Utility.PagedData;
@@ -12,9 +11,6 @@ namespace HospitalRegistrationSystem.Tests.Infrastructure.Repository.RegionRepo;
 [TestFixture]
 public class RegionRepoTests
 {
-    private IRegionRepository _regionRepository;
-    private RegionSeedDataFixture _dataFixture;
-
     [SetUp]
     public void SetUpFixture()
     {
@@ -27,6 +23,9 @@ public class RegionRepoTests
     {
         _dataFixture.Dispose();
     }
+
+    private IRegionRepository _regionRepository;
+    private RegionSeedDataFixture _dataFixture;
 
     [Test]
     public async Task GetRegionsAsync_GetValue()
@@ -63,7 +62,7 @@ public class RegionRepoTests
     public void CreateRegion_Success()
     {
         // Arrange
-        var region = new Region { Id = 3, Name = "Region3" };
+        var region = new Region {Id = 3, Name = "Region3"};
 
         // Act
         _regionRepository.CreateRegion(region);

@@ -19,7 +19,7 @@ public class CityService : ICityService
     private readonly IRepositoryManager _repository;
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="CityService"/> class.
+    ///     Initializes a new instance of the <see cref="CityService" /> class.
     /// </summary>
     /// <param name="mapper">The mapper.</param>
     /// <param name="repository">The repository.</param>
@@ -29,7 +29,7 @@ public class CityService : ICityService
         _repository = repository;
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public async Task<Result<PagedList<CityDto>>> GetAllAsync(PagingParameters paging)
     {
         var cities = await _repository.City.GetCitiesAsync(paging);
@@ -38,7 +38,7 @@ public class CityService : ICityService
         return Result<PagedList<CityDto>>.Success(cityDtos);
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public async Task<Result<CityDto>> GetAsync(int cityId)
     {
         var city = await _repository.City.GetCityAsync(cityId);
@@ -50,7 +50,7 @@ public class CityService : ICityService
         return Result<CityDto>.Success(cityDto);
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public async Task<Result> AddNewAsync(CityDto cityCreationDto)
     {
         var city = _mapper.Map<City>(cityCreationDto);
@@ -61,7 +61,7 @@ public class CityService : ICityService
         return Result.Success();
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public async Task<Result> DeleteAsync(int cityId)
     {
         var existingCity = await _repository.City.GetCityAsync(cityId);

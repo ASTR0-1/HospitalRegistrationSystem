@@ -11,9 +11,6 @@ namespace HospitalRegistrationSystem.Tests.Infrastructure.Repository.Appointment
 [TestFixture]
 public class AppointmentRepoTests
 {
-    private IAppointmentRepository _appointmentRepository;
-    private AppointmentSeedDataFixture _dataFixture;
-
     [SetUp]
     public void SetUpFixture()
     {
@@ -26,6 +23,9 @@ public class AppointmentRepoTests
     {
         _dataFixture.Dispose();
     }
+
+    private IAppointmentRepository _appointmentRepository;
+    private AppointmentSeedDataFixture _dataFixture;
 
     [Test]
     public async Task GetAppointmentAsync_NotExistingId_GetNull()
@@ -58,7 +58,7 @@ public class AppointmentRepoTests
     public void CreateAppointment_Success()
     {
         // Arrange
-        var appointment = new Appointment { Id = 3, VisitTime = DateTime.Now.AddDays(3), IsVisited = false };
+        var appointment = new Appointment {Id = 3, VisitTime = DateTime.Now.AddDays(3), IsVisited = false};
 
         // Act
         _appointmentRepository.CreateAppointment(appointment);

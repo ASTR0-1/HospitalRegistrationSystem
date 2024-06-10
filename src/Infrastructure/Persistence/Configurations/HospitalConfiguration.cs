@@ -1,11 +1,12 @@
 ﻿using HospitalRegistrationSystem.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace HospitalRegistrationSystem.Infrastructure.Persistence.Configurations;
 
 public class HospitalConfiguration : IEntityTypeConfiguration<Hospital>
 {
-    public void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<Hospital> builder)
+    public void Configure(EntityTypeBuilder<Hospital> builder)
     {
         builder.HasKey(h => h.Id);
 

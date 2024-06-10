@@ -3,8 +3,7 @@
 		<button
 			class="btn btn-sm btn-secondary"
 			[disabled]="isInitialWeek()"
-			(click)="previousWeek()"
-		>
+			(click)="previousWeek()">
 			&#10094;
 		</button>
 		<h4>Розклад. Дата: {{ currentDate | date: "fullDate" }}</h4>
@@ -25,8 +24,7 @@
 						: isScheduled(day, hour) && isAuthenticated()
 							? openAppointmentDialog(day, hour)
 							: null
-				"
-			>
+				">
 				{{ hour }}:00
 			</div>
 		</div>
@@ -34,8 +32,7 @@
 	<button
 		class="btn btn-success shadow"
 		*ngIf="isDoctor()"
-		(click)="saveSchedule()"
-	>
+		(click)="saveSchedule()">
 		Зберегти зміни
 	</button>
 </div>

@@ -1,9 +1,7 @@
 <div
-	class="bg-wrapper m-2 h-75 d-flex align-items-center justify-content-center"
->
+	class="bg-wrapper m-2 h-75 d-flex align-items-center justify-content-center">
 	<div
-		class="personal-page shadow d-flex flex-column align-items-center p-5 gap-2"
-	>
+		class="personal-page shadow d-flex flex-column align-items-center p-5 gap-2">
 		<h2>Особиста сторінка</h2>
 		<div class="d-flex w-100 justify-content-between">
 			<div class="d-flex flex-column image-block gap-3">
@@ -15,8 +13,7 @@
 								: '/assets/user-image-placeholder.jpg'
 						"
 						alt="User Image"
-						class="img-fluid"
-					/>
+						class="img-fluid"/>
 				</div>
 				<button class="btn shadow" (click)="fileInput.click()">
 					Змінити фото профілю
@@ -25,8 +22,7 @@
 					#fileInput
 					type="file"
 					(change)="onFileSelected($event)"
-					hidden
-				/>
+					hidden/>
 			</div>
 			<div class="d-flex flex-column gap-2 info-block">
 				<label>
@@ -35,8 +31,7 @@
 						matInput
 						class="rounded"
 						[(ngModel)]="user.firstName"
-						required
-					/>
+						required/>
 				</label>
 				<label>
 					По-батькові:
@@ -44,8 +39,7 @@
 						matInput
 						class="rounded"
 						[(ngModel)]="user.middleName"
-						required
-					/>
+						required/>
 				</label>
 				<label>
 					Прізвище:
@@ -53,8 +47,7 @@
 						matInput
 						class="rounded"
 						[(ngModel)]="user.lastName"
-						required
-					/>
+						required/>
 				</label>
 				<label>
 					Стать:
@@ -63,8 +56,7 @@
 						matInput
 						class="rounded"
 						[(ngModel)]="user.gender"
-						required
-					/>
+						required/>
 				</label>
 				<label *ngIf="userIsDoctor()">
 					Ціна за прийом:
@@ -72,8 +64,7 @@
 						matInput
 						class="rounded"
 						[(ngModel)]="user.visitCost"
-						required
-					/>
+						required/>
 				</label>
 				<label *ngIf="userIsDoctor()">
 					Спеціальність:
@@ -82,8 +73,7 @@
 						matInput
 						class="rounded"
 						[(ngModel)]="user.specialty"
-						required
-					/>
+						required/>
 				</label>
 				<button class="btn shadow w-100 mt-3" (click)="saveUser()">
 					Зберегти зміни
@@ -103,8 +93,7 @@
 			<button
 				class="btn-lg btn-success shadow mt-3"
 				*ngIf="userIsDoctor()"
-				(click)="redirectToDoctorSchedule()"
-			>
+				(click)="redirectToDoctorSchedule()">
 				Налаштування розкладу
 			</button>
 		</div>

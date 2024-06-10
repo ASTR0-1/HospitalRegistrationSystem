@@ -20,7 +20,7 @@ public class RegionController : ControllerBase
     private readonly IRegionService _regionService;
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="RegionController"/> class.
+    ///     Initializes a new instance of the <see cref="RegionController" /> class.
     /// </summary>
     /// <param name="logger">The logger.</param>
     /// <param name="regionService">The region service.</param>

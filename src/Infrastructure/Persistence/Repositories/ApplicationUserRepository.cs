@@ -25,15 +25,14 @@ public class ApplicationUserRepository : IApplicationUserRepository
         _userManager = userManager;
     }
 
-    /// <inheritdoc/>
-    public async Task<PagedList<ApplicationUser>> GetApplicationUsersAsync(PagingParameters paging, string? searchQuery, string role, int? hospitalId = null)
+    /// <inheritdoc />
+    public async Task<PagedList<ApplicationUser>> GetApplicationUsersAsync(PagingParameters paging, string? searchQuery,
+        string role, int? hospitalId = null)
     {
         var users = await _userManager.GetUsersInRoleAsync(role);
         if (hospitalId is not null)
-        {
             users = users.Where(u => u.HospitalId == hospitalId)
                 .ToList();
-        }
 
         if (!string.IsNullOrWhiteSpace(searchQuery))
         {
@@ -41,12 +40,12 @@ public class ApplicationUserRepository : IApplicationUserRepository
                 .Select(term => term.ToLower().Trim())
                 .ToList();
 
-            users = users.Where(u => searchTerms.Any(term => 
-                    u.FirstName.Equals(term, StringComparison.InvariantCultureIgnoreCase) ||
-                    (u.MiddleName is not null && u.MiddleName.Equals(term, StringComparison.InvariantCultureIgnoreCase)) ||
-                    u.LastName.Equals(term, StringComparison.InvariantCultureIgnoreCase) ||
-                    (u.Specialty is not null && u.Specialty.Equals(term, StringComparison.InvariantCultureIgnoreCase))
-                )).ToList();
+            users = users.Where(u => searchTerms.Any(term =>
+                u.FirstName.Equals(term, StringComparison.InvariantCultureIgnoreCase) ||
+                (u.MiddleName is not null && u.MiddleName.Equals(term, StringComparison.InvariantCultureIgnoreCase)) ||
+                u.LastName.Equals(term, StringComparison.InvariantCultureIgnoreCase) ||
+                (u.Specialty is not null && u.Specialty.Equals(term, StringComparison.InvariantCultureIgnoreCase))
+            )).ToList();
         }
 
         var pagedUsers = PagedList<ApplicationUser>.ToPagedList(users, paging.PageNumber, paging.PageSize);
@@ -54,7 +53,7 @@ public class ApplicationUserRepository : IApplicationUserRepository
         return pagedUsers;
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public async Task<bool> CheckUserInRoleAsync(int userId, string role)
     {
         var user = await _userManager.FindByIdAsync(userId.ToString());
@@ -64,7 +63,7 @@ public class ApplicationUserRepository : IApplicationUserRepository
         return await _userManager.IsInRoleAsync(user, role);
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public async Task<ApplicationUser?> GetApplicationUserAsync(int userId)
     {
         var user = await _userManager.FindByIdAsync(userId.ToString());
@@ -77,9 +76,15 @@ public class ApplicationUserRepository : IApplicationUserRepository
         return user;
     }
 
-    /// <inheritdoc/>
-    public async Task<IdentityResult> UpdateApplicationUserAsync(ApplicationUser applicationUser) => await _userManager.UpdateAsync(applicationUser);
+    /// <inheritdoc />
+    public async Task<IdentityResult> UpdateApplicationUserAsync(ApplicationUser applicationUser)
+    {
+        return await _userManager.UpdateAsync(applicationUser);
+    }
 
-    /// <inheritdoc/>
-    public async Task<IdentityResult> AssignUserToRoleAsync(ApplicationUser user, string role) => await _userManager.AddToRoleAsync(user, role);
+    /// <inheritdoc />
+    public async Task<IdentityResult> AssignUserToRoleAsync(ApplicationUser user, string role)
+    {
+        return await _userManager.AddToRoleAsync(user, role);
+    }
 }

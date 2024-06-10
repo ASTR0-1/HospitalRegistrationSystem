@@ -22,8 +22,8 @@ public class FeedbackSeedDataFixture : IDisposable
         };
         ApplicationContext.ApplicationUsers.Add(user);
 
-        var appointment1 = new Appointment { Id = 1, ApplicationUsers = new List<ApplicationUser> { user } };
-        var appointment2 = new Appointment { Id = 2, ApplicationUsers = new List<ApplicationUser> { user } };
+        var appointment1 = new Appointment {Id = 1, ApplicationUsers = new List<ApplicationUser> {user}};
+        var appointment2 = new Appointment {Id = 2, ApplicationUsers = new List<ApplicationUser> {user}};
         ApplicationContext.Appointments.Add(appointment1);
         ApplicationContext.Appointments.Add(appointment2);
 
@@ -61,4 +61,3 @@ public class FeedbackSeedDataFixture : IDisposable
         ApplicationContext.Dispose();
     }
 }
-

@@ -4,8 +4,7 @@
 		class="btn btn-success"
 		mat-raised-button
 		color="primary"
-		(click)="openAddDialog()"
-	>
+		(click)="openAddDialog()">
 		Додати лікарню
 	</button>
 	<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
@@ -36,16 +35,14 @@
 					class="btn btn-danger"
 					mat-button
 					color="warn"
-					(click)="deleteHospital(hospital.id)"
-				>
+					(click)="deleteHospital(hospital.id)">
 					Видалити
 				</button>
 				<button
 					class="btn btn-info"
 					mat-button
 					color="primary"
-					(click)="navigateToUserManagement(hospital.id)"
-				>
+					(click)="navigateToUserManagement(hospital.id)">
 					Користувачі
 				</button>
 			</td>
@@ -56,6 +53,6 @@
 	<mat-paginator
 		[length]="totalHospitals"
 		[pageSize]="10"
-		(page)="onPageChange($event)"
-	></mat-paginator>
+		(page)="onPageChange($event)">
+	</mat-paginator>
 </div>

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
@@ -30,7 +29,7 @@ public class AuthenticationManager : IAuthenticationManager
     private ApplicationUser? _user;
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="AuthenticationManager"/> class.
+    ///     Initializes a new instance of the <see cref="AuthenticationManager" /> class.
     /// </summary>
     /// <param name="userManager">The user manager.</param>
     /// <param name="jwtSettingsOptions">The JWT settings options.</param>
@@ -65,7 +64,7 @@ public class AuthenticationManager : IAuthenticationManager
 
         var refreshToken = GenerateRefreshToken();
         _user!.RefreshToken = refreshToken;
-        
+
         if (populateExpiration)
             _user!.RefreshTokenExpiryTime = DateTime.Now.AddDays(7);
 
@@ -87,12 +86,10 @@ public class AuthenticationManager : IAuthenticationManager
         var userId = int.Parse(principal.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value);
         var user = await _userManager.FindByIdAsync(userId.ToString());
 
-        if (user is null 
+        if (user is null
             || user.RefreshToken != tokenDto.RefreshToken
             || user.RefreshTokenExpiryTime <= DateTime.Now)
-        {
             throw new SecurityTokenException("Invalid try to refresh token. Token DTO has some invalid values.");
-        }
 
         return await CreateTokenAsync(user);
     }
@@ -116,10 +113,10 @@ public class AuthenticationManager : IAuthenticationManager
     private async Task<List<Claim>> GetClaims()
     {
         var claims = new List<Claim>
-            {
-                new(ClaimTypes.NameIdentifier, _user!.Id.ToString()),
-                new("HospitalId", _user!.HospitalId.ToString()!)
-            };
+        {
+            new(ClaimTypes.NameIdentifier, _user!.Id.ToString()),
+            new("HospitalId", _user!.HospitalId.ToString()!)
+        };
 
         var roles = await _userManager.GetRolesAsync(_user);
 
@@ -158,14 +155,13 @@ public class AuthenticationManager : IAuthenticationManager
             ValidIssuer = _jwtSettings.ValidIssuer,
             ValidAudience = _jwtSettings.ValidAudience,
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Secret!)),
-            ValidateLifetime = true,
+            ValidateLifetime = true
         }, out var validatedToken);
 
         if (validatedToken is not JwtSecurityToken jwtSecurityToken
-            || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
-        {
+            || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256,
+                StringComparison.InvariantCultureIgnoreCase))
             throw new SecurityTokenException("Invalid token");
-        }
 
         return principal;
     }

@@ -16,7 +16,8 @@ public interface IDoctorScheduleService
     /// <param name="parameters">The parameters for filtering and pagination.</param>
     /// <param name="doctorId">The ID of the doctor.</param>
     /// <returns>A paged list of doctor schedules.</returns>
-    Task<Result<PagedList<DoctorScheduleDto>>> GetDoctorSchedulesAsync(DoctorScheduleParameters parameters, int doctorId);
+    Task<Result<PagedList<DoctorScheduleDto>>> GetDoctorSchedulesAsync(DoctorScheduleParameters parameters,
+        int doctorId);
 
     /// <summary>
     ///     Creates a new doctor schedule.

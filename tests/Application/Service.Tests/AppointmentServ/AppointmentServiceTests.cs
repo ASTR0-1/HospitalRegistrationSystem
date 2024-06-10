@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
-using HospitalRegistrationSystem.Application.DTOs.AppointmentDTOs;
 using HospitalRegistrationSystem.Application.Interfaces.Data;
-using HospitalRegistrationSystem.Application.Interfaces.Services;
 using HospitalRegistrationSystem.Application.Mappers;
 using HospitalRegistrationSystem.Application.Services;
 using HospitalRegistrationSystem.Application.Utility.PagedData;
-using HospitalRegistrationSystem.Domain.Constants;
 using HospitalRegistrationSystem.Domain.Entities;
 using Moq;
 using NUnit.Framework;
@@ -19,10 +14,6 @@ namespace HospitalRegistrationSystem.Tests.Application.Service.AppointmentServ;
 [TestFixture]
 public class AppointmentServiceTests
 {
-    private Mock<IRepositoryManager> _mock;
-    private AppointmentService _appointmentService;
-    private IMapper _mapper;
-
     [SetUp]
     public void SetUp()
     {
@@ -34,16 +25,22 @@ public class AppointmentServiceTests
         _appointmentService = new AppointmentService(_mock.Object, _mapper, null, null);
     }
 
+    private Mock<IRepositoryManager> _mock;
+    private AppointmentService _appointmentService;
+    private IMapper _mapper;
+
     [Test]
     public async Task GetIncomingByUserIdAsync_ExistingUserId_ReturnAppointments()
     {
         // Arrange
         var existingId = 1;
-        var user = new ApplicationUser { Id = existingId };
+        var user = new ApplicationUser {Id = existingId};
         var appointments = new PagedList<Appointment>(new List<Appointment>(), 1, 1, 1);
 
         _mock.Setup(x => x.ApplicationUser.GetApplicationUserAsync(existingId)).ReturnsAsync(user);
-        _mock.Setup(x => x.Appointment.GetIncomingAppointmentsByUserIdAsync(It.IsAny<PagingParameters>(), existingId, false)).ReturnsAsync(appointments);
+        _mock.Setup(x =>
+                x.Appointment.GetIncomingAppointmentsByUserIdAsync(It.IsAny<PagingParameters>(), existingId, false))
+            .ReturnsAsync(appointments);
 
         // Act
         var result = await _appointmentService.GetIncomingByUserIdAsync(new PagingParameters(), existingId);
@@ -57,11 +54,13 @@ public class AppointmentServiceTests
     {
         // Arrange
         var existingId = 1;
-        var user = new ApplicationUser { Id = existingId };
+        var user = new ApplicationUser {Id = existingId};
         var appointments = new PagedList<Appointment>(new List<Appointment>(), 1, 1, 1);
 
         _mock.Setup(x => x.ApplicationUser.GetApplicationUserAsync(existingId)).ReturnsAsync(user);
-        _mock.Setup(x => x.Appointment.GetAppointmentsByUserIdAsync(It.IsAny<PagingParameters>(), existingId, null, false)).ReturnsAsync(appointments);
+        _mock.Setup(x =>
+                x.Appointment.GetAppointmentsByUserIdAsync(It.IsAny<PagingParameters>(), existingId, null, false))
+            .ReturnsAsync(appointments);
 
         // Act
         var result = await _appointmentService.GetAllByUserIdAsync(new PagingParameters(), existingId);
@@ -75,11 +74,13 @@ public class AppointmentServiceTests
     {
         // Arrange
         var existingId = 1;
-        var user = new ApplicationUser { Id = existingId };
+        var user = new ApplicationUser {Id = existingId};
         var appointments = new PagedList<Appointment>(new List<Appointment>(), 1, 1, 1);
 
         _mock.Setup(x => x.ApplicationUser.GetApplicationUserAsync(existingId)).ReturnsAsync(user);
-        _mock.Setup(x => x.Appointment.GetAppointmentsByUserIdAsync(It.IsAny<PagingParameters>(), existingId, false, false)).ReturnsAsync(appointments);
+        _mock.Setup(x =>
+                x.Appointment.GetAppointmentsByUserIdAsync(It.IsAny<PagingParameters>(), existingId, false, false))
+            .ReturnsAsync(appointments);
 
         // Act
         var result = await _appointmentService.GetMissedByUserIdAsync(new PagingParameters(), existingId);
@@ -93,11 +94,13 @@ public class AppointmentServiceTests
     {
         // Arrange
         var existingId = 1;
-        var user = new ApplicationUser { Id = existingId };
+        var user = new ApplicationUser {Id = existingId};
         var appointments = new PagedList<Appointment>(new List<Appointment>(), 1, 1, 1);
 
         _mock.Setup(x => x.ApplicationUser.GetApplicationUserAsync(existingId)).ReturnsAsync(user);
-        _mock.Setup(x => x.Appointment.GetAppointmentsByUserIdAsync(It.IsAny<PagingParameters>(), existingId, true, false)).ReturnsAsync(appointments);
+        _mock.Setup(x =>
+                x.Appointment.GetAppointmentsByUserIdAsync(It.IsAny<PagingParameters>(), existingId, true, false))
+            .ReturnsAsync(appointments);
 
         // Act
         var result = await _appointmentService.GetVisitedByUserIdAsync(new PagingParameters(), existingId);
@@ -111,7 +114,7 @@ public class AppointmentServiceTests
     {
         // Arrange
         var existingId = 1;
-        var appointment = new Appointment { Id = existingId };
+        var appointment = new Appointment {Id = existingId};
 
         _mock.Setup(x => x.Appointment.GetAppointmentAsync(existingId, true)).ReturnsAsync(appointment);
         _mock.Setup(x => x.SaveAsync()).Returns(Task.CompletedTask);

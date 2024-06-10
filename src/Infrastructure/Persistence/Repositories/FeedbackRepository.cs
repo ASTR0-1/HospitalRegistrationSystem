@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using HospitalRegistrationSystem.Application.Interfaces.Data;
 using HospitalRegistrationSystem.Application.Utility.PagedData;
@@ -19,19 +16,19 @@ public class FeedbackRepository : RepositoryBase<Feedback>, IFeedbackRepository
     {
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public async Task<PagedList<Feedback>> GetFeedbacksByUserIdAsync(PagingParameters paging, int userId)
     {
         var feedbacksQuery = FindByCondition(f => f.Appointment.ApplicationUsers.Any(au => au.Id == userId),
                 false
-                ,f => f.Appointment
-                ,f => f.Appointment.ApplicationUsers)
+                , f => f.Appointment
+                , f => f.Appointment.ApplicationUsers)
             .OrderByDescending(f => f.FeedbackDate);
 
         return await PagedList<Feedback>.ToPagedListAsync(feedbacksQuery, paging.PageNumber, paging.PageSize);
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public async Task<decimal> GetAverageRatingAsync(int userId)
     {
         var averageRating = await FindByCondition(f => f.Appointment.ApplicationUsers.Any(au => au.Id == userId),
@@ -43,6 +40,9 @@ public class FeedbackRepository : RepositoryBase<Feedback>, IFeedbackRepository
         return averageRating;
     }
 
-    /// <inheritdoc/>
-    public void CreateFeedback(Feedback feedback) => Create(feedback);
+    /// <inheritdoc />
+    public void CreateFeedback(Feedback feedback)
+    {
+        Create(feedback);
+    }
 }

@@ -6,8 +6,7 @@
 			<mat-select formControlName="hospitalId">
 				<mat-option
 					*ngFor="let hospital of hospitals"
-					[value]="hospital.id"
-				>
+					[value]="hospital.id">
 					{{ hospital.name }}
 				</mat-option>
 			</mat-select>
@@ -15,9 +14,11 @@
 		<mat-form-field appearance="fill">
 			<mat-label>Роль</mat-label>
 			<mat-select formControlName="role">
-				<mat-option *ngFor="let role of roles" [value]="role">{{
+				<mat-option *ngFor="let role of roles" [value]="role">
+					{{
 					role
-				}}</mat-option>
+					}}
+				</mat-option>
 			</mat-select>
 		</mat-form-field>
 		<mat-form-field
@@ -25,35 +26,31 @@
 				assignForm.get('role') &&
 				assignForm.get('role')!.value! === 'Doctor'
 			"
-			appearance="fill"
-		>
+			appearance="fill">
 			<mat-label>Спеціальність</mat-label>
-			<input matInput formControlName="specialty" />
+			<input matInput formControlName="specialty"/>
 		</mat-form-field>
 		<mat-form-field
 			*ngIf="
 				assignForm.get('role') &&
 				assignForm.get('role')!.value! === 'Doctor'
 			"
-			appearance="fill"
-		>
+			appearance="fill">
 			<mat-label>Ціна за прийом</mat-label>
-			<input matInput type="number" formControlName="doctorPrice" />
+			<input matInput type="number" formControlName="doctorPrice"/>
 		</mat-form-field>
 		<div class="d-flex flex-row gap-2" mat-dialog-actions>
 			<button
 				class="btn btn-sm btn-secondary"
 				mat-button
-				mat-dialog-close
-			>
+				mat-dialog-close>
 				Скасувати
 			</button>
 			<button
 				class="btn btn-sm btn-primary"
 				mat-raised-button
 				color="primary"
-				type="submit"
-			>
+				type="submit">
 				Призначити
 			</button>
 		</div>

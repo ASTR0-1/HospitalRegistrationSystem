@@ -79,7 +79,8 @@ public class DoctorScheduleRepoTests
     public void CreateDoctorSchedule_Success()
     {
         // Arrange
-        var doctorSchedule = new DoctorSchedule { Id = 3, DoctorId = 1, Date = new DateOnly(2022, 1, 3), WorkingHours = 1 << 11 | 1 << 12 };
+        var doctorSchedule = new DoctorSchedule
+            {Id = 3, DoctorId = 1, Date = new DateOnly(2022, 1, 3), WorkingHours = (1 << 11) | (1 << 12)};
 
         // Act
         _doctorScheduleRepository.CreateDoctorSchedule(doctorSchedule);
@@ -103,4 +104,3 @@ public class DoctorScheduleRepoTests
         Assert.That(_dataFixture.ApplicationContext.DoctorSchedules.Count(), Is.EqualTo(1));
     }
 }
-

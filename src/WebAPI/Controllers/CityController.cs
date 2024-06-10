@@ -16,11 +16,11 @@ namespace HospitalRegistrationSystem.WebAPI.Controllers;
 [Route("api/cities")]
 public class CityController : ControllerBase
 {
-    private readonly ILoggerManager _logger;
     private readonly ICityService _cityService;
+    private readonly ILoggerManager _logger;
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="CityController"/> class.
+    ///     Initializes a new instance of the <see cref="CityController" /> class.
     /// </summary>
     /// <param name="logger">The logger.</param>
     /// <param name="cityService">The city service.</param>

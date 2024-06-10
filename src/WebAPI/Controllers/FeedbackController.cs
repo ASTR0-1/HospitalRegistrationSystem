@@ -16,8 +16,8 @@ namespace HospitalRegistrationSystem.WebAPI.Controllers;
 [Route("api/feedbacks")]
 public class FeedbackController : ControllerBase
 {
-    private readonly ILoggerManager _logger;
     private readonly IFeedbackService _feedbackService;
+    private readonly ILoggerManager _logger;
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="FeedbackController" /> class.
@@ -37,7 +37,8 @@ public class FeedbackController : ControllerBase
     /// <param name="userId">The user ID.</param>
     /// <returns>The paged list of feedback DTOs.</returns>
     [HttpGet]
-    public async Task<ActionResult<PagedList<FeedbackDto>>> GetAll([FromQuery] PagingParameters parameters, [FromQuery] int userId)
+    public async Task<ActionResult<PagedList<FeedbackDto>>> GetAll([FromQuery] PagingParameters parameters,
+        [FromQuery] int userId)
     {
         var result = await _feedbackService.GetFeedbacksByUserIdAsync(parameters, userId);
         if (!result.IsSuccess)

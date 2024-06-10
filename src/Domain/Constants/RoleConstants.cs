@@ -40,8 +40,9 @@ public static class RoleConstants
     /// <returns>True if the role exists, otherwise false.</returns>
     public static bool RoleExists(string role)
     {
-        var fields = typeof(RoleConstants).GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy);
+        var fields =
+            typeof(RoleConstants).GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy);
 
-        return fields.Any(f => f is { IsLiteral: true, IsInitOnly: false } && f?.GetValue(null)?.ToString() == role);
+        return fields.Any(f => f is {IsLiteral: true, IsInitOnly: false} && f?.GetValue(null)?.ToString() == role);
     }
 }

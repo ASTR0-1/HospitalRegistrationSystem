@@ -16,11 +16,11 @@ namespace HospitalRegistrationSystem.Application.Services;
 /// </summary>
 public class FeedbackService : IFeedbackService
 {
-    private readonly IRepositoryManager _repository;
     private readonly IMapper _mapper;
+    private readonly IRepositoryManager _repository;
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="FeedbackService"/> class.
+    ///     Initializes a new instance of the <see cref="FeedbackService" /> class.
     /// </summary>
     /// <param name="repository">The repository manager.</param>
     /// <param name="mapper">The mapper.</param>

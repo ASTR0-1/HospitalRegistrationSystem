@@ -13,7 +13,7 @@ namespace HospitalRegistrationSystem.Infrastructure.Persistence.Repositories;
 public class CountryRepository : RepositoryBase<Country>, ICountryRepository
 {
     /// <summary>
-    ///     Initializes a new instance of the <see cref="CountryRepository"/> class.
+    ///     Initializes a new instance of the <see cref="CountryRepository" /> class.
     /// </summary>
     /// <param name="applicationContext">The application context.</param>
     public CountryRepository(ApplicationContext applicationContext)
@@ -21,7 +21,7 @@ public class CountryRepository : RepositoryBase<Country>, ICountryRepository
     {
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public async Task<Country?> GetCountryAsync(int id, bool trackChanges = false)
     {
         var country = await FindByCondition(c => c.Id == id, trackChanges)
@@ -30,7 +30,7 @@ public class CountryRepository : RepositoryBase<Country>, ICountryRepository
         return country;
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public async Task<PagedList<Country>> GetCountriesAsync(PagingParameters paging, bool trackChanges = false)
     {
         var countriesQuery = FindAll(trackChanges)
@@ -39,9 +39,15 @@ public class CountryRepository : RepositoryBase<Country>, ICountryRepository
         return await PagedList<Country>.ToPagedListAsync(countriesQuery, paging.PageNumber, paging.PageSize);
     }
 
-    /// <inheritdoc/>
-    public void CreateCountry(Country country) => Create(country);
+    /// <inheritdoc />
+    public void CreateCountry(Country country)
+    {
+        Create(country);
+    }
 
-    /// <inheritdoc/>
-    public void DeleteCountry(Country country) => Delete(country);
+    /// <inheritdoc />
+    public void DeleteCountry(Country country)
+    {
+        Delete(country);
+    }
 }

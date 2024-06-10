@@ -1,5 +1,4 @@
-﻿using System.Security.AccessControl;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using AutoMapper;
 using HospitalRegistrationSystem.Application.DTOs.DoctorScheduleDTOs;
 using HospitalRegistrationSystem.Application.Interfaces;
@@ -17,12 +16,12 @@ namespace HospitalRegistrationSystem.Application.Services;
 /// </summary>
 public class DoctorScheduleService : IDoctorScheduleService
 {
+    private readonly ICurrentUserService _currentUserService;
     private readonly IMapper _mapper;
     private readonly IRepositoryManager _repository;
-    private readonly ICurrentUserService _currentUserService;
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="DoctorScheduleService"/> class.
+    ///     Initializes a new instance of the <see cref="DoctorScheduleService" /> class.
     /// </summary>
     /// <param name="mapper">The mapper.</param>
     /// <param name="repository">The repository.</param>
@@ -35,7 +34,8 @@ public class DoctorScheduleService : IDoctorScheduleService
     }
 
     /// <inheritdoc />
-    public async Task<Result<PagedList<DoctorScheduleDto>>> GetDoctorSchedulesAsync(DoctorScheduleParameters parameters, int doctorId)
+    public async Task<Result<PagedList<DoctorScheduleDto>>> GetDoctorSchedulesAsync(DoctorScheduleParameters parameters,
+        int doctorId)
     {
         var doctor = await _repository.ApplicationUser.GetApplicationUserAsync(doctorId);
         if (doctor is null)
@@ -69,7 +69,8 @@ public class DoctorScheduleService : IDoctorScheduleService
 
         var callerId = _currentUserService.GetApplicationUserId();
         if (callerId != doctorSchedule!.DoctorId)
-            return Result.Failure(DoctorScheduleError.UnauthorizedAccessToDoctorScheduleManipulation(callerId, doctorSchedule.Id));
+            return Result.Failure(
+                DoctorScheduleError.UnauthorizedAccessToDoctorScheduleManipulation(callerId, doctorSchedule.Id));
 
         doctorSchedule = _mapper.Map(doctorScheduleDto, doctorSchedule);
 
@@ -88,7 +89,8 @@ public class DoctorScheduleService : IDoctorScheduleService
 
         var callerId = _currentUserService.GetApplicationUserId();
         if (callerId != doctorSchedule.DoctorId)
-            return Result.Failure(DoctorScheduleError.UnauthorizedAccessToDoctorScheduleManipulation(callerId, doctorScheduleId));
+            return Result.Failure(
+                DoctorScheduleError.UnauthorizedAccessToDoctorScheduleManipulation(callerId, doctorScheduleId));
 
         _repository.DoctorSchedule.DeleteDoctorSchedule(doctorSchedule);
         await _repository.SaveAsync();

@@ -16,8 +16,8 @@ namespace HospitalRegistrationSystem.WebAPI.Controllers;
 [Route("api/hospitals")]
 public class HospitalController : ControllerBase
 {
-    private readonly ILoggerManager _logger;
     private readonly IHospitalService _hospitalService;
+    private readonly ILoggerManager _logger;
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="HospitalController" /> class.
@@ -59,7 +59,8 @@ public class HospitalController : ControllerBase
     /// <param name="searchQuery">The search query.</param>
     /// <returns>The list of hospitals.</returns>
     [HttpGet]
-    public async Task<ActionResult<PagedList<HospitalDto>>> GetAll([FromQuery] PagingParameters paging, [FromQuery] string? searchQuery)
+    public async Task<ActionResult<PagedList<HospitalDto>>> GetAll([FromQuery] PagingParameters paging,
+        [FromQuery] string? searchQuery)
     {
         var result = await _hospitalService.GetHospitalsAsync(paging, searchQuery);
 

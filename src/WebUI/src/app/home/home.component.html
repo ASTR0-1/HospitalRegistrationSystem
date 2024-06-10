@@ -1,22 +1,19 @@
 <div class="home-container d-flex justify-content-center align-items-center">
 	<div class="card-container shadow gap-3 d-flex flex-column">
 		<div
-			class="search-bar d-flex justify-content-center align-items-center"
-		>
+			class="search-bar d-flex justify-content-center align-items-center">
 			<input
 				type="text"
 				class="form-control"
 				placeholder="Пошук лікарень"
 				[(ngModel)]="searchQuery"
-				(keyup.enter)="loadHospitals()"
-			/>
+				(keyup.enter)="loadHospitals()"/>
 		</div>
 		<div class="d-flex justify-content-between align-items-center gap-1">
 			<button
 				class="btn btn-arrow carousel-button carousel-button-left"
 				(click)="prevPage()"
-				[disabled]="!hasPrevious"
-			>
+				[disabled]="!hasPrevious">
 				&#10094;
 			</button>
 			<div class="card-wrapper d-flex justify-content-center">
@@ -30,8 +27,7 @@
 					<div class="card-footer">
 						<button
 							class="btn btn-outline-primary"
-							(click)="viewDoctors(hospital.id)"
-						>
+							(click)="viewDoctors(hospital.id)">
 							Переглянути
 						</button>
 					</div>
@@ -40,8 +36,7 @@
 			<button
 				class="btn btn-arrow carousel-button carousel-button-right"
 				(click)="nextPage()"
-				[disabled]="!hasNext"
-			>
+				[disabled]="!hasNext">
 				&#10095;
 			</button>
 		</div>

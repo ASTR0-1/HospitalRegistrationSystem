@@ -11,7 +11,7 @@ using HospitalRegistrationSystem.Domain.Shared.ResultPattern;
 namespace HospitalRegistrationSystem.Application.Services;
 
 /// <summary>
-/// Represents a service for managing regions.
+///     Represents a service for managing regions.
 /// </summary>
 public class RegionService : IRegionService
 {
@@ -19,7 +19,7 @@ public class RegionService : IRegionService
     private readonly IRepositoryManager _repository;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="RegionService"/> class.
+    ///     Initializes a new instance of the <see cref="RegionService" /> class.
     /// </summary>
     /// <param name="mapper">The mapper.</param>
     /// <param name="repository">The repository.</param>

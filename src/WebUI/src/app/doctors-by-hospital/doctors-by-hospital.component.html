@@ -1,28 +1,23 @@
 <div class="bg-wrapper d-flex flex-column align-items-center">
 	<div class="home-container d-flex flex-column justify-content-center">
 		<div
-			class="card-container shadow gap-3 d-flex flex-column justify-content-center"
-		>
+			class="card-container shadow gap-3 d-flex flex-column justify-content-center">
 			<div
-				class="search-bar d-flex justify-content-center align-items-center"
-			>
+				class="search-bar d-flex justify-content-center align-items-center">
 				<h2>Лікарі в '{{ hospital.name }}'</h2>
 			</div>
 			<div
-				class="d-flex justify-content-between align-items-center gap-1"
-			>
+				class="d-flex justify-content-between align-items-center gap-1">
 				<button
 					class="btn btn-arrow carousel-button left"
 					(click)="prevPage()"
-					[disabled]="!hasPrevious"
-				>
+					[disabled]="!hasPrevious">
 					&#10094;
 				</button>
 				<div class="card-wrapper d-flex justify-content-center">
 					<div
 						class="card shadow"
-						*ngFor="let doctor of doctors; let i = index"
-					>
+						*ngFor="let doctor of doctors; let i = index">
 						<div class="card-body">
 							<img
 								class="rounded shadow"
@@ -32,40 +27,36 @@
 										: '/assets/user-image-placeholder.jpg'
 								"
 								width="150"
-								height="150"
-							/>
-							<hr />
+								height="150"/>
+							<hr/>
 							<h4 class="card-text">{{ doctor.specialty }}</h4>
-							<hr />
+							<hr/>
 							<h5 class="card-title">{{ doctor.firstName }}</h5>
 							<h5 class="card-title">{{ doctor.middleName }}</h5>
 							<h5 class="card-title">{{ doctor.lastName }}</h5>
-							<hr />
+							<hr/>
 							<h5 class="card-title">
-								Ціна за послуги: <br />
+								Ціна за послуги: <br/>
 								{{ doctor.totalServiceCost | currency: "UAH" }}
 							</h5>
 							<div
 								*ngIf="doctor.averageRating !== undefined"
-								class="d-flex flex-column"
-							>
-								<hr />
+								class="d-flex flex-column">
+								<hr/>
 								<h5 class="card-title">
 									Рейтинг:
 									{{ doctor.averageRating | number: "1.1-1" }}
 								</h5>
-								<hr />
+								<hr/>
 							</div>
 							<button
 								class="btn btn-outline-success"
-								(click)="redirectToDoctorSchedule(doctor.id)"
-							>
+								(click)="redirectToDoctorSchedule(doctor.id)">
 								Розклад
 							</button>
 							<button
 								class="btn btn-outline-warning mt-1"
-								(click)="openFeedbackDialog(doctor.id)"
-							>
+								(click)="openFeedbackDialog(doctor.id)">
 								Відгуки
 							</button>
 							<button
@@ -73,8 +64,7 @@
 								class="btn btn-outline-success mt-1"
 								(click)="
 									redirectToDoctorAppointments(doctor.id)
-								"
-							>
+								">
 								Прийоми
 							</button>
 						</div>
@@ -82,24 +72,22 @@
 					<div
 						class="card"
 						*ngIf="doctors.length === 0"
-						style="visibility: hidden"
-					>
+						style="visibility: hidden">
 						<div class="card-body"></div>
-						<img width="150" height="150" />
+						<img width="150" height="150"/>
 						<h4></h4>
-						<hr />
+						<hr/>
 						<h5 class="card-title"></h5>
 						<h5 class="card-title"></h5>
 						<h5 class="card-title"></h5>
-						<hr />
+						<hr/>
 						<h5 class="card-text"></h5>
 					</div>
 				</div>
 				<button
 					class="btn btn-arrow carousel-button right"
 					(click)="nextPage()"
-					[disabled]="!hasNext"
-				>
+					[disabled]="!hasNext">
 					&#10095;
 				</button>
 			</div>

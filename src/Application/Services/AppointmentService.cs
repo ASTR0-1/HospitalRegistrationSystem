@@ -20,12 +20,13 @@ namespace HospitalRegistrationSystem.Application.Services;
 
 public class AppointmentService : IAppointmentService
 {
+    private readonly IConfiguration _configuration;
     private readonly IMapper _mapper;
     private readonly IRepositoryManager _repository;
-    private readonly IConfiguration _configuration;
     private readonly UserManager<ApplicationUser> _userManager;
 
-    public AppointmentService(IRepositoryManager repository, IMapper mapper, IConfiguration configuration, UserManager<ApplicationUser> userManager)
+    public AppointmentService(IRepositoryManager repository, IMapper mapper, IConfiguration configuration,
+        UserManager<ApplicationUser> userManager)
     {
         _repository = repository;
         _mapper = mapper;
@@ -33,7 +34,7 @@ public class AppointmentService : IAppointmentService
         _userManager = userManager;
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public async Task<Result> AddNewAsync(AppointmentForCreationDto appointmentDto)
     {
         if (appointmentDto.DoctorId == appointmentDto.ClientId)
@@ -49,7 +50,8 @@ public class AppointmentService : IAppointmentService
         if (doctor is null)
             return Result.Failure(ApplicationUserError.UserIdNotFound(appointmentDto.DoctorId));
 
-        var isDoctorInRole = await _repository.ApplicationUser.CheckUserInRoleAsync(appointmentDto.DoctorId, RoleConstants.Doctor);
+        var isDoctorInRole =
+            await _repository.ApplicationUser.CheckUserInRoleAsync(appointmentDto.DoctorId, RoleConstants.Doctor);
         if (!isDoctorInRole)
             return Result.Failure(AppointmentError.DoctorNotInRole(appointmentDto.DoctorId));
 
@@ -57,11 +59,14 @@ public class AppointmentService : IAppointmentService
             return Result.Failure(AppointmentError.DoctorHasNoSchedule(appointmentDto.DoctorId));
 
         var dateIsFree = doctor.DoctorSchedules.Any(ds => ds.Date == DateOnly.FromDateTime(appointmentDto.VisitTime));
-        var timeIsFree = doctor.DoctorSchedules.Any(ds => DecodeWorkingHours(ds.WorkingHours).Contains(appointmentDto.VisitTime.Hour));
+        var timeIsFree = doctor.DoctorSchedules.Any(ds =>
+            DecodeWorkingHours(ds.WorkingHours).Contains(appointmentDto.VisitTime.Hour));
         if (!dateIsFree || !timeIsFree)
-            return Result.Failure(AppointmentError.AppointmentTimeIsNotAvailable(appointmentDto.DoctorId, appointmentDto.VisitTime));
+            return Result.Failure(
+                AppointmentError.AppointmentTimeIsNotAvailable(appointmentDto.DoctorId, appointmentDto.VisitTime));
 
-        var doctorSchedule = doctor.DoctorSchedules.First(ds => ds.Date == DateOnly.FromDateTime(appointmentDto.VisitTime));
+        var doctorSchedule =
+            doctor.DoctorSchedules.First(ds => ds.Date == DateOnly.FromDateTime(appointmentDto.VisitTime));
         _repository.DoctorSchedule.UpdateDoctorSchedule(doctorSchedule);
 
         doctorSchedule.WorkingHours &= ~(1 << appointmentDto.VisitTime.Hour);
@@ -75,7 +80,7 @@ public class AppointmentService : IAppointmentService
         return Result.Success();
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public async Task<Result<AppointmentDto>> GetAsync(int appointmentId)
     {
         var appointment = await _repository.Appointment.GetAppointmentAsync(appointmentId);
@@ -88,14 +93,14 @@ public class AppointmentService : IAppointmentService
         return Result<AppointmentDto>.Success(appointmentDto);
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public async Task<Result<PagedList<AppointmentDto>>> GetIncomingByUserIdAsync(PagingParameters paging, int userId)
     {
         var user = await _repository.ApplicationUser.GetApplicationUserAsync(userId);
         if (user is null)
             return Result<PagedList<AppointmentDto>>.Failure(ApplicationUserError.UserIdNotFound(userId));
 
-        var appointments = await _repository.Appointment.GetIncomingAppointmentsByUserIdAsync(paging, userId, trackChanges: false);
+        var appointments = await _repository.Appointment.GetIncomingAppointmentsByUserIdAsync(paging, userId, false);
         List<AppointmentDto> appointmentsDto = [];
 
         foreach (var appointment in appointments)
@@ -105,20 +110,21 @@ public class AppointmentService : IAppointmentService
             appointmentsDto.Add(appointmentDto);
         }
 
-        var pagedAppointmentsDto = new PagedList<AppointmentDto>(appointmentsDto, appointmentsDto.Count, paging.PageNumber, paging.PageSize);
+        var pagedAppointmentsDto =
+            new PagedList<AppointmentDto>(appointmentsDto, appointmentsDto.Count, paging.PageNumber, paging.PageSize);
         await FillTotalServiceCost(pagedAppointmentsDto);
 
         return Result<PagedList<AppointmentDto>>.Success(pagedAppointmentsDto);
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public async Task<Result<PagedList<AppointmentDto>>> GetAllByUserIdAsync(PagingParameters paging, int userId)
     {
         var user = await _repository.ApplicationUser.GetApplicationUserAsync(userId);
         if (user is null)
             return Result<PagedList<AppointmentDto>>.Failure(ApplicationUserError.UserIdNotFound(userId));
 
-        var appointments = await _repository.Appointment.GetAppointmentsByUserIdAsync(paging, userId, isVisited: null, trackChanges: false);
+        var appointments = await _repository.Appointment.GetAppointmentsByUserIdAsync(paging, userId, null, false);
         List<AppointmentDto> appointmentsDto = [];
 
         foreach (var appointment in appointments)
@@ -128,20 +134,21 @@ public class AppointmentService : IAppointmentService
             appointmentsDto.Add(appointmentDto);
         }
 
-        var pagedAppointmentsDto = new PagedList<AppointmentDto>(appointmentsDto, appointmentsDto.Count, paging.PageNumber, paging.PageSize);
+        var pagedAppointmentsDto =
+            new PagedList<AppointmentDto>(appointmentsDto, appointmentsDto.Count, paging.PageNumber, paging.PageSize);
         await FillTotalServiceCost(pagedAppointmentsDto);
 
         return Result<PagedList<AppointmentDto>>.Success(pagedAppointmentsDto);
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public async Task<Result<PagedList<AppointmentDto>>> GetMissedByUserIdAsync(PagingParameters paging, int userId)
     {
         var user = await _repository.ApplicationUser.GetApplicationUserAsync(userId);
         if (user is null)
             return Result<PagedList<AppointmentDto>>.Failure(ApplicationUserError.UserIdNotFound(userId));
 
-        var appointments = await _repository.Appointment.GetAppointmentsByUserIdAsync(paging, userId, isVisited: false, trackChanges: false);
+        var appointments = await _repository.Appointment.GetAppointmentsByUserIdAsync(paging, userId, false, false);
         List<AppointmentDto> appointmentsDto = [];
 
         foreach (var appointment in appointments)
@@ -151,20 +158,21 @@ public class AppointmentService : IAppointmentService
             appointmentsDto.Add(appointmentDto);
         }
 
-        var pagedAppointmentsDto = new PagedList<AppointmentDto>(appointmentsDto, appointmentsDto.Count, paging.PageNumber, paging.PageSize);
+        var pagedAppointmentsDto =
+            new PagedList<AppointmentDto>(appointmentsDto, appointmentsDto.Count, paging.PageNumber, paging.PageSize);
         await FillTotalServiceCost(pagedAppointmentsDto);
 
         return Result<PagedList<AppointmentDto>>.Success(pagedAppointmentsDto);
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public async Task<Result<PagedList<AppointmentDto>>> GetVisitedByUserIdAsync(PagingParameters paging, int userId)
     {
         var user = await _repository.ApplicationUser.GetApplicationUserAsync(userId);
         if (user is null)
             return Result<PagedList<AppointmentDto>>.Failure(ApplicationUserError.UserIdNotFound(userId));
 
-        var appointments = await _repository.Appointment.GetAppointmentsByUserIdAsync(paging, userId, isVisited: true, trackChanges: false);
+        var appointments = await _repository.Appointment.GetAppointmentsByUserIdAsync(paging, userId, true, false);
         List<AppointmentDto> appointmentsDto = [];
 
         foreach (var appointment in appointments)
@@ -174,13 +182,14 @@ public class AppointmentService : IAppointmentService
             appointmentsDto.Add(appointmentDto);
         }
 
-        var pagedAppointmentsDto = new PagedList<AppointmentDto>(appointmentsDto, appointmentsDto.Count, paging.PageNumber, paging.PageSize);
+        var pagedAppointmentsDto =
+            new PagedList<AppointmentDto>(appointmentsDto, appointmentsDto.Count, paging.PageNumber, paging.PageSize);
         await FillTotalServiceCost(pagedAppointmentsDto);
 
         return Result<PagedList<AppointmentDto>>.Success(pagedAppointmentsDto);
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public async Task<Result> MarkAsVisitedAsync(int appointmentId, string diagnosis)
     {
         var appointment = await _repository.Appointment.GetAppointmentAsync(appointmentId, true);
@@ -199,10 +208,8 @@ public class AppointmentService : IAppointmentService
         var hours = new List<int>();
 
         for (var hour = 0; hour < 24; hour++)
-        {
             if ((workingHours & (1 << hour)) != 0)
                 hours.Add(hour);
-        }
 
         return hours;
     }
@@ -211,15 +218,19 @@ public class AppointmentService : IAppointmentService
     {
         foreach (var appointment in appointmentsDto)
         {
-            var hospital = await _repository.Hospital.GetHospitalAsync((int)appointment.Doctor.HospitalId!);
-            appointment.Doctor.TotalServiceCost = CalculateTotalServiceCost(appointment.Doctor.VisitCost.GetValueOrDefault(), hospital.HospitalFeePercent);
+            var hospital = await _repository.Hospital.GetHospitalAsync((int) appointment.Doctor.HospitalId!);
+            appointment.Doctor.TotalServiceCost =
+                CalculateTotalServiceCost(appointment.Doctor.VisitCost.GetValueOrDefault(),
+                    hospital.HospitalFeePercent);
         }
     }
 
     private async Task ManageUsers(Appointment appointment, AppointmentDto appointmentDto)
     {
-        var u1 = await _repository.ApplicationUser.GetApplicationUserAsync(appointment.ApplicationUsers.FirstOrDefault()!.Id)!;
-        var u2 = await _repository.ApplicationUser.GetApplicationUserAsync(appointment.ApplicationUsers.LastOrDefault()!.Id)!;
+        var u1 = await _repository.ApplicationUser.GetApplicationUserAsync(
+            appointment.ApplicationUsers.FirstOrDefault()!.Id)!;
+        var u2 = await _repository.ApplicationUser.GetApplicationUserAsync(appointment.ApplicationUsers.LastOrDefault()!
+            .Id)!;
 
         if (await _userManager.IsInRoleAsync(u1, RoleConstants.Doctor))
         {
@@ -237,10 +248,11 @@ public class AppointmentService : IAppointmentService
     {
         var systemFeeSection = _configuration.GetSection("SystemSettings:SystemFeePercent");
         var systemFeeString = systemFeeSection.Value;
-        if (!decimal.TryParse(systemFeeString, NumberStyles.Float, CultureInfo.InvariantCulture, out var systemFeePercent))
+        if (!decimal.TryParse(systemFeeString, NumberStyles.Float, CultureInfo.InvariantCulture,
+                out var systemFeePercent))
             throw new Exception("Invalid system fee value");
 
-        var totalServiceCost = visitCost + (visitCost * hospitalFeePercent / 100) + (visitCost * systemFeePercent / 100);
+        var totalServiceCost = visitCost + visitCost * hospitalFeePercent / 100 + visitCost * systemFeePercent / 100;
 
         return totalServiceCost;
     }

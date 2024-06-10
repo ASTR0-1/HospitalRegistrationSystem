@@ -19,7 +19,7 @@ public class CountryService : ICountryService
     private readonly IRepositoryManager _repository;
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="CountryService"/> class.
+    ///     Initializes a new instance of the <see cref="CountryService" /> class.
     /// </summary>
     /// <param name="mapper">The mapper.</param>
     /// <param name="repository">The repository.</param>

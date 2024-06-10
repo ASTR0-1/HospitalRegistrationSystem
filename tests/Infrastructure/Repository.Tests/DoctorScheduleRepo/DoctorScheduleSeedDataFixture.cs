@@ -14,7 +14,7 @@ public class DoctorScheduleSeedDataFixture : IDisposable
             Id = 1,
             DoctorId = 1,
             Date = new DateOnly(2022, 1, 1),
-            WorkingHours = 1 << 9 | 1 << 10
+            WorkingHours = (1 << 9) | (1 << 10)
         });
 
         ApplicationContext.DoctorSchedules.Add(new DoctorSchedule
@@ -22,7 +22,7 @@ public class DoctorScheduleSeedDataFixture : IDisposable
             Id = 2,
             DoctorId = 1,
             Date = new DateOnly(2022, 1, 2),
-            WorkingHours = 1 << 10 | 1 << 11
+            WorkingHours = (1 << 10) | (1 << 11)
         });
         ApplicationContext.SaveChanges();
     }
@@ -38,4 +38,3 @@ public class DoctorScheduleSeedDataFixture : IDisposable
         ApplicationContext.Dispose();
     }
 }
-

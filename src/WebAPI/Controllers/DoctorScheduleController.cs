@@ -19,10 +19,9 @@ namespace HospitalRegistrationSystem.WebAPI.Controllers;
 [Route("api/doctorSchedules")]
 public class DoctorScheduleController : ControllerBase
 {
-    private readonly ILoggerManager _logger;
-    private readonly IDoctorScheduleService _doctorScheduleService;
-
     private readonly IValidator<DoctorScheduleForManipulationDto> _doctorScheduleForCreationDtoValidator;
+    private readonly IDoctorScheduleService _doctorScheduleService;
+    private readonly ILoggerManager _logger;
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="DoctorScheduleController" /> class.
@@ -45,7 +44,8 @@ public class DoctorScheduleController : ControllerBase
     /// <param name="doctorId">The doctor ID.</param>
     /// <returns>The list of doctor schedules.</returns>
     [HttpGet]
-    public async Task<ActionResult<PagedList<DoctorScheduleDto>>> GetAll([FromQuery] DoctorScheduleParameters parameters, [FromQuery] int doctorId)
+    public async Task<ActionResult<PagedList<DoctorScheduleDto>>> GetAll(
+        [FromQuery] DoctorScheduleParameters parameters, [FromQuery] int doctorId)
     {
         var result = await _doctorScheduleService.GetDoctorSchedulesAsync(parameters, doctorId);
         if (!result.IsSuccess)
@@ -101,10 +101,12 @@ public class DoctorScheduleController : ControllerBase
     /// <param name="doctorScheduleForManipulationDto">The doctor schedule DTO.</param>
     /// <returns>The result of the operation.</returns>
     [Authorize(Roles = RoleConstants.Doctor)]
-    [HttpPut()]
-    public async Task<IActionResult> Update([FromBody] DoctorScheduleForManipulationDto doctorScheduleForManipulationDto)
+    [HttpPut]
+    public async Task<IActionResult> Update(
+        [FromBody] DoctorScheduleForManipulationDto doctorScheduleForManipulationDto)
     {
-        var validationResult = await _doctorScheduleForCreationDtoValidator.ValidateAsync(doctorScheduleForManipulationDto);
+        var validationResult =
+            await _doctorScheduleForCreationDtoValidator.ValidateAsync(doctorScheduleForManipulationDto);
         if (!validationResult.IsValid)
         {
             _logger.LogInformation($"Doctor schedule update failed with un processable entity." +

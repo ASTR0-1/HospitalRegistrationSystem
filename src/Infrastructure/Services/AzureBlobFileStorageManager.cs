@@ -11,8 +11,8 @@ namespace HospitalRegistrationSystem.Infrastructure.Services;
 /// </summary>
 public class AzureBlobFileStorageManager : IFileStorageManager
 {
-    private readonly BlobServiceClient _serviceClient;
     private readonly AzureBlobOptions _azureBlobOptions;
+    private readonly BlobServiceClient _serviceClient;
 
     /// <summary>
     ///     AzureBlobFileStorageManager constructor.
@@ -26,7 +26,7 @@ public class AzureBlobFileStorageManager : IFileStorageManager
     }
 
     /// <summary>
-    ///    Uploads a file to the azure blob storage.
+    ///     Uploads a file to the azure blob storage.
     /// </summary>
     /// <param name="content">File content.</param>
     /// <param name="directory">Directory name in azure blob.</param>

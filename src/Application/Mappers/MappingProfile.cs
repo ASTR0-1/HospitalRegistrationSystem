@@ -55,11 +55,11 @@ public class MappingProfile : Profile
             .ForMember(dto => dto.WorkingHoursList, conf => conf.MapFrom(ds => DecodeWorkingHours(ds.WorkingHours)));
 
         CreateMap<DoctorSchedule, DoctorScheduleForManipulationDto>()
-            .ForMember(dest => dest.WorkingHoursList, opt => 
+            .ForMember(dest => dest.WorkingHoursList, opt =>
                 opt.MapFrom(src => DecodeWorkingHours(src.WorkingHours)));
 
         CreateMap<DoctorScheduleForManipulationDto, DoctorSchedule>()
-            .ForMember(dest => dest.WorkingHours, opt => 
+            .ForMember(dest => dest.WorkingHours, opt =>
                 opt.MapFrom(src => EncodeWorkingHours(src.WorkingHoursList)));
 
         CreateMap<Feedback, FeedbackDto>();
@@ -72,13 +72,14 @@ public class MappingProfile : Profile
         var hours = new List<int>();
 
         for (var hour = 0; hour < 24; hour++)
-        {
             if ((workingHours & (1 << hour)) != 0)
                 hours.Add(hour);
-        }
 
         return hours;
     }
 
-    private int EncodeWorkingHours(IEnumerable<int> hours) => hours.Aggregate(0, (current, hour) => current | (1 << hour));
+    private int EncodeWorkingHours(IEnumerable<int> hours)
+    {
+        return hours.Aggregate(0, (current, hour) => current | (1 << hour));
+    }
 }

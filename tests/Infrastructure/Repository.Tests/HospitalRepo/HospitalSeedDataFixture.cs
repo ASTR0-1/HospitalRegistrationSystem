@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using HospitalRegistrationSystem.Domain.Entities;
 using HospitalRegistrationSystem.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
@@ -17,15 +13,15 @@ public class HospitalSeedDataFixture : IDisposable
         {
             Id = 1,
             Name = "Hospital1",
-            Address = new Address()
+            Address = new Address
             {
                 CityId = 1,
-                City = new City()
+                City = new City
                 {
                     Id = 1,
                     Name = "City1"
                 },
-                Street = "Street1",
+                Street = "Street1"
             }
         });
 
@@ -33,15 +29,15 @@ public class HospitalSeedDataFixture : IDisposable
         {
             Id = 2,
             Name = "Hospital2",
-            Address = new Address()
+            Address = new Address
             {
                 CityId = 2,
-                City = new City()
+                City = new City
                 {
                     Id = 2,
                     Name = "City2"
                 },
-                Street = "Street2",
+                Street = "Street2"
             }
         });
         ApplicationContext.SaveChanges();

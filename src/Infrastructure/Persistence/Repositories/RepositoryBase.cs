@@ -24,13 +24,22 @@ public abstract class RepositoryBase<T> : IRepositoryBase<T> where T : class
     }
 
     /// <inheritdoc />
-    public void Create(T entity) => _applicationContext.Set<T>().Add(entity);
+    public void Create(T entity)
+    {
+        _applicationContext.Set<T>().Add(entity);
+    }
 
     /// <inheritdoc />
-    public void Delete(T entity) => _applicationContext.Set<T>().Remove(entity);
+    public void Delete(T entity)
+    {
+        _applicationContext.Set<T>().Remove(entity);
+    }
 
     /// <inheritdoc />
-    public void Update(T entity) => _applicationContext.Set<T>().Update(entity);
+    public void Update(T entity)
+    {
+        _applicationContext.Set<T>().Update(entity);
+    }
 
     /// <inheritdoc />
     public IQueryable<T> FindAll(bool trackChanges)
@@ -42,7 +51,8 @@ public abstract class RepositoryBase<T> : IRepositoryBase<T> where T : class
     }
 
     /// <inheritdoc />
-    public IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression, bool trackChanges, params Expression<Func<T, object>>[] includeProperties)
+    public IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression, bool trackChanges,
+        params Expression<Func<T, object>>[] includeProperties)
     {
         IQueryable<T> query = _applicationContext.Set<T>();
 

@@ -15,10 +15,6 @@ namespace HospitalRegistrationSystem.Tests.Application.Service.RegionServ;
 [TestFixture]
 public class RegionServiceTests
 {
-    private Mock<IRepositoryManager> _mock = null!;
-    private RegionService? _regionService;
-    private IMapper? _mapper;
-
     [SetUp]
     public void SetUp()
     {
@@ -29,6 +25,10 @@ public class RegionServiceTests
 
         _regionService = new RegionService(_mapper, _mock.Object);
     }
+
+    private Mock<IRepositoryManager> _mock = null!;
+    private RegionService? _regionService;
+    private IMapper? _mapper;
 
     [Test]
     public async Task GetAllAsync_WhenCalled_ReturnsAllRegions()
@@ -49,7 +49,7 @@ public class RegionServiceTests
     {
         // Arrange
         var existingId = 1;
-        var region = new Region { Id = existingId };
+        var region = new Region {Id = existingId};
         _mock.Setup(x => x.Region.GetRegionAsync(existingId, false)).ReturnsAsync(region);
 
         // Act
@@ -64,7 +64,7 @@ public class RegionServiceTests
     public async Task AddNewAsync_NewRegion_AddsRegionToDb()
     {
         // Arrange
-        var regionDto = new RegionDto { Name = "T" };
+        var regionDto = new RegionDto {Name = "T"};
         _mock.Setup(x => x.Region.CreateRegion(It.IsAny<Region>()));
         _mock.Setup(x => x.SaveAsync()).Returns(Task.CompletedTask);
 
@@ -80,7 +80,7 @@ public class RegionServiceTests
     {
         // Arrange
         var existingId = 1;
-        var region = new Region { Id = existingId };
+        var region = new Region {Id = existingId};
         _mock.Setup(x => x.Region.GetRegionAsync(existingId, false)).ReturnsAsync(region);
         _mock.Setup(x => x.Region.DeleteRegion(It.IsAny<Region>()));
         _mock.Setup(x => x.SaveAsync()).Returns(Task.CompletedTask);
