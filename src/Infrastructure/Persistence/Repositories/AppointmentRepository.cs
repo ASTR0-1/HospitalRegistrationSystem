@@ -26,10 +26,11 @@ public class AppointmentRepository : RepositoryBase<Appointment>, IAppointmentRe
     public Task<PagedList<Appointment>> GetIncomingAppointmentsByUserIdAsync(PagingParameters paging, int userId, bool trackChanges = false)
     {
         var appointments = FindByCondition(a => a.ApplicationUsers.Any(u => u.Id == userId)
+                                                && a.IsVisited == false
                                                 && a.VisitTime > DateTime.Now
                 , trackChanges
                 , a => a.ApplicationUsers)
-            .OrderBy(a => a.Id);
+            .OrderBy(a => a.VisitTime);
 
         return PagedList<Appointment>.ToPagedListAsync(appointments, paging.PageNumber, paging.PageSize);
     }
@@ -52,7 +53,7 @@ public class AppointmentRepository : RepositoryBase<Appointment>, IAppointmentRe
                 && (!isVisited.HasValue || a.IsVisited == isVisited)
                 , trackChanges
                 , a => a.ApplicationUsers)
-            .OrderBy(a => a.Id);
+            .OrderBy(a => a.VisitTime);
 
         return await PagedList<Appointment>.ToPagedListAsync(appointments, paging.PageNumber, paging.PageSize);
     }

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using HospitalRegistrationSystem.Application.DTOs.ApplicationUserDTOs;
 using HospitalRegistrationSystem.Application.DTOs.AppointmentDTOs;
 using HospitalRegistrationSystem.Application.Interfaces.Data;
 using HospitalRegistrationSystem.Application.Interfaces.Services;
@@ -11,6 +13,7 @@ using HospitalRegistrationSystem.Domain.Constants;
 using HospitalRegistrationSystem.Domain.Entities;
 using HospitalRegistrationSystem.Domain.Errors;
 using HospitalRegistrationSystem.Domain.Shared.ResultPattern;
+using Microsoft.Extensions.Configuration;
 
 namespace HospitalRegistrationSystem.Application.Services;
 
@@ -18,11 +21,13 @@ public class AppointmentService : IAppointmentService
 {
     private readonly IMapper _mapper;
     private readonly IRepositoryManager _repository;
+    private readonly IConfiguration _configuration;
 
-    public AppointmentService(IRepositoryManager repository, IMapper mapper)
+    public AppointmentService(IRepositoryManager repository, IMapper mapper, IConfiguration configuration)
     {
         _repository = repository;
         _mapper = mapper;
+        _configuration = configuration;
     }
 
     /// <inheritdoc/>
@@ -88,6 +93,7 @@ public class AppointmentService : IAppointmentService
 
         var appointments = await _repository.Appointment.GetIncomingAppointmentsByUserIdAsync(paging, userId, trackChanges: false);
         var appointmentsDto = _mapper.Map<PagedList<AppointmentDto>>(appointments);
+        await FillTotalServiceCost(appointmentsDto);
 
         return Result<PagedList<AppointmentDto>>.Success(appointmentsDto);
     }
@@ -101,6 +107,7 @@ public class AppointmentService : IAppointmentService
 
         var appointments = await _repository.Appointment.GetAppointmentsByUserIdAsync(paging, userId, isVisited: null, trackChanges: false);
         var appointmentsDto = _mapper.Map<PagedList<AppointmentDto>>(appointments);
+        await FillTotalServiceCost(appointmentsDto);
 
         return Result<PagedList<AppointmentDto>>.Success(appointmentsDto);
     }
@@ -114,6 +121,7 @@ public class AppointmentService : IAppointmentService
 
         var appointments = await _repository.Appointment.GetAppointmentsByUserIdAsync(paging, userId, isVisited: false, trackChanges: false);
         var appointmentsDto = _mapper.Map<PagedList<AppointmentDto>>(appointments);
+        await FillTotalServiceCost(appointmentsDto);
 
         return Result<PagedList<AppointmentDto>>.Success(appointmentsDto);
     }
@@ -127,6 +135,7 @@ public class AppointmentService : IAppointmentService
 
         var appointments = await _repository.Appointment.GetAppointmentsByUserIdAsync(paging, userId, isVisited: true, trackChanges: false);
         var appointmentsDto = _mapper.Map<PagedList<AppointmentDto>>(appointments);
+        await FillTotalServiceCost(appointmentsDto);
 
         return Result<PagedList<AppointmentDto>>.Success(appointmentsDto);
     }
@@ -156,5 +165,26 @@ public class AppointmentService : IAppointmentService
         }
 
         return hours;
+    }
+
+    private async Task FillTotalServiceCost(PagedList<AppointmentDto> appointmentsDto)
+    {
+        foreach (var appointment in appointmentsDto)
+        {
+            var hospital = await _repository.Hospital.GetHospitalAsync((int)appointment.Doctor.HospitalId!);
+            appointment.Doctor.TotalServiceCost = CalculateTotalServiceCost(appointment.Doctor.VisitCost.GetValueOrDefault(), hospital.HospitalFeePercent);
+        }
+    }
+
+    private decimal CalculateTotalServiceCost(decimal visitCost, decimal hospitalFeePercent)
+    {
+        var systemFeeSection = _configuration.GetSection("SystemSettings:SystemFeePercent");
+        var systemFeeString = systemFeeSection.Value;
+        if (!decimal.TryParse(systemFeeString, NumberStyles.Float, CultureInfo.InvariantCulture, out var systemFeePercent))
+            throw new Exception("Invalid system fee value");
+
+        var totalServiceCost = visitCost + (visitCost * hospitalFeePercent / 100) + (visitCost * systemFeePercent / 100);
+
+        return totalServiceCost;
     }
 }
