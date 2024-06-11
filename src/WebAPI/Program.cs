@@ -1,49 +1,81 @@
 using System.IO;
+using System.Threading.Tasks;
+using HospitalRegistrationSystem.Application.Extensions;
 using HospitalRegistrationSystem.Application.Interfaces;
 using HospitalRegistrationSystem.Application.Mappers;
+using HospitalRegistrationSystem.Infrastructure.Extensions;
+using HospitalRegistrationSystem.WebAPI.ActionFilters;
 using HospitalRegistrationSystem.WebAPI.Exstensions;
+using HospitalRegistrationSystem.WebAPI.Extensions;
+using HospitalRegistrationSystem.WebAPI.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.HttpOverrides;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json.Serialization;
 using NLog;
 
 namespace HospitalRegistrationSystem.WebAPI;
 
-public class Program
+/// <summary>
+///     Main entry point of the application.
+/// </summary>
+public abstract class Program
 {
-    public static void Main(string[] args)
+    /// <summary>
+    ///     Main method of the application.
+    /// </summary>
+    /// <param name="args">Command line arguments.</param>
+    public static async Task Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        LogManager.LoadConfiguration(string.Concat(Directory.GetCurrentDirectory(),
-            "/nlog.config"));
+        LogManager.Setup()
+            .LoadConfigurationFromFile(string.Concat(Directory.GetCurrentDirectory(), "/nlog.config"));
 
         var services = builder.Services;
-        IConfiguration configuration = builder.Configuration;
+        var configuration = builder.Configuration;
 
         services.ConfigureCors();
 
-        services.ConfigureLoggerService();
+        services.ConfigureLoggerManager();
 
-        services.ConfigureSqlContext(configuration);
-        services.ConfigureRepositoryManager();
+        services.AddAuthentication();
+
+        services.ConfigureInfrastructure(configuration);
         services.ConfigureEntityServices();
+
+        services.AddHttpContextAccessor();
+        services.AddScoped<ICurrentUserService, CurrentUserService>();
+
+        services.ConfigureAuthenticationManager();
 
         services.AddAutoMapper(typeof(MappingProfile));
 
-        services.AddControllers(config =>
+        services.ConfigureAzureBlob(configuration);
+
+        services.AddControllers(options =>
         {
-            config.RespectBrowserAcceptHeader = true;
-            config.ReturnHttpNotAcceptable = true;
-        }).AddNewtonsoftJson();
+            options.RespectBrowserAcceptHeader = true;
+            options.ReturnHttpNotAcceptable = true;
+
+            options.Filters.Add<PaginationHeaderFilter>();
+        }).AddNewtonsoftJson(opts =>
+        {
+            opts.SerializerSettings.ContractResolver = new DefaultContractResolver
+            {
+                NamingStrategy = new CamelCaseNamingStrategy()
+            };
+        });
 
         services.AddFluentValidation();
 
-        services.AddSwaggerGen();
+        services.ConfigureSwagger();
 
         var app = builder.Build();
+
+        await app.MigrateDatabaseAsync();
+        await app.ConfigureInitialSupervisorAsync();
 
         if (app.Environment.IsDevelopment())
         {
@@ -51,10 +83,14 @@ public class Program
 
             app.UseSwagger();
             app.UseSwaggerUI();
+
+            // Prolong token expiration for development purposes
+            configuration.GetSection("JwtSettings").GetSection("expires").Value = "60";
         }
         else
         {
             app.UseHsts();
+            app.UseStaticFiles();
         }
 
         var logger = app.Services.GetRequiredService<ILoggerManager>();
@@ -68,10 +104,11 @@ public class Program
             ForwardedHeaders = ForwardedHeaders.All
         });
 
+        app.UseAuthentication();
         app.UseAuthorization();
 
         app.MapControllers();
 
-        app.Run();
+        await app.RunAsync();
     }
 }

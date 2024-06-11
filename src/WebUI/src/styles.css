@@ -1,3 +1,10 @@
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+
 body {
-    background-color: #D3DEDC;
+	background-color: #d3dedc;
+	height: 100vh;
+}
+
+.bg-wrapper {
+	color: #7c99ac;
 }

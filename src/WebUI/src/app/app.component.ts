@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { map, share, Subscription, timer } from 'rxjs';
+import { AuthenticationService } from './services/authentication.service';
+import { Roles } from './constants/role.constants';
+import { Router } from '@angular/router';
 
 @Component({
 	selector: 'app-root',
@@ -7,25 +9,19 @@ import { map, share, Subscription, timer } from 'rxjs';
 	styleUrls: ['./app.component.css'],
 })
 export class AppComponent implements OnInit {
-	rxTime = new Date();
-	intervalId: any;
-	subscription!: Subscription;
+	readonly roles = Roles;
 
-	ngOnInit() {
-		this.subscription = timer(0, 1000)
-			.pipe(
-				map(() => new Date()),
-				share()
-			)
-			.subscribe((time) => {
-				this.rxTime = time;
-			});
-	}
+	constructor(
+		public authService: AuthenticationService,
+		public router: Router,
+	) {}
 
-	ngOnDestroy() {
-		clearInterval(this.intervalId);
-		if (this.subscription) {
-			this.subscription.unsubscribe();
-		}
+	ngOnInit() {}
+
+	ngOnDestroy() {}
+
+	viewHospital() {
+		const hospitalId = this.authService.getHospitalId();
+		this.router.navigate(['/doctors-by-hospital', hospitalId]);
 	}
 }

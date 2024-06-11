@@ -1,0 +1,38 @@
+<div class="calendar-container d-flex flex-column align-items-center gap-2">
+	<div class="header rounded shadow d-flex flex-row gap-4">
+		<button
+			class="btn btn-sm btn-secondary"
+			[disabled]="isInitialWeek()"
+			(click)="previousWeek()">
+			&#10094;
+		</button>
+		<h4>Розклад. Дата: {{ currentDate | date: "fullDate" }}</h4>
+		<button class="btn btn-sm btn-secondary" (click)="nextWeek()">
+			&#10095;
+		</button>
+	</div>
+	<div class="calendar">
+		<div class="day rounded shadow" *ngFor="let day of weekDays">
+			<h4>{{ day | date: "EEEE, MMM d" }}</h4>
+			<div
+				class="hour rounded shadow"
+				*ngFor="let hour of hours"
+				[class.selected]="isScheduled(day, hour)"
+				(click)="
+					isDoctor()
+						? toggleSchedule(day, hour)
+						: isScheduled(day, hour) && isAuthenticated()
+							? openAppointmentDialog(day, hour)
+							: null
+				">
+				{{ hour }}:00
+			</div>
+		</div>
+	</div>
+	<button
+		class="btn btn-success shadow"
+		*ngIf="isDoctor()"
+		(click)="saveSchedule()">
+		Зберегти зміни
+	</button>
+</div>

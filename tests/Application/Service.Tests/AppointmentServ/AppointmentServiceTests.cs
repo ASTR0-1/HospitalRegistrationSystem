@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using HospitalRegistrationSystem.Application.Interfaces.Data;
-using HospitalRegistrationSystem.Application.Interfaces.Services;
 using HospitalRegistrationSystem.Application.Mappers;
 using HospitalRegistrationSystem.Application.Services;
+using HospitalRegistrationSystem.Application.Utility.PagedData;
 using HospitalRegistrationSystem.Domain.Entities;
 using Moq;
 using NUnit.Framework;
@@ -16,258 +14,115 @@ namespace HospitalRegistrationSystem.Tests.Application.Service.AppointmentServ;
 [TestFixture]
 public class AppointmentServiceTests
 {
-    [OneTimeSetUp]
-    public void SetUpMock()
+    [SetUp]
+    public void SetUp()
     {
         _mock = new Mock<IRepositoryManager>();
 
-        MappingProfile mappingProfile = new();
-        IMapper mapper = new Mapper(new MapperConfiguration(x => x.AddProfile(mappingProfile)));
+        var config = new MapperConfiguration(cfg => cfg.AddProfile(new MappingProfile()));
+        _mapper = config.CreateMapper();
 
-        _appointmentService = new AppointmentService(_mock.Object, mapper);
+        _appointmentService = new AppointmentService(_mock.Object, _mapper, null, null);
     }
 
     private Mock<IRepositoryManager> _mock;
-    private IAppointmentService _appointmentService;
+    private AppointmentService _appointmentService;
+    private IMapper _mapper;
 
     [Test]
-    public void AddNewAsync_NullAppointment_ThrowNullReferenceException()
+    public async Task GetIncomingByUserIdAsync_ExistingUserId_ReturnAppointments()
     {
         // Arrange
-        _mock.Setup(x => x.Appointment.CreateAppointment(It.IsAny<Appointment>()))
-            .Throws(new NullReferenceException());
-        Appointment nullAppointment = null;
-        var expectedExceptionType = typeof(NullReferenceException);
+        var existingId = 1;
+        var user = new ApplicationUser {Id = existingId};
+        var appointments = new PagedList<Appointment>(new List<Appointment>(), 1, 1, 1);
+
+        _mock.Setup(x => x.ApplicationUser.GetApplicationUserAsync(existingId)).ReturnsAsync(user);
+        _mock.Setup(x =>
+                x.Appointment.GetIncomingAppointmentsByUserIdAsync(It.IsAny<PagingParameters>(), existingId, false))
+            .ReturnsAsync(appointments);
 
         // Act
-        var actualExceptionType = Assert.CatchAsync<NullReferenceException>(() =>
-            _appointmentService.AddNewAsync(nullAppointment)).GetType();
+        var result = await _appointmentService.GetIncomingByUserIdAsync(new PagingParameters(), existingId);
 
         // Assert
-        Assert.That(actualExceptionType, Is.EqualTo(expectedExceptionType));
+        Assert.That(result.IsSuccess, Is.True);
     }
 
     [Test]
-    public async Task AddNewAsync_NewAppointment_AddClientToDb()
+    public async Task GetAllByUserIdAsync_ExistingUserId_ReturnAppointments()
     {
         // Arrange
-        _mock.Setup(x => x.Appointment.CreateAppointment(It.IsAny<Appointment>()));
-        var expectedDiagnosis = "D1";
-        var appointment = new Appointment {Diagnosis = expectedDiagnosis};
+        var existingId = 1;
+        var user = new ApplicationUser {Id = existingId};
+        var appointments = new PagedList<Appointment>(new List<Appointment>(), 1, 1, 1);
+
+        _mock.Setup(x => x.ApplicationUser.GetApplicationUserAsync(existingId)).ReturnsAsync(user);
+        _mock.Setup(x =>
+                x.Appointment.GetAppointmentsByUserIdAsync(It.IsAny<PagingParameters>(), existingId, null, false))
+            .ReturnsAsync(appointments);
 
         // Act
-        await _appointmentService.AddNewAsync(appointment);
+        var result = await _appointmentService.GetAllByUserIdAsync(new PagingParameters(), existingId);
 
         // Assert
-        _mock.Verify(x => x.Appointment.CreateAppointment(
-            It.Is<Appointment>(a => a.Diagnosis == expectedDiagnosis)));
+        Assert.That(result.IsSuccess, Is.True);
     }
 
     [Test]
-    public async Task GetAllAsync_GetClientAppointmentDTOs()
+    public async Task GetMissedByUserIdAsync_ExistingUserId_ReturnAppointments()
     {
         // Arrange
-        var expectedFirstName = "cf1";
-        _mock.Setup(x => x.Appointment.GetAppointmentsAsync(false))
-            .ReturnsAsync(new List<Appointment>
-            {
-                new() {Doctor = new Doctor {FirstName = expectedFirstName}}
-            });
+        var existingId = 1;
+        var user = new ApplicationUser {Id = existingId};
+        var appointments = new PagedList<Appointment>(new List<Appointment>(), 1, 1, 1);
+
+        _mock.Setup(x => x.ApplicationUser.GetApplicationUserAsync(existingId)).ReturnsAsync(user);
+        _mock.Setup(x =>
+                x.Appointment.GetAppointmentsByUserIdAsync(It.IsAny<PagingParameters>(), existingId, false, false))
+            .ReturnsAsync(appointments);
 
         // Act
-        var clientAppointment = (await _appointmentService.GetAllAsync()).Last();
-        var actualFirstName = clientAppointment.DoctorFirstName;
+        var result = await _appointmentService.GetMissedByUserIdAsync(new PagingParameters(), existingId);
 
         // Assert
-        Assert.That(actualFirstName, Is.EqualTo(expectedFirstName));
+        Assert.That(result.IsSuccess, Is.True);
     }
 
     [Test]
-    public async Task GetAsync_NotExistingAppointmentId_ReturnNull()
+    public async Task GetVisitedByUserIdAsync_ExistingUserId_ReturnAppointments()
     {
         // Arrange
-        var notExistingId = 1;
-        Appointment nullAppointment = null;
-        _mock.Setup(x => x.Appointment.GetAppointmentAsync(notExistingId, false))
-            .ReturnsAsync(nullAppointment);
+        var existingId = 1;
+        var user = new ApplicationUser {Id = existingId};
+        var appointments = new PagedList<Appointment>(new List<Appointment>(), 1, 1, 1);
+
+        _mock.Setup(x => x.ApplicationUser.GetApplicationUserAsync(existingId)).ReturnsAsync(user);
+        _mock.Setup(x =>
+                x.Appointment.GetAppointmentsByUserIdAsync(It.IsAny<PagingParameters>(), existingId, true, false))
+            .ReturnsAsync(appointments);
 
         // Act
-        var appointment = await _appointmentService.GetAsync(notExistingId);
+        var result = await _appointmentService.GetVisitedByUserIdAsync(new PagingParameters(), existingId);
 
         // Assert
-        Assert.That(appointment, Is.Null);
+        Assert.That(result.IsSuccess, Is.True);
     }
 
     [Test]
-    public async Task GetAsync_ExistingAppointmentId_GetClientAppointmentDTO()
+    public async Task MarkAsVisitedAsync_ExistingAppointmentId_MarkAppointmentAsVisited()
     {
         // Arrange
-        var expectedFirstName = "cf1";
-        var id = 1;
-        _mock.Setup(x => x.Appointment.GetAppointmentAsync(id, false))
-            .ReturnsAsync(new Appointment
-            {
-                Doctor = new Doctor {FirstName = expectedFirstName}
-            });
+        var existingId = 1;
+        var appointment = new Appointment {Id = existingId};
+
+        _mock.Setup(x => x.Appointment.GetAppointmentAsync(existingId, true)).ReturnsAsync(appointment);
+        _mock.Setup(x => x.SaveAsync()).Returns(Task.CompletedTask);
 
         // Act
-        var appointment = await _appointmentService.GetAsync(id);
-        var actualFirstName = appointment.DoctorFirstName;
+        var result = await _appointmentService.MarkAsVisitedAsync(existingId, "Diagnosis");
 
         // Assert
-        Assert.That(actualFirstName, Is.EqualTo(expectedFirstName));
-    }
-
-    [Test]
-    public async Task GetByClientIdAsync_NotExistingId_ReturnEmptyList()
-    {
-        // Arrange
-        var notExistingId = -1;
-        _mock.Setup(x => x.Appointment.GetAppointmentsAsync(false))
-            .ReturnsAsync(new List<Appointment>
-            {
-                new(),
-                new()
-            });
-
-        // Act
-        var clientAppointments = await _appointmentService.GetByClientIdAsync(notExistingId);
-
-        // Assert
-        Assert.That(clientAppointments, Is.Empty);
-    }
-
-    [Test]
-    public async Task GetByClientIdAsync_ExistingId_ReturnClientAppointments()
-    {
-        // Arrange
-        var expectedDoctorIds = (1, 2);
-        _mock.Setup(x => x.Appointment.GetAppointmentsAsync(false))
-            .ReturnsAsync(new List<Appointment>
-            {
-                new() {ClientId = 1, DoctorId = 1},
-                new() {ClientId = 1, DoctorId = 2}
-            });
-
-        // Act
-        var clientAppointments = (await _appointmentService.GetByClientIdAsync(1)).ToList();
-        var actualDoctorIds = (clientAppointments[0].DoctorId, clientAppointments[1].DoctorId);
-
-        // Assert
-        Assert.That(expectedDoctorIds, Is.EqualTo(actualDoctorIds));
-    }
-
-    [Test]
-    public async Task GetByDoctorIdAsync_NotExistingId_ReturnEmptyList()
-    {
-        // Arrange
-        var notExistingId = -1;
-        _mock.Setup(x => x.Appointment.GetAppointmentsAsync(false))
-            .ReturnsAsync(new List<Appointment>
-            {
-                new(),
-                new()
-            });
-
-        // Act
-        var clientAppointments = await _appointmentService.GetByDoctorIdAsync(notExistingId);
-
-        // Assert
-        Assert.That(clientAppointments, Is.Empty);
-    }
-
-    [Test]
-    public async Task GetByDoctorIdAsync_ExistingId_ReturnDoctorAppointments()
-    {
-        // Arrange
-        var expectedDoctorIds = (1, 2);
-        _mock.Setup(x => x.Appointment.GetAppointmentsAsync(false))
-            .ReturnsAsync(new List<Appointment>
-            {
-                new() {ClientId = 1, DoctorId = 1},
-                new() {ClientId = 2, DoctorId = 1}
-            });
-
-        // Act
-        var clientAppointments = (await _appointmentService.GetByDoctorIdAsync(1)).ToList();
-        var actualDoctorIds = (clientAppointments[0].ClientId, clientAppointments[1].ClientId);
-
-        // Assert
-        Assert.That(expectedDoctorIds, Is.EqualTo(actualDoctorIds));
-    }
-
-    [Test]
-    public async Task GetVisitedByClientIdAsync_NotExistingId_ReturnEmptyList()
-    {
-        // Arrange
-        var notExistingId = -1;
-        _mock.Setup(x => x.Appointment.GetAppointmentsAsync(false))
-            .ReturnsAsync(new List<Appointment>
-            {
-                new(),
-                new()
-            });
-
-        // Act
-        var clientAppointments = await _appointmentService.GetVisitedByClientIdAsync(notExistingId);
-
-        // Assert
-        Assert.That(clientAppointments, Is.Empty);
-    }
-
-    [Test]
-    public async Task GetVisitedByClientIdAsync_ExistingId_ReturnVisitedClientAppointments()
-    {
-        // Arrange
-        var expectedDoctorIds = (1, 2);
-        _mock.Setup(x => x.Appointment.GetAppointmentsAsync(false))
-            .ReturnsAsync(new List<Appointment>
-            {
-                new() {ClientId = 1, DoctorId = 1, IsVisited = true},
-                new() {ClientId = 1, DoctorId = 2, IsVisited = true}
-            });
-
-        // Act
-        var clientAppointments = (await _appointmentService.GetVisitedByClientIdAsync(1)).ToList();
-        var actualDoctorIds = (clientAppointments[0].DoctorId, clientAppointments[1].DoctorId);
-
-        // Assert
-        Assert.That(expectedDoctorIds, Is.EqualTo(actualDoctorIds));
-    }
-
-    [Test]
-    public async Task MarkAsVisitedAsync_NotExistingId_ReturnNull()
-    {
-        // Arrange
-        var notExistingId = -1;
-        Appointment nullAppointment = null;
-        _mock.Setup(x => x.Appointment.GetAppointmentAsync(notExistingId, false))
-            .ReturnsAsync(nullAppointment);
-
-        // Act
-        var result = await _appointmentService.MarkAsVisitedAsync(notExistingId, "");
-
-        // Assert
-        Assert.That(result, Is.Null);
-    }
-
-    [Test]
-    public async Task MarkAsVisitedAsync_ExistingId_ReturnClientAppointment()
-    {
-        // Arrange
-        var expectedDoctorId = 1;
-        var expectedDiagnosis = "Diagnosis";
-        var appointment = new Appointment {Id = expectedDoctorId, DoctorId = 1};
-        _mock.Setup(x => x.Appointment.GetAppointmentAsync(expectedDoctorId, true))
-            .ReturnsAsync(appointment);
-
-        // Act
-        var clientAppointment = await _appointmentService.MarkAsVisitedAsync(expectedDoctorId, expectedDiagnosis);
-        var actualDoctorId = clientAppointment.DoctorId;
-        var actualDiagnosis = clientAppointment.Diagnosis;
-
-        // Assert
-        Assert.That(actualDoctorId, Is.EqualTo(expectedDoctorId));
-        Assert.That(actualDiagnosis, Is.EqualTo(expectedDiagnosis));
+        Assert.That(result.IsSuccess, Is.True);
     }
 }

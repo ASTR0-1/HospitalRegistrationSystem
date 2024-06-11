@@ -6,45 +6,61 @@ using Microsoft.EntityFrameworkCore;
 
 namespace HospitalRegistrationSystem.Infrastructure.Persistence.Repositories;
 
+/// <summary>
+///     Base repository class for CRUD operations.
+/// </summary>
+/// <typeparam name="T">The entity type.</typeparam>
 public abstract class RepositoryBase<T> : IRepositoryBase<T> where T : class
 {
-    protected RepositoryContext _repositoryContext;
+    private readonly ApplicationContext _applicationContext;
 
-    public RepositoryBase(RepositoryContext repositoryContext)
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="RepositoryBase{T}" /> class.
+    /// </summary>
+    /// <param name="applicationContext">The application context.</param>
+    public RepositoryBase(ApplicationContext applicationContext)
     {
-        _repositoryContext = repositoryContext;
+        _applicationContext = applicationContext;
     }
 
+    /// <inheritdoc />
     public void Create(T entity)
     {
-        _repositoryContext.Set<T>().Add(entity);
+        _applicationContext.Set<T>().Add(entity);
     }
 
+    /// <inheritdoc />
     public void Delete(T entity)
     {
-        _repositoryContext.Set<T>().Remove(entity);
+        _applicationContext.Set<T>().Remove(entity);
     }
 
+    /// <inheritdoc />
     public void Update(T entity)
     {
-        _repositoryContext.Set<T>().Update(entity);
+        _applicationContext.Set<T>().Update(entity);
     }
 
+    /// <inheritdoc />
     public IQueryable<T> FindAll(bool trackChanges)
     {
         return !trackChanges
-            ? _repositoryContext.Set<T>()
+            ? _applicationContext.Set<T>()
                 .AsNoTracking()
-            : _repositoryContext.Set<T>();
+            : _applicationContext.Set<T>();
     }
 
-    public IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression, bool trackChanges)
+    /// <inheritdoc />
+    public IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression, bool trackChanges,
+        params Expression<Func<T, object>>[] includeProperties)
     {
-        return !trackChanges
-            ? _repositoryContext.Set<T>()
-                .Where(expression)
-                .AsNoTracking()
-            : _repositoryContext.Set<T>()
-                .Where(expression);
+        IQueryable<T> query = _applicationContext.Set<T>();
+
+        if (!trackChanges)
+            query = query.AsNoTracking();
+
+        query = includeProperties.Aggregate(query, (current, includeProperty) => current.Include(includeProperty));
+
+        return query.Where(expression);
     }
 }

@@ -1,30 +1,21 @@
-.navbar-brand {
-    color: #7C99AC;
-    font-size: 25px;
-    font-style: normal;
-    font-weight: 800;
+p {
+	font-family: arial;
 }
 
-.navbar-brand:visited {
-    color: #7C99AC;
-    font-style: normal;
+.header {
+	background-color: #fff;
+	padding: 10px;
+	border-radius: 5px;
+	margin-bottom: 20px;
 }
 
 .plus-icon {
-    fill: #b14141;
-    width: 34px;
-    height: 34px;
+	width: 30px;
+	height: 30px;
+	fill: red;
+	cursor: pointer;
 }
 
-.clock {
-    color: #92A9BD;
-    font-size: 28px;
-    font-family: arial;
-    font-style: normal;
-    font-weight: 800;
-}
-
-.main-container {
-    border-radius: 10px;
-    height: 78vh;
+.btn {
+	border: 1px solid #7c99ac;
 }

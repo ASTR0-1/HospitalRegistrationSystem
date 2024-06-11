@@ -1,0 +1,32 @@
+<h2 mat-dialog-title>Відмітити прийом як відвіданий</h2>
+<mat-dialog-content>
+	<form [formGroup]="markAsVisitedForm" (ngSubmit)="onSubmit()">
+		<mat-form-field appearance="fill" style="width: 15vw">
+			<mat-label>Висновки по прийому</mat-label>
+			<textarea
+				matInput
+				formControlName="diagnosis"
+				style="height: 20vh"
+			></textarea>
+			<mat-error
+				*ngIf="markAsVisitedForm.get('diagnosis')!.hasError('required')">
+				Висновок обов'язковий
+			</mat-error>
+		</mat-form-field>
+		<div class="d-flex flex-row gap-2" mat-dialog-actions>
+			<button
+				class="btn shadow btn-sm btn-outline-danger"
+				mat-button
+				(click)="onCancel()">
+				Скасувати
+			</button>
+			<button
+				class="btn shadow btn-sm btn-outline-success"
+				mat-button
+				type="submit"
+				[disabled]="!markAsVisitedForm.valid">
+				Відмітити
+			</button>
+		</div>
+	</form>
+</mat-dialog-content>

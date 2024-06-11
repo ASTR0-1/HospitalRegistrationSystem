@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from "@angular/router";
+import { Router } from '@angular/router';
+import { HospitalService } from '../services/hospital.service';
+import { HospitalDto } from '../entities/hospital/hospitalDto';
+import { PagingParameters } from '../entities/utility/pagingParameters';
 
 @Component({
 	selector: 'app-home',
@@ -7,19 +10,63 @@ import { Router } from "@angular/router";
 	styleUrls: ['./home.component.css'],
 })
 export class HomeComponent implements OnInit {
-	constructor(private router: Router) {}
+	hospitals: HospitalDto[] = [];
 
-	ngOnInit(): void {}
+	currentPage: number = 1;
+	pageSize: number = 6;
+	totalPages: number = 0;
+	hasNext: boolean = false;
+	hasPrevious: boolean = false;
 
-    searchClients(searchString: string) {
-        this.router.navigate(['clients'], {
-			queryParams: { SearchString: searchString },
-		});
-    }
+	searchQuery = '';
 
-    searchDoctors(searchString: string) {
-        this.router.navigate(['doctors'], {
-			queryParams: { SearchString: searchString },
-		});
-    }
+	constructor(
+		private router: Router,
+		private hospitalService: HospitalService,
+	) {}
+
+	ngOnInit(): void {
+		this.loadHospitals();
+	}
+
+	viewDoctors(hospitalId: number): void {
+		this.router.navigate(['/doctors-by-hospital', hospitalId]);
+	}
+
+	loadHospitals(): void {
+		const paging: PagingParameters = {
+			pageNumber: this.currentPage,
+			pageSize: this.pageSize,
+		};
+
+		this.hospitalService
+			.getAllHospitals(paging, this.searchQuery)
+			.subscribe((result) => {
+				this.hospitals = result.body as HospitalDto[];
+
+				const paginationData = JSON.parse(
+					result.headers.get('X-Pagination')!,
+				);
+
+				this.totalPages = paginationData.totalPages;
+				this.currentPage = paginationData.currentPage;
+				this.pageSize = paginationData.pageSize;
+				this.hasNext = paginationData.hasNext;
+				this.hasPrevious = paginationData.hasPrevious;
+			});
+	}
+
+	nextPage(): void {
+		if (this.currentPage < this.totalPages) {
+			this.currentPage++;
+			this.loadHospitals();
+		}
+	}
+
+	prevPage(): void {
+		if (this.currentPage > 1) {
+			this.currentPage--;
+			this.loadHospitals();
+		}
+	}
 }

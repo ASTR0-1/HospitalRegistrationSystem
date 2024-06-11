@@ -1,0 +1,35 @@
+<h2 mat-dialog-title>Відгуки</h2>
+<mat-dialog-content class="d-flex flex-column gap-2">
+	<div *ngFor="let feedback of feedbacks">
+		<mat-card>
+			<mat-card-header>
+				<mat-card-title>
+					<ng-container
+						class="d-flex align-items-center"
+						*ngFor="
+							let star of starsArray(feedback.rating);
+							let i = index
+						"
+					>
+						<mat-icon *ngIf="star === 'full'">star</mat-icon>
+						<mat-icon *ngIf="star === 'half'">star_half</mat-icon>
+						<mat-icon *ngIf="star === 'empty'"
+							>star_border</mat-icon
+						>
+					</ng-container>
+				</mat-card-title>
+				<mat-card-subtitle>{{
+					feedback.feedbackDate | date: "medium"
+				}}</mat-card-subtitle>
+			</mat-card-header>
+			<mat-card-content>
+				<p>{{ feedback.text }}</p>
+			</mat-card-content>
+		</mat-card>
+	</div>
+</mat-dialog-content>
+<mat-dialog-actions class="d-flex justify-content-center">
+	<button class="btn btn-sm btn-danger" mat-button mat-dialog-close>
+		Закрити
+	</button>
+</mat-dialog-actions>

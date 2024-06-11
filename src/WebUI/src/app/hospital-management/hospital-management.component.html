@@ -1,0 +1,58 @@
+<div class="container rounded h-75">
+	<h2>Менеджмент лікарень</h2>
+	<button
+		class="btn btn-success"
+		mat-raised-button
+		color="primary"
+		(click)="openAddDialog()">
+		Додати лікарню
+	</button>
+	<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+		<ng-container matColumnDef="id">
+			<th mat-header-cell *matHeaderCellDef>Id</th>
+			<td mat-cell *matCellDef="let hospital">{{ hospital.id }}</td>
+		</ng-container>
+		<ng-container matColumnDef="name">
+			<th mat-header-cell *matHeaderCellDef>Назва лікарні</th>
+			<td mat-cell *matCellDef="let hospital">{{ hospital.name }}</td>
+		</ng-container>
+		<ng-container matColumnDef="region">
+			<th mat-header-cell *matHeaderCellDef>Область</th>
+			<td mat-cell *matCellDef="let hospital">{{ hospital.region }}</td>
+		</ng-container>
+		<ng-container matColumnDef="city">
+			<th mat-header-cell *matHeaderCellDef>Місто</th>
+			<td mat-cell *matCellDef="let hospital">{{ hospital.city }}</td>
+		</ng-container>
+		<ng-container matColumnDef="street">
+			<th mat-header-cell *matHeaderCellDef>Вулиця</th>
+			<td mat-cell *matCellDef="let hospital">{{ hospital.street }}</td>
+		</ng-container>
+		<ng-container matColumnDef="actions">
+			<th mat-header-cell *matHeaderCellDef>Дії</th>
+			<td mat-cell *matCellDef="let hospital">
+				<button
+					class="btn btn-danger"
+					mat-button
+					color="warn"
+					(click)="deleteHospital(hospital.id)">
+					Видалити
+				</button>
+				<button
+					class="btn btn-info"
+					mat-button
+					color="primary"
+					(click)="navigateToUserManagement(hospital.id)">
+					Користувачі
+				</button>
+			</td>
+		</ng-container>
+		<tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+		<tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+	</table>
+	<mat-paginator
+		[length]="totalHospitals"
+		[pageSize]="10"
+		(page)="onPageChange($event)">
+	</mat-paginator>
+</div>

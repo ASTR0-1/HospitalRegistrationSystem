@@ -1,0 +1,31 @@
+.bg-wrapper {
+	height: 85%;
+}
+
+.container {
+	padding: 5vh;
+	height: 80vh;
+	background-color: #f9f9f9;
+}
+
+.appointments-container {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.appointment-card {
+	margin-bottom: 20px;
+}
+
+.card {
+	border: 1px solid #ccc;
+	width: 12vw;
+	border-radius: 10px;
+}
+
+.card-body {
+	padding: 15px;
+	height: 310px;
+	max-height: 310px;
+	overflow-y: auto;
+}

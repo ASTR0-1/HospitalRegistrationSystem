@@ -1,0 +1,54 @@
+.register-page {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 85vh;
+	margin: 0;
+
+	color: #7c99ac;
+}
+
+.register-block {
+	width: 25%;
+	height: 85vh;
+	background: #ffffff;
+	border-radius: 20px;
+	margin: auto;
+}
+
+.input-block {
+	width: 100%;
+	font-weight: 600;
+	font-size: 14px !important;
+}
+
+.input-block > div {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+input,
+.form-select {
+	font-size: 14px;
+	width: 12vw;
+	height: 5vh;
+	border: 1px solid #7c99ac;
+}
+
+.btn {
+	background-color: #7c99ac;
+	color: white;
+	font-size: 16px;
+}
+
+.error-container {
+	font-size: 12px;
+	height: 2vh;
+	margin: 0.5vh;
+}
+
+.invalid-register-error {
+	height: 4vh;
+	font-size: 14px;
+}

@@ -1,0 +1,77 @@
+<div class="bg-wrapper d-flex flex-row align-items-center">
+	<div
+		class="container d-flex flex-column justify-content-center rounded shadow mt-4">
+		<h2>Відвідані прийоми</h2>
+		<hr class="border"/>
+		<div class="appointments-container row">
+			<div
+				class="appointment-card col-sm-12 col-md-6 col-lg-3"
+				*ngFor="let appointment of appointments">
+				<div
+					class="card mb-1"
+					[style.border-color]="
+						appointment.doctor.id === currentUserId
+							? 'salmon'
+							: 'initial'
+					">
+					<div class="card-body">
+						<p class="card-text">
+							<strong>Дата:</strong>
+							{{ appointment.visitTime | date: "medium" }}
+						</p>
+						<ng-container
+							*ngIf="
+								appointment.doctor.id === currentUserId;
+								else patientInfo
+							">
+							<p class="card-text">
+								<strong>Пацієнт:</strong>
+								{{ appointment.client.firstName }}
+								{{ appointment.client.lastName }}
+							</p>
+						</ng-container>
+						<ng-template #patientInfo>
+							<p class="card-text">
+								<strong>Спеціаліст:</strong>
+								{{ appointment.doctor.firstName }}
+								{{ appointment.doctor.lastName }}
+							</p>
+							<p class="card-text">
+								<strong>Спеціальність:</strong>
+								{{ appointment.doctor.specialty }}
+							</p>
+							<p class="card-text">
+								<strong>Вартість прийому:</strong>
+								{{
+								appointment.doctor.visitCost
+								| currency: "UAH"
+								}}
+							</p>
+						</ng-template>
+						<div class="diagnosis-container">
+							<p class="card-text">
+								<strong>Висновки по прийому:</strong>
+								{{ appointment.diagnosis }}
+							</p>
+						</div>
+						<button
+							class="btn btn-sm btn-outline-success mt-2"
+							*ngIf="appointment.doctor.id !== currentUserId"
+							mat-button
+							color="primary"
+							(click)="openFeedbackDialog(appointment.id)">
+							Залишити відгук
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<mat-paginator
+			class="border rounded"
+			[length]="totalAppointments"
+			[pageSize]="pageSize"
+			[pageIndex]="pageIndex"
+			(page)="fetchAppointments($event)">
+		</mat-paginator>
+	</div>
+</div>

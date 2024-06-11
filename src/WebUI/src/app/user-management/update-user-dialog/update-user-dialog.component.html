@@ -1,0 +1,51 @@
+<h2 mat-dialog-title>Оновити користувача</h2>
+<mat-dialog-content>
+	<form [formGroup]="updateUserForm" (ngSubmit)="onSubmit()">
+		<mat-form-field appearance="fill">
+			<mat-label>Ім'я</mat-label>
+			<input matInput formControlName="firstName" required/>
+		</mat-form-field>
+		<mat-form-field appearance="fill">
+			<mat-label>По-батькові</mat-label>
+			<input matInput formControlName="middleName" required/>
+		</mat-form-field>
+		<mat-form-field appearance="fill">
+			<mat-label>Прізвище</mat-label>
+			<input matInput formControlName="lastName" required/>
+		</mat-form-field>
+		<mat-form-field appearance="fill">
+			<mat-label>Стать</mat-label>
+			<mat-select formControlName="gender" required>
+				<mat-option value="Чоловіча">Чоловіча</mat-option>
+				<mat-option value="Жіноча">Жіноча</mat-option>
+			</mat-select>
+		</mat-form-field>
+		<mat-form-field *ngIf="userIsDoctor()" appearance="fill">
+			<mat-label>Ціна за прийом</mat-label>
+			<input
+				matInput
+				formControlName="visitCost"
+				type="number"
+				required/>
+		</mat-form-field>
+		<mat-form-field *ngIf="userIsDoctor()" appearance="fill">
+			<mat-label>Спеціальність</mat-label>
+			<input matInput formControlName="specialty" required/>
+		</mat-form-field>
+		<div class="d-flex flex-row gap-2" mat-dialog-actions>
+			<button
+				class="btn btn-sm btn-secondary"
+				mat-button
+				mat-dialog-close>
+				Скасувати
+			</button>
+			<button
+				class="btn btn-sm btn-primary"
+				mat-raised-button
+				color="primary"
+				type="submit">
+				Зберегти зміни
+			</button>
+		</div>
+	</form>
+</mat-dialog-content>

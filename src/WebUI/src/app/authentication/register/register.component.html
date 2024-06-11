@@ -1,0 +1,146 @@
+<div class="register-page">
+	<form
+		class="register-block shadow d-flex flex-column align-items-center p-4 gap-2"
+		(ngSubmit)="register()">
+		<h2 class="header">Реєстрація</h2>
+		<div
+			class="input-block d-flex flex-column align-items-center justify-content-center h-100 m-2">
+			<p
+				class="invalid-register-error alert-danger p-1 m-0 rounded"
+				*ngIf="isInvalidRegister$ | async">
+				Помилка реєстрації.
+			</p>
+			<div>
+				<p class="px-3 m-1">Ім'я</p>
+				<input
+					matInput
+					class="form-control"
+					type="text"
+					name="firstName"
+					[(ngModel)]="user.firstName"
+					required
+					#firstName="ngModel"/>
+				<div class="error-container">
+					<p
+						class="alert-danger p-1 rounded"
+						*ngIf="firstName.invalid && firstName.touched">
+						Ім'я обов'язкове
+					</p>
+				</div>
+			</div>
+			<div>
+				<p class="px-3 m-1">Ім'я по батькові</p>
+				<input
+					matInput
+					class="form-control"
+					type="text"
+					name="middleName"
+					[(ngModel)]="user.middleName"/>
+				<div class="error-container"></div>
+			</div>
+			<div>
+				<p class="px-3 m-1">Прізвище</p>
+				<input
+					matInput
+					class="form-control"
+					type="text"
+					name="lastName"
+					[(ngModel)]="user.lastName"
+					required
+					#lastName="ngModel"/>
+				<div class="error-container">
+					<p
+						class="alert-danger p-1 rounded"
+						*ngIf="lastName.invalid && lastName.touched">
+						Прізвище обов'язкове
+					</p>
+				</div>
+			</div>
+			<div>
+				<p class="px-3 m-1">Стать</p>
+				<select
+					class="form-select"
+					name="gender"
+					[(ngModel)]="user.gender"
+					required
+					#gender="ngModel">
+					<option value="Чоловіча">Чоловіча</option>
+					<option value="Жіноча">Жіноча</option>
+				</select>
+				<div class="error-container">
+					<p
+						class="alert-danger p-1 rounded"
+						*ngIf="gender.invalid && gender.touched">
+						Стать обов'язкова
+					</p>
+				</div>
+			</div>
+			<div>
+				<p class="px-3 m-1">Номер телефону</p>
+				<input
+					matInput
+					class="form-control"
+					type="text"
+					name="phoneNumber"
+					[(ngModel)]="user.phoneNumber"
+					placeholder="+380"
+					pattern="380[0-9]{9}"
+					required
+					#phoneNumber="ngModel"/>
+				<div class="error-container">
+					<p
+						class="alert-danger p-1 rounded"
+						*ngIf="
+							phoneNumber.errors?.['required'] &&
+							phoneNumber.touched
+						">
+						Номер телефону обов'язковий
+					</p>
+					<p
+						class="alert-danger p-1 rounded"
+						*ngIf="phoneNumber.errors?.['pattern']">
+						Номер телефону має починатися з '380' і має бути 12
+						символів
+					</p>
+				</div>
+			</div>
+			<div>
+				<p class="px-3 m-1">Пароль</p>
+				<input
+					matInput
+					class="form-control"
+					type="password"
+					name="password"
+					[(ngModel)]="user.password"
+					minlength="5"
+					required
+					#password="ngModel"/>
+				<div class="error-container">
+					<p
+						class="alert-danger p-1 rounded"
+						*ngIf="
+							password.errors?.['required'] && password.touched
+						">
+						Пароль обов'язковий
+					</p>
+					<p
+						class="alert-danger p-1 rounded"
+						*ngIf="password.errors?.['minlength']">
+						Пароль має бути не менше 5 символів
+					</p>
+				</div>
+			</div>
+		</div>
+		<button
+			class="btn w-50"
+			type="submit"
+			[disabled]="
+				firstName.invalid ||
+				lastName.invalid ||
+				phoneNumber.invalid ||
+				password.invalid
+			">
+			Зареєструватись
+		</button>
+	</form>
+</div>
