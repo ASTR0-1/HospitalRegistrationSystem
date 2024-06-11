@@ -131,7 +131,7 @@ export class UserManagementComponent implements OnInit {
 
 	openAssignDialog(user?: ApplicationUserDto): void {
 		const dialogRef = this.dialog.open(AssignEmployeeDialogComponent, {
-			width: '400px',
+			width: '600px',
 			data: user,
 		});
 
