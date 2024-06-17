@@ -1,13 +1,13 @@
 <h2 mat-dialog-title>Призначити співробітника</h2>
 <mat-dialog-content>
-	<form [formGroup]="assignForm" (ngSubmit)="onSubmit()">
+	<form class="d-flex flex-column gap-2" [formGroup]="assignForm" (ngSubmit)="onSubmit()">
 		<mat-form-field appearance="fill">
 			<mat-label>Лікарня</mat-label>
 			<mat-select formControlName="hospitalId">
 				<mat-option
 					*ngFor="let hospital of hospitals"
 					[value]="hospital.id">
-					{{ hospital.name }}
+					{{ hospital.name }}, {{ hospital.city }}, {{ hospital.street }}
 				</mat-option>
 			</mat-select>
 		</mat-form-field>

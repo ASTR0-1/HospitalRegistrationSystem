@@ -34,7 +34,7 @@ export class UserManagementComponent implements OnInit {
 	pageSize = 25;
 	selectedRole = Roles.CLIENT;
 	searchQuery = '';
-	roles = Object.values(Roles);
+	roles = Object.values(Roles).filter(role => role !== Roles.MASTER_SUPERVISOR);
 
 	@ViewChild(MatPaginator) paginator: MatPaginator | undefined;
 
@@ -131,7 +131,7 @@ export class UserManagementComponent implements OnInit {
 
 	openAssignDialog(user?: ApplicationUserDto): void {
 		const dialogRef = this.dialog.open(AssignEmployeeDialogComponent, {
-			width: '400px',
+			width: '600px',
 			data: user,
 		});
 
