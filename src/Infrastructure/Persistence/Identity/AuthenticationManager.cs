@@ -155,7 +155,7 @@ public class AuthenticationManager : IAuthenticationManager
             ValidIssuer = _jwtSettings.ValidIssuer,
             ValidAudience = _jwtSettings.ValidAudience,
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Secret!)),
-            ValidateLifetime = true
+            ValidateLifetime = false
         }, out var validatedToken);
 
         if (validatedToken is not JwtSecurityToken jwtSecurityToken
